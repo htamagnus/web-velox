@@ -1,6 +1,7 @@
 import { ApiError } from "@/errors/api-errors"
 
 type RegisterData = {
+  name: string
   email: string
   password: string
 }
@@ -29,7 +30,7 @@ export default class ApiVeloxService {
     this.url = process.env.NEXT_PUBLIC_VELOX_API ?? ''
   }
 
-  async register(userData: RegisterData): Promise<void> {
+  async register(userData: RegisterData): Promise<LoginResponse> {
     const response = await fetch(`${this.url}/athlete/register`, {
       method: 'POST',
       headers: {
@@ -46,7 +47,7 @@ export default class ApiVeloxService {
       throw new ApiError(json.message || 'Erro na requisição', response.status, json.code, json)
     }
 
-    return
+    return json as LoginResponse
   }
 
   async login(loginData: LoginData): Promise<LoginResponse> {
