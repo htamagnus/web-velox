@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ApiVeloxService from '@/providers/api-velox.provider'
 import { registerSchema } from '@/validations/register-schema'
 import { ApiError } from '@/errors/api-errors'
@@ -11,6 +11,7 @@ export default function RegisterForm() {
   const [globalError, setGlobalError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+  const [password, setPassword] = useState('')
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -60,6 +61,13 @@ export default function RegisterForm() {
     }    
   }
 
+  const passwordChecks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    number: /\d/.test(password),
+    specialChar: /[^A-Za-z0-9]/.test(password),
+  }
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4">
       <div>
@@ -87,12 +95,25 @@ export default function RegisterForm() {
           type="password"
           name="password"
           id="password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value)
+            if (fieldErrors.password) {
+              setFieldErrors((prev) => ({ ...prev, password: undefined }))
+            }
+          }}
           className={`mt-1 block w-full px-4 py-2 border ${
             fieldErrors.password ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
           placeholder="Digite sua senha"
           required
         />
+        <div className="mt-2 space-y-1 text-sm text-gray-600">
+          <p className={passwordChecks.length ? 'text-green-600' : 'text-gray-500'}>• Pelo menos 8 caracteres</p>
+          <p className={passwordChecks.uppercase ? 'text-green-600' : 'text-gray-500'}>• Uma letra maiúscula</p>
+          <p className={passwordChecks.number ? 'text-green-600' : 'text-gray-500'}>• Um número</p>
+          <p className={passwordChecks.specialChar ? 'text-green-600' : 'text-gray-500'}>• Um caractere especial</p>
+        </div>
         {fieldErrors.password && <p className="text-sm text-red-500 mt-1">{fieldErrors.password}</p>}
       </div>
 
