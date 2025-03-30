@@ -3,9 +3,10 @@
 import React, { useState } from 'react'
 import ApiVeloxService from '@/providers/api-velox.provider'
 import { ApiError } from '@/errors/api-errors'
-import { useRouter } from 'next/navigation'
 import { loginSchema } from '@/validations/login-schema'
 import { useAuth } from '@/contexts/auth-context'
+import Button from '../ui/button/button'
+import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
   const apiVelox = new ApiVeloxService()
@@ -97,13 +98,13 @@ export default function LoginForm() {
         {fieldErrors.password && <p className="text-sm text-red-500 mt-1">{fieldErrors.password}</p>}
       </div>
 
-      <button
+      <Button
         type="submit"
-        disabled={loading}
-        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+        variant="primary"
+        loading={false}
       >
         {loading ? 'Entrando...' : 'Entrar'}
-      </button>
+      </Button>
 
       {globalError && <p className="text-center text-sm text-red-600">{globalError}</p>}
     </form>
