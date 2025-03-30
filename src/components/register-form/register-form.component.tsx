@@ -4,14 +4,20 @@ import React, { useEffect, useState } from 'react'
 import ApiVeloxService from '@/providers/api-velox.provider'
 import { registerSchema } from '@/validations/register-schema'
 import { ApiError } from '@/errors/api-errors'
+import Button from '../ui/button/button'
+import { useAuth } from '@/contexts/auth-context'
+import { useRouter } from 'next/navigation'
 
 export default function RegisterForm() {
   const apiVelox = new ApiVeloxService()
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
+  const router = useRouter()
+
+  const [fieldErrors, setFieldErrors] = useState<{ name?:string; email?: string; password?: string }>({})
   const [globalError, setGlobalError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
   const [password, setPassword] = useState('')
+  const { login } = useAuth()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -24,6 +30,7 @@ export default function RegisterForm() {
     const formData = new FormData(form)
 
     const rawData = {
+      name: formData.get('name')?.toString().trim() ?? '',
       email: formData.get('email')?.toString().trim() ?? '',
       password: formData.get('password')?.toString().trim() ?? '',
     }
@@ -33,6 +40,7 @@ export default function RegisterForm() {
     if (!result.success) {
       const errors = result.error.flatten().fieldErrors
       setFieldErrors({
+        name: errors.name?.[0],
         email: errors.email?.[0],
         password: errors.password?.[0],
       })
@@ -43,8 +51,9 @@ export default function RegisterForm() {
     const validData = result.data
 
     try {
-      await apiVelox.register(validData)
-      setSuccess('Usuário registrado com sucesso!')
+      const response = await apiVelox.register(validData)
+      login(response)
+      router.push('/onboarding')
       form.reset()
     } catch (err) {
       if (err instanceof ApiError) {
@@ -70,6 +79,22 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4">
+            <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          Nome
+        </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          className={`mt-1 block w-full px-4 py-2 border ${
+            fieldErrors.name ? 'border-red-500' : 'border-gray-300'
+          } rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+          placeholder="Digite seu nome"
+          required
+        />
+        {fieldErrors.name && <p className="text-sm text-red-500 mt-1">{fieldErrors.name}</p>}
+      </div>
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           E-mail
@@ -117,13 +142,13 @@ export default function RegisterForm() {
         {fieldErrors.password && <p className="text-sm text-red-500 mt-1">{fieldErrors.password}</p>}
       </div>
 
-      <button
+      <Button
         type="submit"
-        disabled={loading}
-        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+        loading={loading}
+        variant="primary"
       >
         {loading ? 'Enviando...' : 'Registrar'}
-      </button>
+      </Button>
 
       {globalError && <p className="text-center text-sm text-red-600">{globalError}</p>}
       {success && <p className="text-center text-sm text-green-600">{success}</p>}
