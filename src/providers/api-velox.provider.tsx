@@ -5,6 +5,17 @@ type RegisterData = {
   password: string
 }
 
+type LoginData = {
+  email: string
+  password: string
+}
+
+type LoginResponse = {
+  token: string
+  expiresIn: number
+  athleteId: string
+}
+
 type ApiErrorResponse = {
   code?: string
   message?: string
@@ -37,5 +48,26 @@ export default class ApiVeloxService {
 
     return
   }
-  
+
+  async login(loginData: LoginData): Promise<LoginResponse> {
+    const response = await fetch(`${this.url}/athlete/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+      body: JSON.stringify(loginData),
+    })
+
+    const text = await response.text()
+    const json: LoginResponse | ApiErrorResponse = text ? JSON.parse(text) : {}
+
+    if (!response.ok) {
+      throw new ApiError((json as ApiErrorResponse).message || 'Erro no login', response.status, (json as ApiErrorResponse).code, json)
+    }
+
+    localStorage.setItem('velox_token', json.token)
+
+    return json as LoginResponse
+  }
 }
