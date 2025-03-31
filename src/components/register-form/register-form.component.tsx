@@ -7,6 +7,8 @@ import { ApiError } from '@/errors/api-errors'
 import Button from '../ui/button/button'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
+import InputField from '../ui/input-field/input-field'
+import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
 
 export default function RegisterForm() {
   const apiVelox = new ApiVeloxService()
@@ -51,7 +53,7 @@ export default function RegisterForm() {
     const validData = result.data
 
     try {
-      const response = await apiVelox.register(validData)
+      const response = await apiVelox.registerAndLogin(validData)
       login(response)
       router.push('/onboarding')
       form.reset()
@@ -78,48 +80,27 @@ export default function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4">
-            <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Nome
-        </label>
-        <input
-          type="text"
+    <FormWrapper onSubmit={handleSubmit}>
+        <div>
+        <InputField 
+          label="Nome"
           name="name"
-          id="name"
-          className={`mt-1 block w-full px-4 py-2 border ${
-            fieldErrors.name ? 'border-red-500' : 'border-gray-300'
-          } rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
           placeholder="Digite seu nome"
+          error={fieldErrors.name}
           required
         />
-        {fieldErrors.name && <p className="text-sm text-red-500 mt-1">{fieldErrors.name}</p>}
-      </div>
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          E-mail
-        </label>
-        <input
-          type="email"
+        <InputField 
+          label="E-mail"
           name="email"
-          id="email"
-          className={`mt-1 block w-full px-4 py-2 border ${
-            fieldErrors.email ? 'border-red-500' : 'border-gray-300'
-          } rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+          type="email"
           placeholder="Digite seu e-mail"
+          error={fieldErrors.email}
           required
         />
-        {fieldErrors.email && <p className="text-sm text-red-500 mt-1">{fieldErrors.email}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Senha
-        </label>
-        <input
-          type="password"
+        <InputField
+          label="Senha"
           name="password"
-          id="password"
+          type="password"
           value={password}
           onChange={(e) => {
             setPassword(e.target.value)
@@ -127,12 +108,11 @@ export default function RegisterForm() {
               setFieldErrors((prev) => ({ ...prev, password: undefined }))
             }
           }}
-          className={`mt-1 block w-full px-4 py-2 border ${
-            fieldErrors.password ? 'border-red-500' : 'border-gray-300'
-          } rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-          placeholder="Digite sua senha"
+          error={fieldErrors.password}
           required
         />
+      </div>
+      <div>
         <div className="mt-2 space-y-1 text-sm text-gray-600">
           <p className={passwordChecks.length ? 'text-green-600' : 'text-gray-500'}>• Pelo menos 8 caracteres</p>
           <p className={passwordChecks.uppercase ? 'text-green-600' : 'text-gray-500'}>• Uma letra maiúscula</p>
@@ -152,6 +132,6 @@ export default function RegisterForm() {
 
       {globalError && <p className="text-center text-sm text-red-600">{globalError}</p>}
       {success && <p className="text-center text-sm text-green-600">{success}</p>}
-    </form>
+    </FormWrapper>
   )
 }
