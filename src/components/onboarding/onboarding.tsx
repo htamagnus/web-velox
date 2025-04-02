@@ -6,7 +6,8 @@ import ApiVeloxService from '@/providers/api-velox.provider'
 import Button from '../ui/button/button'
 import { ApiError } from '@/errors/api-errors'
 import { CreateAthleteDto } from '@/interfaces/athlete.interface'
-import InputField from '../ui/input-field/input-field'
+import { motion, AnimatePresence } from 'framer-motion'
+import { onboardingSteps } from './steps'
 
 export default function OnboardingForm() {
   const router = useRouter()
@@ -14,8 +15,8 @@ export default function OnboardingForm() {
 
   const [formData, setFormData] = useState<CreateAthleteDto>({
     age: 0,
-    weight: 0,
-    height: 0,
+    weight: 65,
+    height: 165,
     averageSpeedRoad: 0,
     averageSpeedMtb: 0,
     averageSpeedGeneral: 0,
@@ -23,6 +24,40 @@ export default function OnboardingForm() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [step, setStep] = useState(0)
+  const nextStep = () => setStep((prev) => prev + 1)
+  const prevStep = () => setStep((prev) => prev - 1)
+
+  const stepConfig = onboardingSteps[step]
+  const StepComponent = stepConfig?.Component
+  const stepProp = stepConfig?.prop
+
+  const updateFormData = (key: keyof CreateAthleteDto, value: number) => {
+    setFormData((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const isLastStep = step === onboardingSteps.length - 1
+
+  const handleNext = async () => {
+    if (isLastStep) {
+      try {
+        setLoading(true)
+        await apiVelox.completeProfile(formData)
+        router.push('/main')
+      } catch (err) {
+        if (err instanceof ApiError) {
+          setError(err.message)
+        } else {
+          setError('Erro inesperado. Tente novamente.')
+        }
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      nextStep()
+    }
+  }
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -53,62 +88,32 @@ export default function OnboardingForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4">
-      <h2 className="text-xl font-semibold text-center">Complete seu perfil</h2>
-      <InputField
-        label="Idade"
-        name="age"
-        type="number"
-        value={formData.age.toString()}
-        onChange={handleChange}
-        required
+    <div className="w-full h-screen flex items-center justify-center bg-gray-900 text-white">
+<AnimatePresence mode="wait">
+  {StepComponent && (
+    <motion.div
+      key={`step-${step}`}
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ duration: 0.4 }}
+    >
+      <StepComponent
+        value={formData[stepProp]}
+        onChange={(value) => updateFormData(stepProp, value)}
+        onNext={nextStep}
+        onBack={step > 0 ? prevStep : undefined}
       />
-      <InputField
-        label="Peso (kg)"
-        name="weight"
-        type="number"
-        value={formData.weight.toString()}
-        onChange={handleChange}
-        required
-      />
-      <InputField
-        label="Altura (cm)"
-        name="height"
-        type="number"
-        value={formData.height.toString()}
-        onChange={handleChange}
-        required
-      />
-      <InputField
-        label="Velocidade média - Road (km/h)"
-        name="averageSpeedRoad"
-        type="number"
-        value={formData.averageSpeedRoad.toString()}
-        onChange={handleChange}
-        required
-      />
-      <InputField
-        label="Velocidade média - MTB (km/h)"
-        name="averageSpeedMtb"
-        type="number"
-        value={formData.averageSpeedMtb.toString()}
-        onChange={handleChange}
-        required
-      />
-      <InputField
-        label="Velocidade média - Geral (km/h)"
-        name="averageSpeedGeneral"
-        type="number"
-        value={formData.averageSpeedGeneral.toString()}
-        onChange={handleChange}
-        required
-      />
+    </motion.div>
+  )}
+</AnimatePresence>
+  <div className="absolute top-0 left-0 w-full h-2 bg-gray-700">
+    <div
+      className="h-full bg-purple-500 transition-all duration-300"
+      style={{ width: `${((step + 1) / onboardingSteps.length) * 100}%` }}
+    />
+  </div>
 
-      {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-
-      <Button type="submit" loading={loading} variant="primary">
-        {loading ? 'Salvando...' : 'Começar'}
-      </Button>
-    </form>
+    </div>
   )
 }
