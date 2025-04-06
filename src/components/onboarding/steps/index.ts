@@ -2,31 +2,20 @@ import { CreateAthleteDto } from "@/interfaces/athlete.interface"
 import StepHeight from "./step-height"
 import StepWeight from "./step-weight"
 import StepAge from "./step-age"
-import StepSpeed from "./step-speed"
+import StepSpeedGeneral from "./step-speed-general"
 
-type NormalStep = {
+interface StepConfig {
     key: string
-    prop: keyof CreateAthleteDto
     Component: React.FC<{
       value: number
       onChange: (value: number) => void
       onNext: () => void
       onBack?: () => void
     }>
+    prop: keyof CreateAthleteDto
   }
   
-  type SpeedStep = {
-    key: string
-    props: ['averageSpeedGeneral', 'averageSpeedRoad', 'averageSpeedMtb']
-    Component: React.FC<{
-      values: Pick<CreateAthleteDto, 'averageSpeedGeneral' | 'averageSpeedRoad' | 'averageSpeedMtb'>
-      onChange: (key: keyof CreateAthleteDto, value: number) => void
-      onNext: () => void
-      onBack?: () => void
-    }>
-  }
-  
-  export const onboardingSteps: (NormalStep | SpeedStep)[] = [
+  export const onboardingSteps: StepConfig[] = [
     {
       key: 'height',
       prop: 'height',
@@ -43,9 +32,9 @@ type NormalStep = {
       Component: StepAge
     },
     {
-      key: 'speed',
-      props: ['averageSpeedGeneral', 'averageSpeedRoad', 'averageSpeedMtb'],
-      Component: StepSpeed
+      key: 'averageSpeedGeneral',
+      prop: 'averageSpeedGeneral',
+      Component: StepSpeedGeneral
     }
   ]
   
