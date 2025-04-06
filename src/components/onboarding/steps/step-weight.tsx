@@ -1,8 +1,7 @@
-
 'use client'
 
-import Button from '@/components/ui/button/button'
 import React from 'react'
+import Button from '@/components/ui/button/button'
 
 interface StepWeightProps {
   value: number
@@ -11,57 +10,83 @@ interface StepWeightProps {
   onBack?: () => void
 }
 
+const MIN_WEIGHT = 40
+const MAX_WEIGHT = 120
+
 export default function StepWeight({ value, onChange, onNext, onBack }: StepWeightProps) {
+  const getDisplayValues = () => {
+    return [
+      value - 2,
+      value - 1,
+      value,
+      value + 1,
+      value + 2,
+    ].filter((v) => v >= MIN_WEIGHT && v <= MAX_WEIGHT)
+  }
+
   return (
-    <div className="w-full max-w-xs text-center">
-      <h2 className="text-2xl font-bold mb-2">What Is Your Weight?</h2>
-      <p className="text-sm text-gray-300 mb-6">
-        Informe seu peso para estimarmos melhor seu desempenho.
-      </p>
-
-      <div className="relative h-64 w-20 mx-auto bg-purple-500 rounded-xl flex items-center justify-center mb-6">
-  <div className="absolute inset-0 flex flex-col justify-between p-2">
-    {Array.from({ length: 21 }, (_, i) => (
-      <div key={i} className="w-full h-[1px] bg-white opacity-50" />
-    ))}
-  </div>
-
-  <div className="absolute -left-20 top-1/2 -translate-y-1/2 flex flex-col items-center z-10">
-    <span className="text-4xl font-extrabold leading-none">{value}</span>
-    <span className="text-sm">kg</span>
-  </div>
-
-  <div className="absolute w-full h-1 bg-white top-1/2 transform -translate-y-1/2" />
-</div>
-
-
-      <div className="flex justify-center gap-6 mb-4">
-        <button
-          onClick={() => onChange(value - 1)}
-          className="bg-white text-gray-900 rounded-full w-10 h-10 text-xl font-bold"
-        >
-          -
-        </button>
-        <button
-          onClick={() => onChange(value + 1)}
-          className="bg-white text-gray-900 rounded-full w-10 h-10 text-xl font-bold"
-        >
-          +
-        </button>
-      </div>
-
-      <div className="flex gap-4 justify-center">
+    <div className="w-full h-screen flex flex-col items-center justify-center text-white bg-gray-900 relative px-4">
+      
       {onBack && (
-        <button onClick={onBack} className="text-sm text-purple-400 underline">
-          Voltar
-        </button>
-      )}
         <Button
-          onClick={onNext}
-          variant="secondary"
+          onClick={onBack}
+          className="absolute top-6 left-4"
+          variant="round"
+          aria-label="Voltar"
         >
-          Continuar
+          ←
         </Button>
+      )}
+
+      <div className="w-full max-w-xs text-center mt-10">
+        <h2 className="text-2xl font-bold mb-2">What Is Your Weight?</h2>
+        <p className="text-sm text-gray-300 mb-6">
+          Informe seu peso para estimarmos melhor seu desempenho.
+        </p>
+
+        <div className="relative h-60 flex flex-col items-center justify-center">
+          <div className="absolute top-[calc(50%+1.5rem)] w-20 h-[1px] bg-gray-400 opacity-60 z-10" />
+
+          <div className="space-y-2 z-20">
+            {getDisplayValues().map((w) => (
+              <div
+                key={w}
+                className={`transition-all flex items-center justify-center ${
+                  w === value
+                    ? 'text-4xl font-extrabold text-white'
+                    : 'text-lg text-gray-400 opacity-80'
+                }`}
+              >
+                {w}
+                {w === value && (
+                  <span className="ml-1 text-base font-medium text-gray-300">kg</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-center gap-6 my-6">
+          <button
+            onClick={() => onChange(Math.max(value - 1, MIN_WEIGHT))}
+            className="bg-white text-black rounded-full w-10 h-10 flex items-center justify-center text-xl shadow"
+            aria-label="Diminuir"
+          >
+            ↓
+          </button>
+          <button
+            onClick={() => onChange(Math.min(value + 1, MAX_WEIGHT))}
+            className="bg-white text-black rounded-full w-10 h-10 flex items-center justify-center text-xl shadow"
+            aria-label="Aumentar"
+          >
+            ↑
+          </button>
+        </div>
+
+        <div className="flex justify-center">
+          <Button onClick={onNext} variant="secondary">
+            Continuar
+          </Button>
+        </div>
       </div>
     </div>
   )
