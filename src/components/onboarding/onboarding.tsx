@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ApiVeloxService from '@/providers/api-velox.provider'
 import Button from '../ui/button/button'
@@ -12,15 +12,40 @@ import { onboardingSteps } from './steps'
 export default function OnboardingForm() {
   const router = useRouter()
   const apiVelox = new ApiVeloxService()
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const savedSpeed = sessionStorage.getItem('velox_avg_speed')
+    const savedStep = sessionStorage.getItem('velox_current_step')
+    
+    if (savedSpeed) {
+      const parsed = Number(savedSpeed)
+      setFormData((prev) => {
+        const updated = { ...prev, averageSpeedGeneral: parsed }
+        console.log('[STRAVA DEBUG] formData atualizado:', updated)
+        return updated
+      })
+      sessionStorage.removeItem('velox_avg_speed')
+    }
+  
+    if (savedStep) {
+      setStep(Number(savedStep))
+      sessionStorage.removeItem('velox_current_step')
+    }
+  
+    setReady(true)
+  }, [])
+  
 
   const [formData, setFormData] = useState<CreateAthleteDto>({
-    age: 0,
+    age: 22,
     weight: 65,
     height: 165,
     averageSpeedRoad: 0,
     averageSpeedMtb: 0,
     averageSpeedGeneral: 0,
   })
+  
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -87,12 +112,14 @@ export default function OnboardingForm() {
     }
   }
 
+  if (!ready) return null
+
   return (
     <div className="w-full h-screen flex items-center justify-center bg-gray-900 text-white">
 <AnimatePresence mode="wait">
   {StepComponent && (
     <motion.div
-      key={`step-${step}`}
+    key={`step-${step}-${formData[stepProp]}`}
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
