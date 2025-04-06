@@ -6,7 +6,7 @@ import clsx from 'clsx'
 type ButtonProps = {
   children: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
-  variant?: 'primary' | 'secondary' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'round'
   loading?: boolean
   disabled?: boolean
   className?: string
@@ -23,12 +23,13 @@ export default function Button({
   onClick,
 }: ButtonProps) {
   const baseClasses =
-    'inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2'
+    'inline-flex items-center justify-center font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2'
 
   const variants = {
-    primary: 'w-full bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'w-full bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400',
-    ghost: 'w-full bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-300',
+    primary: 'w-full bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 px-4 py-2 rounded-md',
+    secondary: 'bg-white text-gray-900 px-6 py-2 rounded-full font-semibold shadow-lg hover:opacity-90',
+    ghost: 'w-full bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-300 px-4 py-2 rounded-md',
+    round: 'bg-white text-black w-10 h-10 rounded-full text-xl shadow hover:opacity-90', // NOVO
   }
 
   return (
