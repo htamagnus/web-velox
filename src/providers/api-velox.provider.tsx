@@ -48,6 +48,8 @@ export default class ApiVeloxService {
       throw new ApiError(json.message || 'Erro na requisição', response.status, json.code, json)
     }
 
+    localStorage.setItem('velox_token', json.token)
+
     return json as LoginResponse
   }
 
@@ -94,4 +96,30 @@ export default class ApiVeloxService {
   
     return json as Athlete
   }
+
+  async getStravaAverageSpeed(code: string): Promise<{ averageSpeedGeneral: number }> {
+    const token = localStorage.getItem('velox_token')
+  
+    const response = await fetch(`${this.url}/athlete/strava/average-speed?code=${code}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  
+    const text = await response.text()
+    const json = text ? JSON.parse(text) : {}
+  
+    if (!response.ok) {
+      throw new ApiError(
+        json.message || 'Erro ao buscar dados do Strava',
+        response.status,
+        json.code,
+        json
+      )
+    }
+  
+    return json
+  }
+  
 }
