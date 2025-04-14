@@ -121,5 +121,26 @@ export default class ApiVeloxService {
   
     return json
   }
+
+  async planRoute(data: GetPlannedRouteInputDto): Promise<GetPlannedRouteResponseDto> {
+    const token = localStorage.getItem('velox_token')
   
+    const response = await fetch(`${this.url}/routes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+  
+    const text = await response.text()
+    const json: ApiErrorResponse = text ? JSON.parse(text) : {}
+  
+    if (!response.ok) {
+      throw new ApiError(json.message || 'Erro ao planejar rota', response.status, json.code, json)
+    }
+  
+    return json as GetPlannedRouteResponseDto
+  }
 }
