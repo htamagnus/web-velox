@@ -81,7 +81,10 @@ export default function RegisterForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
-        <div>
+      <div className="text-center space-y-2">
+        <h2 className="text-2xl font-bold">Criar Conta</h2>
+        <p className="text-sm text-muted">Preencha os dados abaixo para começar a usar o Velox 🚴‍♂️</p>
+      </div>
         <InputField 
           label="Nome"
           name="name"
@@ -111,21 +114,20 @@ export default function RegisterForm() {
           error={fieldErrors.password}
           required
         />
-      </div>
       <div>
-        <div className="mt-2 space-y-1 text-sm text-gray-600">
-          <p className={passwordChecks.length ? 'text-green-600' : 'text-gray-500'}>• Pelo menos 8 caracteres</p>
-          <p className={passwordChecks.uppercase ? 'text-green-600' : 'text-gray-500'}>• Uma letra maiúscula</p>
-          <p className={passwordChecks.number ? 'text-green-600' : 'text-gray-500'}>• Um número</p>
-          <p className={passwordChecks.specialChar ? 'text-green-600' : 'text-gray-500'}>• Um caractere especial</p>
-        </div>
+      <div className="mt-2 space-y-1 text-sm">
+        <p className={passwordChecks.length ? 'text-green-500' : 'text-muted'}>• Pelo menos 8 caracteres</p>
+        <p className={passwordChecks.uppercase ? 'text-green-500' : 'text-muted'}>• Uma letra maiúscula</p>
+        <p className={passwordChecks.number ? 'text-green-500' : 'text-muted'}>• Um número</p>
+        <p className={passwordChecks.specialChar ? 'text-green-500' : 'text-muted'}>• Um caractere especial</p>
+      </div>
         {fieldErrors.password && <p className="text-sm text-red-500 mt-1">{fieldErrors.password}</p>}
       </div>
 
       <Button
         type="submit"
         loading={loading}
-        variant="primary"
+        variant="confirm"
       >
         {loading ? 'Enviando...' : 'Registrar'}
       </Button>
