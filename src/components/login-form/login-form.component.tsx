@@ -7,6 +7,8 @@ import { loginSchema } from '@/validations/login-schema'
 import { useAuth } from '@/contexts/auth-context'
 import Button from '../ui/button/button'
 import { useRouter } from 'next/navigation'
+import InputField from '../ui/input-field/input-field'
+import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
 
 export default function LoginForm() {
   const apiVelox = new ApiVeloxService()
@@ -63,50 +65,36 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md space-y-4">
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          E-mail
-        </label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          className={`mt-1 block w-full px-4 py-2 border ${
-            fieldErrors.email ? 'border-red-500' : 'border-gray-300'
-          } rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-          placeholder="Digite seu e-mail"
-          required
-        />
-        {fieldErrors.email && <p className="text-sm text-red-500 mt-1">{fieldErrors.email}</p>}
-      </div>
+    <FormWrapper onSubmit={handleSubmit}>
+    <div className="text-center space-y-2">
+      <h2 className="text-2xl font-bold">Entrar no Velox</h2>
+      <p className="text-sm text-muted">Acesse sua conta para começar a planejar rotas.</p>
+    </div>
+    <InputField
+      label="E-mail"
+      name="email"
+      type="email"
+      placeholder="Digite seu e-mail"
+      error={fieldErrors.email}
+      required
+    />
+    <InputField
+      label="Senha"
+      name="password"
+      type="password"
+      placeholder="Digite sua senha"
+      error={fieldErrors.password}
+      required
+    />
+    <Button type="submit" variant="confirm" loading={loading}>
+      {loading ? 'Entrando...' : 'Entrar'}
+    </Button>
 
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Senha
-        </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          className={`mt-1 block w-full px-4 py-2 border ${
-            fieldErrors.password ? 'border-red-500' : 'border-gray-300'
-          } rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-          placeholder="Digite sua senha"
-          required
-        />
-        {fieldErrors.password && <p className="text-sm text-red-500 mt-1">{fieldErrors.password}</p>}
-      </div>
-
-      <Button
-        type="submit"
-        variant="primary"
-        loading={false}
-      >
-        {loading ? 'Entrando...' : 'Entrar'}
-      </Button>
-
-      {globalError && <p className="text-center text-sm text-red-600">{globalError}</p>}
-    </form>
+    {globalError && (
+      <p className="text-center text-sm text-red-500 mt-2">
+        {globalError}
+      </p>
+    )}
+  </FormWrapper>
   )
 }
