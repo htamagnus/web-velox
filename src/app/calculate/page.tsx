@@ -80,6 +80,8 @@ export default function RoutePlannerPage() {
         destination={destination}
         polyline={routeData?.decodedPolyline ?? []}
         onMapClick={handleMapClick}
+        distanceKm={routeData?.distanceKm}
+        estimatedTimeMinutes={routeData?.estimatedTimeMinutes}
       />
       {routeData && (
         <div className="absolute top-4 left-4 right-4 bg-white text-black p-4 rounded-xl shadow-lg space-y-2 z-[999]">

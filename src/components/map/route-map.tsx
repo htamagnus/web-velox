@@ -15,6 +15,8 @@ type MapProps = {
   destination: [number, number] | null
   polyline: [number, number][]
   onMapClick: (e: { latlng: { lat: number; lng: number } }) => void
+  distanceKm?: number
+  estimatedTimeMinutes?: number
 }
 
 function ClickHandler({ onMapClick }: { onMapClick: MapProps['onMapClick'] }) {
@@ -24,11 +26,19 @@ function ClickHandler({ onMapClick }: { onMapClick: MapProps['onMapClick'] }) {
   return null
 }
 
+function getMiddlePoint(points: [number, number][]): { lat: number; lng: number } | null {
+  if (points.length === 0) return null;
+  const middleIndex = Math.floor(points.length / 2)
+  return { lat: points[middleIndex][0], lng: points[middleIndex][1] }
+}
+
 export default function RouteMap({
   origin,
   destination,
   polyline,
   onMapClick,
+  distanceKm,
+  estimatedTimeMinutes,
 }: MapProps) {
   const center = origin ?? [-28.678, -49.369]
 
@@ -38,6 +48,27 @@ export default function RouteMap({
       zoom={13}
       className="h-[70vh] w-full rounded-xl shadow-lg"
     >
+      <>
+      {polyline.length > 0 && getMiddlePoint(polyline) && (
+        <Marker
+          position={getMiddlePoint(polyline)!}
+          interactive={false} // se quiser que o usuário não clique
+          opacity={0} // deixa o marcador invisível
+        >
+          <Popup
+            closeButton={false}
+            closeOnClick={false}
+            autoClose={false}
+            className="custom-popup"
+          >
+            <div className="text-center text-sm">
+              <div><strong>{distanceKm?.toFixed(1)} km</strong></div>
+              <div>{Math.floor(estimatedTimeMinutes / 60)}h {estimatedTimeMinutes % 60}min</div>
+            </div>
+          </Popup>
+        </Marker>
+        )}
+      </>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       <ClickHandler onMapClick={onMapClick} />
