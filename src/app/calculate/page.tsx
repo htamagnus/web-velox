@@ -26,13 +26,14 @@ export default function RoutePlannerPage() {
   const [selectedModality, setSelectedModality] = useState<Modality>('general')
   const [averageSpeed, setAverageSpeed] = useState<number | null>(null)
   const [userData, setUserData] = useState<Athlete | null>(null)
+  const [mapCenter, setMapCenter] = useState<[number, number]>([-28.678, -49.369])
 
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const coords: [number, number] = [pos.coords.latitude, pos.coords.longitude]
-        setOrigin(coords)
+        setMapCenter(coords)
       },
       (err) => {
         console.warn('Não foi possível pegar localização:', err)
@@ -104,6 +105,7 @@ export default function RoutePlannerPage() {
   return (
     <div className="relative w-full h-screen pb-48">
       <RouteMap
+        center={mapCenter}
         origin={origin}
         destination={destination}
         polyline={routeData?.decodedPolyline ?? []}
@@ -191,7 +193,6 @@ export default function RoutePlannerPage() {
           onSelectModality={(modality, speed) => {
             setSelectedModality(modality)
             setAverageSpeed(speed)
-            handleCalculate()
           }}
           speeds={{
             general: userData.averageSpeedGeneral,

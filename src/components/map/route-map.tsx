@@ -7,6 +7,7 @@ import {
   Marker,
   Popup,
   useMapEvents,
+  useMap,
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect } from 'react'
@@ -26,6 +27,7 @@ const destinationIcon = new Icon({
 
 
 type MapProps = {
+  center: [number, number]
   origin: [number, number] | null
   destination: [number, number] | null
   polyline: [number, number][]
@@ -38,6 +40,20 @@ function ClickHandler({ onMapClick }: { onMapClick: MapProps['onMapClick'] }) {
   useMapEvents({
     click: onMapClick,
   })
+  return null
+}
+
+
+function FitBoundsToPolyline({ polyline }: { polyline: [number, number][] }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (polyline.length > 0) {
+      const bounds = polyline.map(([lat, lng]) => [lat, lng])
+      map.fitBounds(bounds as any, { padding: [50, 50] })
+    }
+  }, [polyline, map])
+
   return null
 }
 
@@ -69,6 +85,7 @@ export default function RouteMap({
 
     fixLeafletIcons()
   }, [])
+
   const center = origin ?? [-28.678, -49.369]
 
   return (
@@ -76,6 +93,9 @@ export default function RouteMap({
       center={{ lat: center[0], lng: center[1] }}
       zoom={13}
       className="h-[70vh] w-full rounded-xl shadow-lg"
+      scrollWheelZoom={false}
+      doubleClickZoom={false}
+      dragging={true}
     >
       <>
       {polyline.length > 0 && getMiddlePoint(polyline) && (
@@ -113,6 +133,8 @@ export default function RouteMap({
      url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
       attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
     />
+
+    <FitBoundsToPolyline polyline={polyline} />
 
 
       <ClickHandler onMapClick={onMapClick} />
