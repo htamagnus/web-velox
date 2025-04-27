@@ -75,6 +75,18 @@ export default function RoutePlannerPage() {
         return 'Geral'
     }
   }  
+
+  function getAverageSpeedByModality(modality: Modality, user: Athlete) {
+    switch (modality) {
+      case 'road':
+        return user.averageSpeedRoad ?? 0
+      case 'mtb':
+        return user.averageSpeedMtb ?? 0
+      case 'general':
+      default:
+        return user.averageSpeedGeneral ?? 0
+    }
+  }  
   
   const handleCalculate = async () => {
     if (!originLabel || !destinationLabel) {
@@ -125,7 +137,7 @@ export default function RoutePlannerPage() {
           <div><strong>Ganho de elevação:</strong> {routeData.elevationGain} m</div>
           <div><strong>Perda de elevação:</strong> {routeData.elevationLoss} m</div>
           <div><strong>Calorias estimadas:</strong> {routeData.estimatedCalories} kcal</div>
-          <div><strong>Modalidade:</strong> {getModalityLabel(selectedModality)}</div>
+          <div><strong>Modalidade:</strong> {getModalityLabel(selectedModality)}. Sua média nessa modalidade é de {getAverageSpeedByModality(selectedModality, userData)} km/h.</div>
 
           <div className="flex flex-col md:flex-row gap-2 pt-4">
             <Button
