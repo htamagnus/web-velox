@@ -44,6 +44,7 @@ export default function SearchBar({
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null)
   const [justSelected, setJustSelected] = useState(false)
 
+  // Quando recebe coordenadas, busca o nome do local
   useEffect(() => {
     if (initialValue) {
       const [lat, lon] = initialValue
@@ -53,6 +54,7 @@ export default function SearchBar({
         .then(data => {
           const label = formatAddress(data)
           setQuery(label)
+          onSelect([lat, lon], label) // importante: notifica o pai
         })
         .catch(err => {
           console.error('Erro ao buscar nome do local:', err)
@@ -60,20 +62,20 @@ export default function SearchBar({
     }
   }, [initialValue])
 
-  // autocomplete de busca
+  // Autocomplete de busca
   useEffect(() => {
     if (justSelected) {
       setJustSelected(false)
       return
     }
-  
+
     if (query.length < 3) {
       setResults([])
       return
     }
-  
+
     if (typingTimeout) clearTimeout(typingTimeout)
-  
+
     const timeout = setTimeout(async () => {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(query)}`
@@ -81,19 +83,34 @@ export default function SearchBar({
       const data = await res.json()
       setResults(data.slice(0, 5))
     }, 400)
-  
+
     setTypingTimeout(timeout)
   }, [query])
 
-  // quando usuário seleciona um item
   const handleSelect = (item: Suggestion) => {
     const coords: [number, number] = [parseFloat(item.lat), parseFloat(item.lon)]
     const label = formatAddress(item)
 
-    setResults([]) // fecha sugestões imediatamente
+    setResults([])
     setQuery(label)
-    setJustSelected(true) 
+    setJustSelected(true)
     onSelect(coords, label)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      // Se houver sugestões, seleciona a primeira
+      if (results.length > 0) {
+        handleSelect(results[0])
+      } else {
+        // Caso contrário, tenta forçar busca
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(query)}`)
+          .then(res => res.json())
+          .then((data: Suggestion[]) => {
+            if (data.length > 0) handleSelect(data[0])
+          })
+      }
+    }
   }
 
   return (
@@ -102,6 +119,7 @@ export default function SearchBar({
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className="bg-transparent text-white placeholder:text-gray-400 outline-none flex-1 px-2 py-2"
       />
