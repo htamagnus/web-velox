@@ -68,7 +68,7 @@ export default function OnboardingForm() {
       try {
         setLoading(true)
         await apiVelox.completeProfile(formData)
-        router.push('/main')
+        router.push('/home')
       } catch (err) {
         if (err instanceof ApiError) {
           setError(err.message)
@@ -115,32 +115,31 @@ export default function OnboardingForm() {
   if (!ready) return null
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gray-900 text-white">
-<AnimatePresence mode="wait">
-  {StepComponent && (
-    <motion.div
-    key={`step-${step}-${formData[stepProp]}`}
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -50 }}
-      transition={{ duration: 0.4 }}
-    >
+    <div className="w-full h-screen flex items-center justify-center bg-background text-foreground">
+    <AnimatePresence mode="wait">
+      {StepComponent && (
+        <motion.div
+        key={`step-${step}-${formData[stepProp]}`}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.4 }}
+      >
       <StepComponent
         value={formData[stepProp]}
         onChange={(value) => updateFormData(stepProp, value)}
-        onNext={nextStep}
+        onNext={isLastStep ? handleNext : nextStep}
         onBack={step > 0 ? prevStep : undefined}
       />
     </motion.div>
   )}
-</AnimatePresence>
-  <div className="absolute top-0 left-0 w-full h-2 bg-gray-700">
-    <div
-      className="h-full bg-purple-500 transition-all duration-300"
-      style={{ width: `${((step + 1) / onboardingSteps.length) * 100}%` }}
-    />
-  </div>
-
+    </AnimatePresence>
+      <div className="absolute top-0 left-0 w-full h-2 bg-gray-700">
+        <div
+          className="h-full bg-purple-500 transition-all duration-300"
+          style={{ width: `${((step + 1) / onboardingSteps.length) * 100}%` }}
+        />
+      </div>
     </div>
   )
 }
