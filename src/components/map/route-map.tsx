@@ -9,6 +9,21 @@ import {
   useMapEvents,
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import { useEffect } from 'react'
+import { Icon } from 'leaflet'
+
+const originIcon = new Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+})
+
+const destinationIcon = new Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/252/252025.png',
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+})
+
 
 type MapProps = {
   origin: [number, number] | null
@@ -40,6 +55,20 @@ export default function RouteMap({
   distanceKm,
   estimatedTimeMinutes,
 }: MapProps) {
+
+  useEffect(() => {
+    async function fixLeafletIcons() {
+      const L = await import('leaflet')
+
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-2x.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
+      })
+    }
+
+    fixLeafletIcons()
+  }, [])
   const center = origin ?? [-28.678, -49.369]
 
   return (
@@ -54,6 +83,7 @@ export default function RouteMap({
           position={getMiddlePoint(polyline)!}
           interactive={false} // se quiser que o usuário não clique
           opacity={0} // deixa o marcador invisível
+          icon={originIcon}
         >
           <Popup
             closeButton={false}
@@ -77,7 +107,7 @@ export default function RouteMap({
       <ClickHandler onMapClick={onMapClick} />
 
       {origin && (
-        <Marker position={{ lat: origin[0], lng: origin[1] }}>
+        <Marker position={{ lat: origin[0], lng: origin[1] }} icon={destinationIcon}>
           <Popup>Origem</Popup>
         </Marker>
       )}
