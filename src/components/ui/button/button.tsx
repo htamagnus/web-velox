@@ -28,7 +28,7 @@ export default function Button({
   const variants = {
     confirm: 'w-full bg-white/7 button-confirm rounded-md py-2',
     primary: 'button-confirm w-full',
-    secondary: 'bg-white text-gray-900 px-6 py-2 rounded-full font-semibold shadow-lg hover:opacity-90',
+    secondary: 'bg-white text-gray-900 px-6 py-2 rounded-md font-semibold shadow-lg hover:opacity-90',
     ghost: 'w-full bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-300 px-4 py-2 rounded-md',
     round: 'rounded-button',
   }
