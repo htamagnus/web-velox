@@ -15,9 +15,11 @@ export default function RoutePlannerPage() {
 
   const [origin, setOrigin] = useState<[number, number] | null>(null)
   const [destination, setDestination] = useState<[number, number] | null>(null)
+  const [originLabel, setOriginLabel] = useState<string | null>(null)
+  const [destinationLabel, setDestinationLabel] = useState<string | null>(null)
   const [routeData, setRouteData] = useState<RouteData | null>(null)
 
-  const [showSpeedOptions, setShowSpeedOptions] = useState(false) // ✅ novo
+  const [showSpeedOptions, setShowSpeedOptions] = useState(false)
   const [selectedModality, setSelectedModality] = useState<'general' | 'road' | 'mtb'>('general')
 
   useEffect(() => {
@@ -34,27 +36,42 @@ export default function RoutePlannerPage() {
 
   const handleMapClick = (e: { latlng: { lat: number; lng: number } }) => {
     const coords: [number, number] = [e.latlng.lat, e.latlng.lng]
-    if (!origin) setOrigin(coords)
-    else if (!destination) setDestination(coords)
+    if (!origin) {
+      setOrigin(coords)
+      setOriginLabel(null)
+    } else if (!destination) {
+      setDestination(coords)
+      setDestinationLabel(null)
+    }
   }
 
   const handleCalculate = async () => {
-    if (!origin || !destination) return
-
-    const payload: GetPlannedRouteInputDto = {
-      origin: { lat: origin[0], lng: origin[1] },
-      destination: { lat: destination[0], lng: destination[1] },
-      modality: selectedModality === 'general' ? 'road' : selectedModality,
+    console.log('📍 Origem Label:', originLabel)
+    console.log('📍 Destino Label:', destinationLabel)
+    if (!originLabel || !destinationLabel) {
+      console.warn('Defina origem e destino antes de calcular a rota.')
+      return
     }
-
-    const response = await api.planRoute(payload)
-    const decoded = polyline.decode(response.polyline) as [number, number][]
-
-    setRouteData({
-      ...response,
-      decodedPolyline: decoded,
-    })
-  }
+  
+    const payload: GetPlannedRouteInputDto = {
+      origin: originLabel,
+      destination: destinationLabel,
+      modality: selectedModality,
+    }
+  
+    try {
+      const response = await api.planRoute(payload)
+      const decoded = polyline.decode(response.polyline) as [number, number][]
+  
+      setRouteData({
+        ...response,
+        decodedPolyline: decoded,
+      })
+    } catch (error) {
+      console.error('Erro ao calcular rota:', error)
+      alert('Não foi possível calcular a rota. Tente ajustar os nomes ou a modalidade.')
+    }
+  }  
 
   return (
     <div className="relative w-full h-screen pb-48"> {/* padding pro painel + opções */}
@@ -68,8 +85,14 @@ export default function RoutePlannerPage() {
       <RoutePlannerPanel
         origin={origin}
         destination={destination}
-        onSetOrigin={(coords) => setOrigin(coords)}
-        onSetDestination={(coords) => setDestination(coords)}
+        onSetOrigin={(coords, label) => {
+          setOrigin(coords)
+          setOriginLabel(label)
+        }}
+        onSetDestination={(coords, label) => {
+          setDestination(coords)
+          setDestinationLabel(label)
+        }}
         onStart={() => setShowSpeedOptions(true)} // ✅ ativa opções
         onCancel={() => {
           setOrigin(null)
