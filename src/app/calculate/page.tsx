@@ -81,7 +81,15 @@ export default function RoutePlannerPage() {
         polyline={routeData?.decodedPolyline ?? []}
         onMapClick={handleMapClick}
       />
-
+      {routeData && (
+        <div className="absolute top-4 left-4 right-4 bg-white text-black p-4 rounded-xl shadow-lg space-y-2 z-[999]">
+          <div><strong>Distância:</strong> {routeData.distanceKm.toFixed(2)} km</div>
+          <div><strong>Tempo estimado:</strong> {Math.floor(routeData.estimatedTimeMinutes / 60)}h {routeData.estimatedTimeMinutes % 60}min</div>
+          <div><strong>Ganho de elevação:</strong> {routeData.elevationGain} m</div>
+          <div><strong>Perda de elevação:</strong> {routeData.elevationLoss} m</div>
+          <div><strong>Calorias estimadas:</strong> {routeData.estimatedCalories} kcal</div>
+        </div>
+      )}
       <RoutePlannerPanel
         origin={origin}
         destination={destination}
