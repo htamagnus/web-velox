@@ -143,4 +143,23 @@ export default class ApiVeloxService {
   
     return json as GetPlannedRouteResponseDto
   }
+
+  async saveRoute(data: SaveRouteDto): Promise<void> {
+    const token = localStorage.getItem('velox_token')
+  
+    const response = await fetch(`${this.url}/athlete/routes/save`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+  
+    if (!response.ok) {
+      const text = await response.text()
+      const json: ApiErrorResponse = text ? JSON.parse(text) : {}
+      throw new ApiError(json.message || 'Erro ao salvar a rota', response.status, json.code, json)
+    }
+  }
 }

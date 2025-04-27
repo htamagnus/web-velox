@@ -14,7 +14,7 @@ type Props = {
   onCancel: () => void
   showSpeedOptions: boolean
   onCloseSpeedOptions: () => void
-  onSelectModality: (modality: 'general' | 'road' | 'mtb') => void
+  onSelectModality: (modality: Modality) => void
 }
 
 export default function RoutePlannerPanel({

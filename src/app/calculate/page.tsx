@@ -20,7 +20,7 @@ export default function RoutePlannerPage() {
   const [routeData, setRouteData] = useState<RouteData | null>(null)
 
   const [showSpeedOptions, setShowSpeedOptions] = useState(false)
-  const [selectedModality, setSelectedModality] = useState<'general' | 'road' | 'mtb'>('general')
+  const [selectedModality, setSelectedModality] = useState<Modality>('general')
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -117,17 +117,43 @@ export default function RoutePlannerPage() {
           <div><strong>Perda de elevação:</strong> {routeData.elevationLoss} m</div>
           <div><strong>Calorias estimadas:</strong> {routeData.estimatedCalories} kcal</div>
 
-          {/* Botão de novo planejamento */}
-          <button
-            onClick={() => {
-              setOrigin(null)
-              setDestination(null)
-              setRouteData(null)
-            }}
-            className="w-full mt-4 bg-blue-600 text-white py-2 rounded-full font-semibold"
-          >
-            Planejar Nova Rota
-          </button>
+          <div className="flex space-x-4 pt-4">
+            <button
+              onClick={() => {
+                setOrigin(null)
+                setDestination(null)
+                setRouteData(null)
+              }}
+              className="flex-1 bg-gray-700 hover:bg-gray-800 text-white py-2 rounded-full font-semibold transition"
+            >
+              Nova Rota
+            </button>
+
+            <button
+              onClick={async () => {
+                if (!routeData) return
+                try {
+                  await api.saveRoute({
+                    origin: originLabel!,
+                    destination: destinationLabel!,
+                    modality: selectedModality,
+                    polyline: routeData.polyline,
+                    distanceKm: routeData.distanceKm,
+                    estimatedTimeMinutes: routeData.estimatedTimeMinutes,
+                    elevationGain: routeData.elevationGain,
+                    elevationLoss: routeData.elevationLoss,
+                    estimatedCalories: routeData.estimatedCalories,
+                  })
+                } catch (error) {
+                  console.error('Erro ao salvar rota:', error)
+                }
+              }}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full font-semibold transition"
+            >
+              Salvar Rota
+            </button>
+          </div>
+
         </div>
       )}
     </div>
