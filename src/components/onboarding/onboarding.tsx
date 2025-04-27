@@ -117,7 +117,7 @@ export default function OnboardingForm() {
     <AnimatePresence mode="wait">
       {StepComponent && (
         <motion.div
-        key={`step-${step}-${formData[stepProp]}`}
+        key={`step-${step}`}
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -50 }}
