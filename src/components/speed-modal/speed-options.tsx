@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Button from '@/components/ui/button/button'
 
 type SpeedChoice = 'general' | 'road' | 'mtb'
 
@@ -18,22 +17,17 @@ type Props = {
 export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
   const [selected, setSelected] = useState<SpeedChoice>('general')
 
-  const handleConfirm = () => {
-    onSelect(selected, speeds[selected])
-    onClose()
-  }
-
   return (
-    <div className="bg-background rounded-xl p-6 mt-4 shadow-lg space-y-6">
-      <h2 className="text-xl font-bold text-foreground">Escolha o tipo de velocidade</h2>
+    <div className="bg-background rounded-xl p-5 mt-4 shadow-lg space-y-2">
+      <h3 className="text-l font-bold text-foreground">Escolha o tipo de velocidade</h3>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {([
           { label: 'Velocidade geral (Strava)', value: 'general', speed: speeds.general },
           { label: 'Speed (Road)', value: 'road', speed: speeds.road },
           { label: 'MTB', value: 'mtb', speed: speeds.mtb },
         ] as const).map((option) => (
-          <label key={option.value} className="flex items-center space-x-3">
+          <label key={option.value} className="flex items-center space-x-2">
             <input
               type="radio"
               value={option.value}

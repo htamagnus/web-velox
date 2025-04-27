@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ApiVeloxService from '@/providers/api-velox.provider'
-import Button from '../ui/button/button'
 import { ApiError } from '@/errors/api-errors'
 import { CreateAthleteDto } from '@/interfaces/athlete.interface'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -22,7 +21,6 @@ export default function OnboardingForm() {
       const parsed = Number(savedSpeed)
       setFormData((prev) => {
         const updated = { ...prev, averageSpeedGeneral: parsed }
-        console.log('[STRAVA DEBUG] formData atualizado:', updated)
         return updated
       })
       sessionStorage.removeItem('velox_avg_speed')

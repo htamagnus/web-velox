@@ -66,15 +66,12 @@ export default function RoutePlannerPanel({
           <RefreshCcw size={16} />
         </button>
       </div>
-
-      {/* Modal de Escolha de Velocidade */}
-      {showSpeedOptions && (
+  
         <SpeedOptions
           onClose={onCloseSpeedOptions}
           onSelect={onSelectModality}
           speeds={speeds}
         />
-      )}
 
       <div className="flex justify-between pt-2">
         <button className="text-sm text-gray-300 underline">Salvar</button>
