@@ -34,7 +34,7 @@ export default function RoutePlannerPanel({
   speeds,
 }: Props) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black/90 text-white px-4 pt-4 pb-6 rounded-t-2xl z-[9999] shadow-2xl space-y-4">
+    <div className="fixed bottom-0 left-0 right-0 bg-background text-white px-4 pt-4 pb-6 rounded-t-2xl z-[9999] shadow-2xl space-y-4">
       <div className="flex justify-between items-center">
         <span className="text-sm font-semibold flex items-center">
           <span className="mr-2">🚴‍♀️</span> Planejador de rotas
