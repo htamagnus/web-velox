@@ -7,6 +7,7 @@ import RouteMap from '@/components/map/route-map'
 import RoutePlannerPanel from '@/components/planner/route-planner-panel'
 import Button from '@/components/ui/button/button'
 import { Athlete } from '@/interfaces/athlete.interface'
+import BackButton from '@/components/ui/back-button/back-button'
 
 type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][]

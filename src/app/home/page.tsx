@@ -15,7 +15,7 @@ export default function HomePage() {
 
       <footer className="fixed bottom-0 left-0 right-0 bg-white/9 backdrop-blur-md border-border text-muted shadow-md">
         <div className="flex justify-between items-center px-16 py-2 text-sm">
-          <button onClick={() => router.push('/routes')} className="flex flex-col items-center">
+          <button onClick={() => router.push('/saved-routes')} className="flex flex-col items-center">
             <Map size={24} />
             Rotas
           </button>
