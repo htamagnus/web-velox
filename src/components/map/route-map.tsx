@@ -69,7 +69,10 @@ export default function RouteMap({
         </Marker>
         )}
       </>
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <TileLayer
+        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://carto.com/">CARTO'
+      />
 
       <ClickHandler onMapClick={onMapClick} />
 
