@@ -1,5 +1,5 @@
 import { ApiError } from "@/errors/api-errors"
-import { Athlete, CreateAthleteDto } from "@/interfaces/athlete.interface"
+import { Athlete, CreateAthleteDto, UpdateAthleteDto } from "@/interfaces/athlete.interface"
 
 type RegisterData = {
   name: string
@@ -183,4 +183,27 @@ export default class ApiVeloxService {
   
     return json
   }  
+
+  async updateProfile(data: Partial<UpdateAthleteDto>): Promise<UpdateAthleteDto> {
+    const token = localStorage.getItem('velox_token')
+  
+    const response = await fetch(`${this.url}/athlete/profile/update`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+  
+    const text = await response.text()
+    const json = text ? JSON.parse(text) : {}
+  
+    if (!response.ok) {
+      throw new ApiError(json.message || 'Erro ao atualizar perfil', response.status, json.code, json)
+    }
+  
+    return json
+  }
+  
 }
