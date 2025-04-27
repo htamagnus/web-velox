@@ -125,7 +125,7 @@ export default class ApiVeloxService {
   async planRoute(data: GetPlannedRouteInputDto): Promise<GetPlannedRouteResponseDto> {
     const token = localStorage.getItem('velox_token')
   
-    const response = await fetch(`${this.url}/routes`, {
+    const response = await fetch(`${this.url}/athlete/routes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
