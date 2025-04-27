@@ -1,13 +1,7 @@
 type GetPlannedRouteInputDto = {
-    origin: {
-      lat: number
-      lng: number
-    }
-    destination: {
-      lat: number
-      lng: number
-    }
-    modality: 'road' | 'mtb'
+    origin: string
+    destination: string
+    modality: 'road' | 'mtb' | 'general'
   }
   
   type GetPlannedRouteResponseDto = {
