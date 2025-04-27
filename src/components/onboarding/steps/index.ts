@@ -3,6 +3,8 @@ import StepHeight from "./step-height"
 import StepWeight from "./step-weight"
 import StepAge from "./step-age"
 import StepSpeedGeneral from "./step-speed-general"
+import StepSpeedRoad from "./step-speed-road"
+import StepSpeedMtb from "./step-speed-mtb"
 
 interface StepConfig {
     key: string
@@ -35,6 +37,16 @@ interface StepConfig {
       key: 'averageSpeedGeneral',
       prop: 'averageSpeedGeneral',
       Component: StepSpeedGeneral
+    },
+    {
+      key: 'averageSpeedRoad',
+      prop: 'averageSpeedRoad',
+      Component: StepSpeedRoad
+    },
+    {
+      key: 'averageSpeedMtb',
+      prop: 'averageSpeedMtb',
+      Component: StepSpeedMtb
     }
   ]
   
