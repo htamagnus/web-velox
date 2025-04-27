@@ -205,5 +205,24 @@ export default class ApiVeloxService {
   
     return json
   }
+
+  async getSavedRoutes(): Promise<SaveRouteDto[]> {
+    const token = localStorage.getItem('velox_token')
   
+    const response = await fetch(`${this.url}/athlete/routes/saved`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  
+    const text = await response.text()
+    const json = text ? JSON.parse(text) : {}
+  
+    if (!response.ok) {
+      throw new Error(json.message || 'Erro ao buscar rotas salvas')
+    }
+  
+    return json as SaveRouteDto[]
+  }
 }
