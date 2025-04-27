@@ -162,4 +162,25 @@ export default class ApiVeloxService {
       throw new ApiError(json.message || 'Erro ao salvar a rota', response.status, json.code, json)
     }
   }
+
+  async getProfile(): Promise<Athlete> {
+    const token = localStorage.getItem('velox_token')
+    
+    const response = await fetch(`${this.url}/athlete/profile`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  
+    const text = await response.text()
+    const json = text ? JSON.parse(text) : {}
+  
+    if (!response.ok) {
+      throw new ApiError(json.message || 'Erro ao buscar perfil', response.status, json.code, json)
+    }
+  
+    return json
+  }  
 }

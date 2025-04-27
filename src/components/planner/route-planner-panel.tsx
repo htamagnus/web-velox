@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { LocateFixed, Plus, RefreshCcw, X } from 'lucide-react'
 import SearchBar from '../ui/search-bar/search-bar'
 import SpeedOptions from '../speed-modal/speed-options'
@@ -14,21 +13,26 @@ type Props = {
   onCancel: () => void
   showSpeedOptions: boolean
   onCloseSpeedOptions: () => void
-  onSelectModality: (modality: Modality) => void
+  onSelectModality: (modality: Modality, speed: number) => void
+  speeds: {
+    general: number
+    road: number
+    mtb: number
+  }
 }
 
 export default function RoutePlannerPanel({
-    origin,
-    destination,
-    onSetOrigin,
-    onSetDestination,
-    onStart,
-    onCancel,
-    showSpeedOptions,
-    onCloseSpeedOptions,
-    onSelectModality,
-}: Props)   {
-      console.log('showSpeedOptions:', showSpeedOptions)
+  origin,
+  destination,
+  onSetOrigin,
+  onSetDestination,
+  onStart,
+  onCancel,
+  showSpeedOptions,
+  onCloseSpeedOptions,
+  onSelectModality,
+  speeds,
+}: Props) {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black/90 text-white px-4 pt-4 pb-6 rounded-t-2xl z-[9999] shadow-2xl space-y-4">
       <div className="flex justify-between items-center">
@@ -62,10 +66,16 @@ export default function RoutePlannerPanel({
           <RefreshCcw size={16} />
         </button>
       </div>
+
+      {/* Modal de Escolha de Velocidade */}
+      {showSpeedOptions && (
         <SpeedOptions
-            onClose={onCloseSpeedOptions}
-            onSelect={onSelectModality}
+          onClose={onCloseSpeedOptions}
+          onSelect={onSelectModality}
+          speeds={speeds}
         />
+      )}
+
       <div className="flex justify-between pt-2">
         <button className="text-sm text-gray-300 underline">Salvar</button>
         <button
@@ -74,7 +84,7 @@ export default function RoutePlannerPanel({
         >
           Planejar
         </button>
-        </div>
+      </div>
     </div>
   )
 }
