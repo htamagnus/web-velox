@@ -1,10 +1,11 @@
 'use client'
 
-import { LocateFixed, Plus, RefreshCcw, X } from 'lucide-react'
+import { ArrowLeft, LocateFixed, Plus, RefreshCcw, X } from 'lucide-react'
 import SearchBar from '../ui/search-bar/search-bar'
 import SpeedOptions from '../speed-modal/speed-options'
 import BackButton from '../ui/back-button/back-button'
 import Loader from '../ui/loader/loader'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   origin: [number, number] | null
@@ -41,9 +42,17 @@ export default function RoutePlannerPanel({
   speeds,
   isCalculatingRoute
 }: Props) {
+  const router = useRouter()
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-background text-white px-4 pt-4 pb-6 rounded-t-2xl z-[9999] shadow-2xl space-y-4">
       <div className="flex justify-between items-center">
+      <button
+      onClick={() => router.push('/home')}
+      className="text-gray-400 hover:text-white flex items-center gap-1"
+    >
+      <ArrowLeft size={18} />
+      <span className="text-sm hidden sm:inline">Início</span>
+    </button>
         <span className="text-m font-semibold flex items-center">
           <span className="mr-2">🚴‍♀️</span> Planejador de rotas
         </span>

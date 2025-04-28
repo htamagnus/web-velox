@@ -8,6 +8,7 @@ import { Athlete, UpdateAthleteDto } from '@/interfaces/athlete.interface'
 import Loader from '@/components/ui/loader/loader'
 import BackButton from '@/components/ui/back-button/back-button'
 import InputField from '@/components/ui/input-field/input-field'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function ProfilePage() {
   const api = new ApiVeloxService()
@@ -79,13 +80,22 @@ export default function ProfilePage() {
 
   if (!userData) {
     return (
-      <div className="flex items-center justify-center h-screen text-muted">
-        Carregando perfil...
+      <div className="flex items-center justify-center h-screen">
+        <Loader size={48}/>
       </div>
     )
   }
 
   return (
+    <AnimatePresence mode="wait">
+    <motion.div
+      key="profile-page"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4 }}
+      className="max-w-xl mx-auto p-6 space-y-6"
+    >
     <div className="max-w-xl mx-auto p-6 space-y-6">
         <BackButton />
       <h1 className="text-2xl font-bold text-foreground text-center">Meu Perfil</h1>
@@ -121,6 +131,8 @@ export default function ProfilePage() {
         </Button>
       </div>
     </div>
+    </motion.div>
+  </AnimatePresence>
   )
 }
 

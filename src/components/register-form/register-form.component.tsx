@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import InputField from '../ui/input-field/input-field'
 import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
+import { toast } from 'sonner'
 
 export default function RegisterForm() {
   const apiVelox = new ApiVeloxService()
@@ -63,8 +64,10 @@ export default function RegisterForm() {
           setFieldErrors({ email: 'Este e-mail já está em uso.' })
         } else if (err.message) {
           setGlobalError(err.message)
+          toast.error('Erro inesperado. Tente novamente.')
         } else {
           setGlobalError('Erro inesperado. Tente novamente.')
+          toast.error('Erro inesperado. Tente novamente.')
         }
       }
     } finally {

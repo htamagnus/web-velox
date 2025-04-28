@@ -2,11 +2,21 @@
 
 import { useRouter } from 'next/navigation'
 import { Map, PlusCircle, User } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function HomePage() {
   const router = useRouter()
 
   return (
+    <AnimatePresence mode="wait">
+    <motion.div
+      key="homepage"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4 }}
+      className="flex flex-col min-h-screen bg-background text-foreground"
+    >
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-1 p-4">
       <div className="space-y-6 p-6 max-w-4xl mx-auto">
@@ -65,5 +75,7 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
+    </motion.div>
+    </AnimatePresence>
   )
 }

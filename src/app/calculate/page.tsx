@@ -15,7 +15,7 @@ type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][]
 }
 
-export default function RoutePlannerPage() {
+export default function CalculateRoutePage() {
   const api = new ApiVeloxService()
 
   const [origin, setOrigin] = useState<[number, number] | null>(null)

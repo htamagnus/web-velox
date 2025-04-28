@@ -129,10 +129,20 @@ export default function RouteMap({
   url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
   attribution='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
 /> */}
-     <TileLayer
+     {/* <TileLayer
      url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
       attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+    /> */}
+    <TileLayer
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     />
+
+{/* <TileLayer
+  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+  attribution='&copy; <a href="https://carto.com/">CARTO</a> contributors'
+/> */}
+
 
     <FitBoundsToPolyline polyline={polyline} />
 
