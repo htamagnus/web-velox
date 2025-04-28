@@ -4,6 +4,7 @@ import { LocateFixed, Plus, RefreshCcw, X } from 'lucide-react'
 import SearchBar from '../ui/search-bar/search-bar'
 import SpeedOptions from '../speed-modal/speed-options'
 import BackButton from '../ui/back-button/back-button'
+import Loader from '../ui/loader/loader'
 
 type Props = {
   origin: [number, number] | null
@@ -22,6 +23,7 @@ type Props = {
     road: number
     mtb: number
   }
+  isCalculatingRoute: boolean,
 }
 
 export default function RoutePlannerPanel({
@@ -37,6 +39,7 @@ export default function RoutePlannerPanel({
   onCloseSpeedOptions,
   onSelectModality,
   speeds,
+  isCalculatingRoute
 }: Props) {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-background text-white px-4 pt-4 pb-6 rounded-t-2xl z-[9999] shadow-2xl space-y-4">
@@ -49,7 +52,6 @@ export default function RoutePlannerPanel({
         </button>
       </div>
 
-      {/* Origem */}
       <div className="flex items-center bg-gray-800 rounded-lg px-3 py-2">
         <LocateFixed size={16} className="mr-2 text-gray-300" />
         <SearchBar
@@ -59,7 +61,6 @@ export default function RoutePlannerPanel({
         />
       </div>
 
-      {/* Destino */}
       <div className="flex items-center bg-gray-800 rounded-lg px-3 py-2">
         <Plus size={16} className="mr-2 text-gray-300" />
         <SearchBar
@@ -67,9 +68,6 @@ export default function RoutePlannerPanel({
           initialValue={destinationLabel ?? undefined}
           onSelect={onSetDestination}
         />
-        <button className="ml-2 text-gray-400 hover:text-white">
-          <RefreshCcw size={16} />
-        </button>
       </div>
   
         <SpeedOptions
@@ -84,7 +82,11 @@ export default function RoutePlannerPanel({
           onClick={onStart}
           className="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md"
         >
-          Planejar
+            {isCalculatingRoute ? (
+            <Loader size={18} />
+          ) : (
+            'Planejar'
+          )}
         </button>
       </div>
     </div>

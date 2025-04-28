@@ -29,6 +29,7 @@ export default function RoutePlannerPage() {
   const [averageSpeed, setAverageSpeed] = useState<number | null>(null)
   const [userData, setUserData] = useState<Athlete | null>(null)
   const [mapCenter, setMapCenter] = useState<[number, number]>([-28.678, -49.369])
+  const [isCalculatingRoute, setIsCalculatingRoute] = useState(false)
 
 
   useEffect(() => {
@@ -79,9 +80,10 @@ export default function RoutePlannerPage() {
     }
   
     try {
+      setIsCalculatingRoute(true)
       const response = await api.planRoute(payload)
       const decoded = polyline.decode(response.polyline) as [number, number][]
-  
+    
       setRouteData({
         ...response,
         decodedPolyline: decoded,
@@ -89,8 +91,10 @@ export default function RoutePlannerPage() {
     } catch (error) {
       console.error('Erro ao calcular rota:', error)
       alert('Não foi possível calcular a rota. Tente ajustar os nomes ou a modalidade.')
+    } finally {
+      setIsCalculatingRoute(false)
     }
-  }  
+  }
 
   return (
     <div className="relative w-full h-screen pb-48">
@@ -192,6 +196,7 @@ export default function RoutePlannerPage() {
             road: userData.averageSpeedRoad,
             mtb: userData.averageSpeedMtb,
           }}
+          isCalculatingRoute={isCalculatingRoute}
         />
       )}
     </div>
