@@ -18,16 +18,6 @@ type Props = {
 export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
   const [selected, setSelected] = useState<Modality>('general')
 
-  const handleConfirm = () => {
-    if (!speeds[selected] || speeds[selected] <= 0) {
-      toast.error('🚫 Velocidade inválida! Atualize no seu perfil primeiro.')
-      return
-    }
-
-    onSelect(selected)
-    onClose()
-  }
-
   const options = [
     { label: 'Velocidade geral (Strava)', value: 'general', speed: speeds.general },
     { label: 'Speed (Road)', value: 'road', speed: speeds.road },
@@ -53,7 +43,13 @@ export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
                 value={option.value}
                 checked={selected === option.value}
                 disabled={isDisabled}
-                onChange={() => setSelected(option.value as Modality)}
+                onChange={() => {
+                  setSelected(option.value as Modality)
+                  if (option.speed && option.speed > 0) {
+                    onSelect(option.value as Modality, option.speed) // chama o pai já
+                    onClose() // fecha o modal se quiser
+                  }
+                }}                
               />
               <span>{option.label} - {option.speed?.toFixed(1)} km/h</span>
             </label>
