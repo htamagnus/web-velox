@@ -8,6 +8,7 @@ import RoutePlannerPanel from '@/components/planner/route-planner-panel'
 import Button from '@/components/ui/button/button'
 import { Athlete } from '@/interfaces/athlete.interface'
 import BackButton from '@/components/ui/back-button/back-button'
+import { getModalityLabel } from '@/helpers/modality.helper'
 
 type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][]
@@ -64,30 +65,6 @@ export default function RoutePlannerPage() {
       setDestinationLabel(null)
     }
   }
-
-  function getModalityLabel(modality: Modality) {
-    switch (modality) {
-      case 'road':
-        return 'Speed (Estrada)'
-      case 'mtb':
-        return 'MTB (Trilha)'
-      case 'general':
-      default:
-        return 'Geral'
-    }
-  }  
-
-  function getAverageSpeedByModality(modality: Modality, user: Athlete) {
-    switch (modality) {
-      case 'road':
-        return user.averageSpeedRoad ?? 0
-      case 'mtb':
-        return user.averageSpeedMtb ?? 0
-      case 'general':
-      default:
-        return user.averageSpeedGeneral ?? 0
-    }
-  }  
   
   const handleCalculate = async () => {
     if (!originLabel || !destinationLabel) {
@@ -138,7 +115,7 @@ export default function RoutePlannerPage() {
           <div><strong>Ganho de elevação:</strong> {routeData.elevationGain} m</div>
           <div><strong>Perda de elevação:</strong> {routeData.elevationLoss} m</div>
           <div><strong>Calorias estimadas:</strong> {routeData.estimatedCalories} kcal</div>
-          <div><strong>Modalidade:</strong> {getModalityLabel(selectedModality)}. Sua média nessa modalidade é de {getAverageSpeedByModality(selectedModality, userData)} km/h.</div>
+          <div><strong>Modalidade:</strong> {getModalityLabel(selectedModality)}. Sua média nessa modalidade é de {routeData.averageSpeedUsed} km/h.</div>
 
           <div className="flex flex-col md:flex-row gap-2 pt-4">
             <Button
@@ -170,6 +147,7 @@ export default function RoutePlannerPage() {
                     elevationGain: routeData.elevationGain,
                     elevationLoss: routeData.elevationLoss,
                     estimatedCalories: routeData.estimatedCalories,
+                    averageSpeedUsed: routeData.averageSpeedUsed,
                   })
                 } catch (error) {
                   console.error('Erro ao salvar rota:', error)
@@ -186,7 +164,9 @@ export default function RoutePlannerPage() {
       ) : (
         <RoutePlannerPanel
           origin={origin}
+          originLabel={originLabel}
           destination={destination}
+          destinationLabel={destinationLabel}
           onSetOrigin={(coords, label) => {
             setOrigin(coords)
             setOriginLabel(label)

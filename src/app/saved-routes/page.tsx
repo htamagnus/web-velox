@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import ApiVeloxService from '@/providers/api-velox.provider'
-import { Timer, MapPin, TrendingUp, TrendingDown } from 'lucide-react'
+import { Timer, MapPin, TrendingUp, TrendingDown, TimerIcon, RouteIcon, ArrowUpIcon, ArrowDownIcon, BikeIcon, GaugeIcon } from 'lucide-react'
 import Loader from '@/components/ui/loader/loader'
+import polyline from '@mapbox/polyline'
 import BackButton from '@/components/ui/back-button/back-button'
 import { toast } from 'sonner'
+import { getModalityLabel } from '@/helpers/modality.helper'
+import MiniMap from '@/components/mini-map/mini-map.component'
 
 export default function SavedRoutesPage() {
   const api = new ApiVeloxService()
@@ -44,43 +47,51 @@ export default function SavedRoutesPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-6">
+    <div className="mx-auto p-6 space-y-4">
         <BackButton />
-      <h1 className="text-2xl font-bold text-foreground">Minhas Rotas Salvas</h1>
+      <h1 className="text-2xl font-bold text-foreground text-center">Minhas Rotas</h1>
 
-      {routes.length === 0 ? (
-        <div className="text-muted text-center mt-10">Nenhuma rota salva ainda.</div>
-      ) : (
-        <div className="space-y-4">
-          {routes.map((route, index) => (
-            <div key={index} className="bg-background rounded-lg shadow-md p-4 space-y-2 border border-border">
-              <div className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                <MapPin size={18} />
-                Percurso de <span className="text-purple-600">{route.origin}</span> para <span className="text-purple-600">{route.destination}</span>
+      {routes.map((route, index) => {
+        const decoded = polyline.decode(route.polyline) as [number, number][]
+        return (
+          <div
+            key={index}
+            className="shadow-lg max-w-xl mx-auto p-4 bg-white/5 backdrop-blur-md text-foreground rounded-2xl shadow-xl space-y-2"
+          >
+            <MiniMap polyline={decoded} />
+
+            <div className="p-4 space-y-2">
+              <div className="font-semibold text-lg">
+                Percurso de {route.origin} para {route.destination}
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm text-muted pt-2">
                 <div className="flex items-center gap-2">
-                  <Timer size={16} />
-                  {Math.floor(route.estimatedTimeMinutes / 60)}h {route.estimatedTimeMinutes % 60}min
+                  <TimerIcon size={16} /> {Math.floor(route.estimatedTimeMinutes / 60)}h {route.estimatedTimeMinutes % 60}min
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin size={16} />
-                  {route.distanceKm.toFixed(2)} km
+                  <RouteIcon size={16} /> {route.distanceKm.toFixed(1)} km
                 </div>
                 <div className="flex items-center gap-2">
-                  <TrendingUp size={16} />
-                  +{route.elevationGain}m
+                  <TrendingUp size={16} /> +{route.elevationGain} m
                 </div>
                 <div className="flex items-center gap-2">
-                  <TrendingDown size={16} />
-                  -{route.elevationLoss}m
+                  <TrendingDown size={16} /> -{route.elevationLoss} m
+                </div>
+                <div className="flex items-center gap-2">
+                  <BikeIcon size={16} /> 
+                  <span className="font-semibold">Modalidade: {getModalityLabel(route.modality)}</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <GaugeIcon size={16} />
+                  <span className="font-semibold">Velocidade Média:</span> {route.averageSpeedUsed} km/h
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )
+      })}
     </div>
   )
 }
