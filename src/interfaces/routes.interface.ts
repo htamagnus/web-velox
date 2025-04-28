@@ -13,6 +13,7 @@ type GetPlannedRouteResponseDto = {
   elevationGain: number
   elevationLoss: number
   polyline: string
+  averageSpeedUsed: number
 }
 
 type SaveRouteDto = {
@@ -25,4 +26,5 @@ type SaveRouteDto = {
   elevationGain: number
   elevationLoss: number
   estimatedCalories: number
+  averageSpeedUsed: number
 }

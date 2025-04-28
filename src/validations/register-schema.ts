@@ -2,7 +2,7 @@ import { z } from 'zod'
 import {
   strongPasswordRegex,
   passwordValidationMessage,
-} from '@/helpers/validation'
+} from '@/helpers/validation.helper'
 
 export const registerSchema = z.object({
   name: z.string(),
