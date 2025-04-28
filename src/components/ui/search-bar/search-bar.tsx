@@ -21,7 +21,7 @@ type Suggestion = {
 type Props = {
   onSelect: (coords: [number, number], label: string) => void
   placeholder?: string
-  initialValue?: [number, number]
+  initialValue?: string | null
 }
 
 function formatAddress(item: Suggestion): string {
@@ -43,31 +43,17 @@ export default function SearchBar({
   const [results, setResults] = useState<Suggestion[]>([])
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null)
   const [justSelected, setJustSelected] = useState(false)
+  const [hasSelected, setHasSelected] = useState(false)
 
-  // Quando recebe coordenadas, busca o nome do local
   useEffect(() => {
     if (initialValue) {
-      const [lat, lon] = initialValue
-
-      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`)
-        .then(res => res.json())
-        .then(data => {
-          const label = formatAddress(data)
-          setQuery(label)
-          onSelect([lat, lon], label) // importante: notifica o pai
-        })
-        .catch(err => {
-          console.error('Erro ao buscar nome do local:', err)
-        })
+      setQuery(initialValue)
     }
   }, [initialValue])
-
+  
   // Autocomplete de busca
   useEffect(() => {
-    if (justSelected) {
-      setJustSelected(false)
-      return
-    }
+    if (hasSelected) return 
 
     if (query.length < 3) {
       setResults([])
@@ -93,7 +79,7 @@ export default function SearchBar({
 
     setResults([])
     setQuery(label)
-    setJustSelected(true)
+    setHasSelected(true) 
     onSelect(coords, label)
   }
 
