@@ -3,10 +3,13 @@
 import { LocateFixed, Plus, RefreshCcw, X } from 'lucide-react'
 import SearchBar from '../ui/search-bar/search-bar'
 import SpeedOptions from '../speed-modal/speed-options'
+import BackButton from '../ui/back-button/back-button'
 
 type Props = {
   origin: [number, number] | null
+  originLabel: string | null
   destination: [number, number] | null
+  destinationLabel: string | null
   onSetOrigin: (coords: [number, number], label: string) => void
   onSetDestination: (coords: [number, number], label: string) => void
   onStart: () => void
@@ -23,7 +26,9 @@ type Props = {
 
 export default function RoutePlannerPanel({
   origin,
+  originLabel,
   destination,
+  destinationLabel,
   onSetOrigin,
   onSetDestination,
   onStart,
@@ -36,7 +41,7 @@ export default function RoutePlannerPanel({
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-background text-white px-4 pt-4 pb-6 rounded-t-2xl z-[9999] shadow-2xl space-y-4">
       <div className="flex justify-between items-center">
-        <span className="text-sm font-semibold flex items-center">
+        <span className="text-m font-semibold flex items-center">
           <span className="mr-2">🚴‍♀️</span> Planejador de rotas
         </span>
         <button onClick={onCancel} className="text-gray-400 hover:text-white">
@@ -49,7 +54,7 @@ export default function RoutePlannerPanel({
         <LocateFixed size={16} className="mr-2 text-gray-300" />
         <SearchBar
           placeholder="Localização atual"
-          initialValue={origin ?? undefined}
+          initialValue={originLabel ?? undefined}
           onSelect={onSetOrigin}
         />
       </div>
@@ -59,7 +64,7 @@ export default function RoutePlannerPanel({
         <Plus size={16} className="mr-2 text-gray-300" />
         <SearchBar
           placeholder="Escolher destino"
-          initialValue={destination ?? undefined}
+          initialValue={destinationLabel ?? undefined}
           onSelect={onSetDestination}
         />
         <button className="ml-2 text-gray-400 hover:text-white">
