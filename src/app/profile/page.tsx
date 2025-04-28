@@ -88,9 +88,9 @@ export default function ProfilePage() {
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
         <BackButton />
-      <h1 className="text-2xl font-bold text-foreground">Meu Perfil</h1>
+      <h1 className="text-2xl font-bold text-foreground text-center">Meu Perfil</h1>
 
-      <div className="space-y-4">
+      <div className="shadow-lg max-w-xl mx-auto p-4 bg-white/5 backdrop-blur-md text-foreground rounded-2xl shadow-xl space-y-3">
         <InputField label="Nome" name="name" value={name} onChange={(e) => setName(e.target.value)} />
         <InputField label="Email" name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <InputField label="Idade" name="age" type="number" value={age.toString()} onChange={(e) => setAge(Number(e.target.value))} />
