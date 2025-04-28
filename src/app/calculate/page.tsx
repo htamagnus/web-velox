@@ -9,6 +9,7 @@ import Button from '@/components/ui/button/button'
 import { Athlete } from '@/interfaces/athlete.interface'
 import BackButton from '@/components/ui/back-button/back-button'
 import { getModalityLabel } from '@/helpers/modality.helper'
+import { AnimatePresence, motion } from 'framer-motion'
 
 type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][]
@@ -108,11 +109,27 @@ export default function RoutePlannerPage() {
         estimatedTimeMinutes={routeData?.estimatedTimeMinutes}
       />
 
+      <AnimatePresence mode="wait">
       {!userData ? (
+            <motion.div
+            key="loading-profile"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute bottom-4 left-4 right-4 text-center text-muted p-4"
+          >
         <div className="absolute bottom-4 left-4 right-4 text-center text-muted p-4">
           Carregando perfil...
         </div>
+        </motion.div>
       ) : routeData ? (
+        <motion.div
+        key="route-result"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className="absolute bottom-4 left-4 right-4 bg-background text-foreground p-4 rounded-xl shadow-lg space-y-2 z-[999]"
+      >
         <div className="absolute bottom-4 left-4 right-4 bg-background text-foreground p-4 rounded-xl shadow-lg space-y-2 z-[999]">
           <div><strong>Distância:</strong> {routeData.distanceKm.toFixed(2)} km</div>
           <div><strong>Tempo estimado:</strong> {Math.floor(routeData.estimatedTimeMinutes / 60)}h {routeData.estimatedTimeMinutes % 60}min</div>
@@ -165,7 +182,15 @@ export default function RoutePlannerPage() {
             </Button>
           </div>
         </div>
+            </motion.div>
       ) : (
+        <motion.div
+        key="route-planner"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className="absolute bottom-0 left-0 right-0"
+      >
         <RoutePlannerPanel
           origin={origin}
           originLabel={originLabel}
@@ -198,7 +223,9 @@ export default function RoutePlannerPage() {
           }}
           isCalculatingRoute={isCalculatingRoute}
         />
+            </motion.div>
       )}
+    </AnimatePresence>
     </div>
   )
 }
