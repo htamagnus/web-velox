@@ -113,13 +113,13 @@ export default function LandingPage() {
           {loading ? (
             <div className="w-5 h-5 border-2 border-t-transparent border-black rounded-full animate-spin" />
           ) : (
-            <>Começar <span>🚴‍♂️</span></>
+            <>Começar <ArrowRight className="w-5 h-5" /></>
           )}
         </motion.button>
       </div>
     </section>
 
-    <section className="w-full py-32 px-6 bg-gradient-to-b from-red-900/20 via-background to-emerald-900/10 backdrop-blur-md">
+    <section className="w-full py-32 px-6 bg-gradient-to-b from-red-900/20 via-background via-emerald-900/10 to-background backdrop-blur-md">
     <div className="max-w-2xl mx-auto flex flex-col items-center text-center space-y-24">
       
       {/* BLOCO PROBLEMA */}
@@ -160,7 +160,7 @@ export default function LandingPage() {
   </section>
 
     {/* FEATURES */}
-    <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-18 max-w-4xl">
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4 max-w-4xl px-6 mx-auto">
     {[
         { icon: LineChart, title: "Previsão Real", desc: "Calcule o tempo com base na sua velocidade média, não em médias genéricas." },
         { icon: Bike, title: "Modalidade Adaptada", desc: "Escolha entre MTB, Speed ou urbano para previsões ainda mais precisas." },
@@ -185,37 +185,60 @@ export default function LandingPage() {
       ))}
     </section>
 
-    {/* CTA FINAL */}
-    <section className="flex flex-col items-center text-center mt-30 mb-20 space-y-6 max-w-2xl">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        viewport={{ once: true }}
-        className="text-4xl md:text-5xl font-bold"
-      >
-        Pronto para pedalar com precisão?
-      </motion.h2>
+    <section className="relative w-full min-h-[80vh] flex flex-col items-center justify-center text-center text-foreground overflow-hidden pt-23">
+  {/* BACKGROUND IMAGE */}
+  <div className="absolute inset-0 z-0 overflow-hidden pt-32">
+    <motion.img
+      src="/images/cta-bike.jpg"
+      alt="Ciclista em movimento"
+      initial={{ scale: 1 }}
+      animate={{ scale: 1.05 }}
+      transition={{
+        duration: 20,
+        ease: 'easeInOut',
+        repeat: Infinity,
+        repeatType: 'mirror'
+      }}
+      className="w-full h-full object-cover object-[50%_30%] opacity-40 grayscale"
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        viewport={{ once: true }}
-        className="text-muted text-lg mt-4"
-      >
-        Comece agora e planeje seus treinos como nunca antes.
-      </motion.p>
-      <motion.button 
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.2 }}
-        className="mt-8 px-10 py-5 bg-lime-400 text-black rounded-full text-lg font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2"
-      >
-        Criar Conta 🚴‍♂️
-      </motion.button>
-    </section>
 
+    />
+    <div className="absolute inset-0 bg-background/80" />
+  </div>
+
+  {/* CTA CONTENT */}
+  <div className="relative z-10 flex flex-col items-center space-y-6 max-w-2xl px-6">
+    <motion.h2
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true }}
+      className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-lime-300 to-green-500 text-transparent bg-clip-text"
+    >
+      Chegou a hora de pedalar com inteligência
+    </motion.h2>
+
+    <motion.p
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.2 }}
+      viewport={{ once: true }}
+      className="text-lg md:text-xl text-muted-foreground"
+    >
+      Seu treino merece mais do que um palpite. Ganhe controle sobre cada percurso.
+    </motion.p>
+
+    <motion.button
+      whileHover={{ scale: 1.07 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.2 }}
+      className="mt-6 px-10 py-5 bg-lime-400 text-black rounded-full text-lg font-bold shadow-[0_8px_30px_rgba(163,230,53,0.3)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
+    >
+      Criar Conta Agora <ArrowRight className="w-5 h-5" />
+    </motion.button>
+    <LogoVelox className="mt-10 w-30" />
+  </div>
+</section>
     </main>
     </>
   )
