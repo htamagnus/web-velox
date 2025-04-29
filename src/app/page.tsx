@@ -189,9 +189,10 @@ export default function LandingPage() {
           key={feature.title}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: index * 0.2 }}
+          whileHover={{ scale: 1.03, rotate: 0.2 }}
+          transition={{ type: 'spring', stiffness: 120 }}
           viewport={{ once: true }}
-          className="p-6 rounded-xl bg-muted/10 border border-muted/20 hover:shadow-lg transition-all"
+          className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_4px_20px_rgba(0,255,150,0.05)] transition-all"
         >
           <div className="flex items-center gap-2 mb-2">
             <feature.icon className="w-6 h-6" stroke="var(--primary)"/>
