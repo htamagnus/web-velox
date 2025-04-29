@@ -126,3 +126,16 @@ body::-webkit-scrollbar {
   } 
 }
 
+@layer components {
+  .step-heading {
+    @apply text-3xl text-center;
+    color: var(--copy);
+  }
+
+  .step-paragraph {
+    @apply text-base text-center mt-2;
+    color: var(--copy-light);
+  }
+}
+
+
