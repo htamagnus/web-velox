@@ -23,11 +23,23 @@ export default function LandingPage() {
   return (
     <>
     <PageTransitionOverlay visible={showTransition} />
-    <main className="min-h-screen bg-background text-foreground flex flex-col items-center justify-start px-6">
-      {/* HERO */}
-      <section className="flex flex-col items-center text-center mt-20 space-y-6 max-w-3xl">
+        <main className="min-h-screen bg-background text-foreground flex flex-col items-center justify-start">
+          {/* HERO */}
+          <section className="relative w-full min-h-[80vh] flex items-center justify-center text-center text-foreground">
+      {/* BACKGROUND IMAGE */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/hero-bike.jpg"
+          alt="Ciclista em movimento"
+          className="w-full h-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-background/80" />
+      </div>
+
+      {/* HERO CONTENT */}
+      <div className="relative z-10 flex flex-col items-center space-y-6 max-w-3xl px-4">
         <LogoVelox className="mb-6" />
-        
+
         <motion.h1 
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }}
@@ -42,10 +54,11 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="text-muted text-lg md:text-xl max-w-2xl mt-4"
+          className="text-lg md:text-xl max-w-2xl"
         >
           O Velox calcula a previsão de percurso com base na sua velocidade real, no seu terreno e no seu esforço — não numa média genérica.
         </motion.p>
+
         <motion.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -60,7 +73,9 @@ export default function LandingPage() {
             <>Começar <span>🚴‍♂️</span></>
           )}
         </motion.button>
-      </section>
+      </div>
+    </section>
+
       {/* PROBLEMA */}
       <section className="flex flex-col items-center text-center mt-24 space-y-6 max-w-2xl">
         <motion.h2
