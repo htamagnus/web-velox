@@ -7,7 +7,7 @@ import styles from './button.module.css'
 type ButtonProps = {
   children: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
-  variant?: 'primary' | 'secondary' | 'ghost' | 'round' | 'confirm'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'round' | 'confirm' | 'strava' | 'back'
   loading?: boolean
   disabled?: boolean
   className?: string
@@ -31,7 +31,9 @@ export default function Button({
     secondary: 'bg-copy text-background shadow hover:opacity-90 active:scale-95',
     ghost: 'bg-transparent text-copy hover:bg-white/10 active:scale-95',
     round: 'bg-primary-dark w-10 h-10 rounded-full hover:brightness-110 active:scale-95',
+    back: 'w-10 h-10 rounded-full text-copy-lighter hover:bg-white/10 active:scale-95',
     confirm: styles.confirm,
+    strava: styles.strava,
   }
 
   const isDisabled = disabled || loading
