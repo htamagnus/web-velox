@@ -134,7 +134,7 @@ export default function OnboardingForm() {
     </AnimatePresence>
       <div className="absolute top-0 left-0 w-full h-2 bg-gray-700">
         <div
-          className="h-full bg-purple-500 transition-all duration-300"
+          className="h-full bg-primary-dark transition-all duration-300"
           style={{ width: `${((step + 1) / onboardingSteps.length) * 100}%` }}
         />
       </div>
