@@ -9,6 +9,7 @@ import Button from '../ui/button/button'
 import { useRouter } from 'next/navigation'
 import InputField from '../ui/input-field/input-field'
 import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
+import LogoVelox from '../ui/logo-velox/logo-velox'
 
 export default function LoginForm() {
   const apiVelox = new ApiVeloxService()
@@ -66,9 +67,10 @@ export default function LoginForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
+      <LogoVelox className="mb-8" /> 
     <div className="text-center space-y-2">
-      <h2 className="text-2xl font-bold">Entrar no Velox</h2>
-      <p className="text-sm text-muted">Acesse sua conta para começar a planejar rotas.</p>
+      <h2 className="text-2xl font-bold text-primary-light">Entrar no Velox</h2>
+      <p className="text-s text-copy-light">Acesse sua conta para começar a planejar rotas.</p>
     </div>
     <InputField
       label="E-mail"
@@ -86,7 +88,7 @@ export default function LoginForm() {
       error={fieldErrors.password}
       required
     />
-    <Button type="submit" variant="confirm" loading={loading}>
+    <Button type="submit" variant="primary" loading={loading}>
       {loading ? 'Entrando...' : 'Entrar'}
     </Button>
 

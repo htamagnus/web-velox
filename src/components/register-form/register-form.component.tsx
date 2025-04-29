@@ -88,10 +88,14 @@ export default function RegisterForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-1">
       <LogoVelox className="mb-8" /> 
-        <h2 className="text-2xl font-bold">Criar Conta</h2>
-        <p className="text-sm text-muted">Preencha os dados abaixo para começar a usar o Velox 🚴‍♂️</p>
+      {/* <div className="relative w-full flex items-center justify-center">
+        <div className="absolute w-62 h-0.5 bg-primary" />
+      </div> */}
+
+        <h2 className="text-2xl font-bold text-primary-light mt-8">Criar Conta</h2>
+        <p className="text-s text-copy-light">Preencha os dados abaixo para começar a usar o Velox</p>
       </div>
 
       <InputField 
@@ -114,6 +118,7 @@ export default function RegisterForm() {
         name="password"
         type="password"
         value={password}
+        placeholder="Digite sua senha"
         onChange={(e) => {
           setPassword(e.target.value)
           if (fieldErrors.password) {
@@ -124,7 +129,7 @@ export default function RegisterForm() {
         required
       />
 
-      <div className="mt-4 space-y-1 text-sm">
+      <div className="mt-4 space-y-1 text-sm text-copy-lighter">
         <p className={passwordChecks.length ? 'text-green-500' : 'text-muted'}>• Pelo menos 8 caracteres</p>
         <p className={passwordChecks.uppercase ? 'text-green-500' : 'text-muted'}>• Uma letra maiúscula</p>
         <p className={passwordChecks.number ? 'text-green-500' : 'text-muted'}>• Um número</p>
@@ -134,18 +139,17 @@ export default function RegisterForm() {
       <Button
         type="submit"
         loading={loading}
-        variant="confirm"
+        variant="primary"
         className="transition-transform active:scale-95 hover:brightness-110 mt-6"
       >
         {loading ? 'Enviando...' : 'Registrar'}
       </Button>
-      <div className="mt-2 text-center text-sm text-muted">
+      <div className="mt-2 text-center text-sm text-copy-light">
         Já tem uma conta?{" "}
         <Link href="/login" className="text-primary hover:underline font-medium">
           Clique aqui para entrar
         </Link>
       </div>
-
     </FormWrapper>
   )
 }
