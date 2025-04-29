@@ -12,11 +12,16 @@
 }
 
 
-body {
+html, body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
+  scrollbar-width: none;
   @apply text-base leading-relaxed antialiased;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 @layer utilities {

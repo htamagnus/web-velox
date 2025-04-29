@@ -1,16 +1,34 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import LogoVelox from '@/components/ui/logo-velox/logo-velox'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay'
 import { Bike, LineChart, Flame, MountainSnow } from 'lucide-react'
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion'
+
 
 export default function LandingPage() {
   const [loading, setLoading] = useState(false)
   const [showTransition, setShowTransition] = useState(false)
   const router = useRouter()
+
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const offsetX = (e.clientX / window.innerWidth - 0.5) * 20
+      const offsetY = (e.clientY / window.innerHeight - 0.5) * 20
+      x.set(offsetX)
+      y.set(offsetY)
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+  
+  const springX = useSpring(x, { stiffness: 50, damping: 10 })
+  const springY = useSpring(y, { stiffness: 50, damping: 10 })
 
   const handleStart = () => {
     setShowTransition(true)
@@ -27,14 +45,39 @@ export default function LandingPage() {
           {/* HERO */}
           <section className="relative w-full min-h-[80vh] flex items-center justify-center text-center text-foreground">
       {/* BACKGROUND IMAGE */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/images/hero-bike.jpg"
-          alt="Ciclista em movimento"
-          className="w-full h-full object-cover opacity-60"
-        />
+      {/* <div className="absolute inset-0 z-0">
+      <motion.img
+      src="/images/hero-bike.jpg"
+      alt="Ciclista em movimento"
+      initial={{ scale: 1 }}
+      animate={{ scale: 1.00 }}
+      transition={{ duration: 5, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' }}
+      className="w-full h-full object-cover opacity-60"
+    />
+
         <div className="absolute inset-0 bg-background/80" />
-      </div>
+      </div> */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+    <motion.img
+      src="/images/hero-bike.jpg"
+      alt="Ciclista em movimento"
+      style={{
+        x: springX,
+        y: springY,
+        scale: 1.05
+      }}
+      initial={{ scale: 1 }}
+      animate={{ scale: 1.05 }}
+      transition={{
+        duration: 20,
+        ease: 'easeInOut',
+        repeat: Infinity,
+        repeatType: 'mirror'
+      }}
+      className="w-full h-full object-cover opacity-60"
+    />
+    <div className="absolute inset-0 bg-background/80" />
+  </div>
 
       {/* HERO CONTENT */}
       <div className="relative z-10 flex flex-col items-center space-y-6 max-w-3xl px-4">
