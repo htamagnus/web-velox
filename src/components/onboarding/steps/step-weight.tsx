@@ -1,97 +1,22 @@
-'use client'
+import { ArrowDown, ArrowUp } from "lucide-react";
+import StepNumericSelector from "../step-numeric-selector";
+import { StepProps } from "@/interfaces/step.interface";
+import { useTexts } from "@/helpers/use-texts";
 
-import React from 'react'
-import Button from '@/components/ui/button/button'
-import { ArrowUp, ArrowDown } from 'lucide-react'
-
-interface StepWeightProps {
-  value: number
-  onChange: (value: number) => void
-  onNext: () => void
-  onBack?: () => void
-}
-
-const MIN_WEIGHT = 40
-const MAX_WEIGHT = 120
-
-export default function StepWeight({ value, onChange, onNext, onBack }: StepWeightProps) {
-  const getDisplayValues = () => {
-    return [
-      value - 2,
-      value - 1,
-      value,
-      value + 1,
-      value + 2,
-    ].filter((v) => v >= MIN_WEIGHT && v <= MAX_WEIGHT)
-  }
+export default function StepWeight(props: StepProps) {
+  const { t } = useTexts('onboarding.weight')
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center text-white bg-gray-900 relative px-4">
-      
-      {onBack && (
-        <Button
-          onClick={onBack}
-          className="absolute top-6 left-4"
-          variant="round"
-          aria-label="Voltar"
-        >
-          ←
-        </Button>
-      )}
-
-      <div className="w-full max-w-xs text-center mt-10">
-        <h2 className="step-heading mb-2">What Is Your <strong>Weight?</strong></h2>
-        <p className="step-paragraph mb-6">
-          Informe seu peso para estimarmos melhor seu desempenho.
-        </p>
-
-        <div className="relative h-60 flex flex-col items-center justify-center">
-          <div className="absolute top-[calc(50%+1.5rem)] w-20 h-[1px] bg-gray-400 opacity-60 z-10" />
-
-          <div className="space-y-2 z-20">
-            {getDisplayValues().map((w) => (
-              <div
-                key={w}
-                className={`transition-all flex items-center justify-center ${
-                  w === value
-                    ? 'text-4xl font-extrabold text-white'
-                    : 'text-lg text-gray-400 opacity-80'
-                }`}
-              >
-                {w}
-                {w === value && (
-                  <span className="ml-1 text-base font-medium text-gray-300">kg</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex justify-center gap-6 my-6">
-        <Button
-            variant="round"
-            onClick={() => onChange(Math.max(value - 1, MIN_WEIGHT))}
-            aria-label="Diminuir"
-          >
-           <ArrowDown className="w-5 h-5" color='black'/> 
-          </Button>
-          <Button
-            variant="round"
-            onClick={() => onChange(Math.min(value + 1, MAX_WEIGHT))}
-            aria-label="Aumentar"
-          >
-            <ArrowUp className="w-5 h-5" color='black'/>
-          </Button>
-        </div>
-
-        <div className="flex justify-center">
-        <Button
-        onClick={onNext}
-        variant="confirm"
-      >
-        Continue
-      </Button>
-        </div>
-      </div>
-    </div>
+    <StepNumericSelector
+      title={t('title')}
+      subtitle={t('subtitle')}
+      unit={t('unit')}
+      min={40}
+      max={120}
+      iconUp={<ArrowUp className="w-5 h-5" color="black" />}
+      iconDown={<ArrowDown className="w-5 h-5" color="black" />}
+      {...props}
+      note={t('note')}
+    />
   )
 }
