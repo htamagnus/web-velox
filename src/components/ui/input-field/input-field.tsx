@@ -21,7 +21,7 @@ export default function InputField({
 }: InputFieldProps) {
   return (
     <div className="w-full">
-      <label htmlFor={name} className="block text-sm font-medium text-muted">
+      <label htmlFor={name} className="block text-s font-medium text-copy">
         {label}
       </label>
       <input
@@ -32,7 +32,7 @@ export default function InputField({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className={`mt-1 block w-full px-4 py-2 rounded-md shadow-sm bg-transparent text-foreground placeholder:text-muted border ${
+        className={`mt-1 block w-full px-4 py-2 rounded-md shadow-sm text-copy border ${
           error ? 'border-red-500' : 'border-border'
         } focus:ring-2 focus:ring-accent focus:outline-none`}
       />
