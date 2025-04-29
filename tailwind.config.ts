@@ -17,21 +17,15 @@ const config: Config = {
   plugins: [
     plugin(function ({ addUtilities }) {
       addUtilities({
-        '.bg-background': {
-          backgroundColor: 'var(--background)',
-        },
-        '.text-foreground': {
-          color: 'var(--foreground)',
-        },
-        '.text-muted': {
-          color: 'var(--muted)',
-        },
-        '.bg-accent': {
-          backgroundColor: 'var(--accent)',
-        },
-        '.border-border': {
-          borderColor: 'var(--border)',
-        },
+        '.bg-background': { backgroundColor: 'var(--background)' },
+        '.text-foreground': { color: 'var(--foreground)' },
+        '.text-muted': { color: 'var(--muted)' },
+        '.bg-accent': { backgroundColor: 'var(--accent)' },
+        '.border-border': { borderColor: 'var(--border)' },
+        '.bg-primary': { backgroundColor: 'var(--primary)' },
+        '.text-primary': { color: 'var(--primary)' },
+        '.bg-secondary': { backgroundColor: 'var(--secondary)' },
+        '.text-secondary': { color: 'var(--secondary)' },
       })
     }),
   ],

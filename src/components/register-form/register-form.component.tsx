@@ -11,6 +11,7 @@ import InputField from '../ui/input-field/input-field'
 import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
 import { toast } from 'sonner'
 import LogoVelox from '../ui/logo-velox/logo-velox'
+import Link from 'next/link'
 
 export default function RegisterForm() {
   const apiVelox = new ApiVeloxService()
@@ -138,6 +139,13 @@ export default function RegisterForm() {
       >
         {loading ? 'Enviando...' : 'Registrar'}
       </Button>
+      <div className="mt-2 text-center text-sm text-muted">
+        Já tem uma conta?{" "}
+        <Link href="/login" className="text-primary hover:underline font-medium">
+          Clique aqui para entrar
+        </Link>
+      </div>
+
     </FormWrapper>
   )
 }

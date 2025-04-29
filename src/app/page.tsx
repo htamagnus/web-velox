@@ -5,6 +5,7 @@ import LogoVelox from '@/components/ui/logo-velox/logo-velox'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay'
+import { Bike, LineChart, Flame, MountainSnow } from 'lucide-react'
 
 export default function LandingPage() {
   const [loading, setLoading] = useState(false)
@@ -120,11 +121,11 @@ export default function LandingPage() {
     </section>
     {/* FEATURES */}
     <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-18 max-w-4xl">
-      {[
-        { title: "Previsão Real", desc: "Calcule o tempo com base na sua velocidade média, não em médias genéricas." },
-        { title: "Modalidade Adaptada", desc: "Escolha entre MTB, Speed ou urbano para previsões ainda mais precisas." },
-        { title: "Integração Strava", desc: "Importe automaticamente sua velocidade real do Strava." },
-        { title: "Calorias e Altimetria", desc: "Veja calorias gastas e ganho de elevação em cada trajeto." },
+    {[
+        { icon: LineChart, title: "Previsão Real", desc: "Calcule o tempo com base na sua velocidade média, não em médias genéricas." },
+        { icon: Bike, title: "Modalidade Adaptada", desc: "Escolha entre MTB, Speed ou urbano para previsões ainda mais precisas." },
+        { icon: Flame, title: "Integração Strava", desc: "Importe automaticamente sua velocidade real do Strava." },
+        { icon: MountainSnow, title: "Calorias e Altimetria", desc: "Veja calorias gastas e ganho de elevação em cada trajeto." },
       ].map((feature, index) => (
         <motion.div
           key={feature.title}
@@ -134,7 +135,10 @@ export default function LandingPage() {
           viewport={{ once: true }}
           className="p-6 rounded-xl bg-muted/10 border border-muted/20 hover:shadow-lg transition-all"
         >
-          <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+          <div className="flex items-center gap-2 mb-2">
+            <feature.icon className="w-6 h-6" stroke="var(--primary)"/>
+            <h3 className="text-xl font-bold">{feature.title}</h3>
+          </div>
           <p className="text-muted">{feature.desc}</p>
         </motion.div>
       ))}
