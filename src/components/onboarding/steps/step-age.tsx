@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Button from '@/components/ui/button/button'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 
 interface StepAgeProps {
   value: number
@@ -39,8 +40,8 @@ export default function StepAge({ value, onChange, onNext, onBack }: StepAgeProp
       )}
 
       <div className="w-full max-w-xs text-center mt-10">
-        <h2 className="text-2xl font-bold mb-2">What Is Your Age?</h2>
-        <p className="text-sm text-gray-300 mb-6">
+        <h2 className="step-heading mb-2">What Is Your <strong>Age?</strong></h2>
+        <p className="step-paragraph mb-6">
           Informe sua idade para personalizarmos melhor sua experiência.
         </p>
 
@@ -72,19 +73,19 @@ export default function StepAge({ value, onChange, onNext, onBack }: StepAgeProp
             onClick={() => onChange(Math.max(value - 1, MIN_AGE))}
             aria-label="Diminuir"
           >
-            ↓
+            <ArrowDown className="w-5 h-5" color='black'/> 
           </Button>
           <Button
             variant="round"
             onClick={() => onChange(Math.min(value + 1, MAX_AGE))}
             aria-label="Aumentar"
           >
-            ↑
+            <ArrowUp className="w-5 h-5" color='black'/>
           </Button>
         </div>
 
         <div className="flex justify-center">
-          <Button onClick={onNext} variant="secondary">
+          <Button onClick={onNext} variant="confirm">
             Continuar
           </Button>
         </div>

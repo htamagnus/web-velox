@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Button from '@/components/ui/button/button'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 
 interface StepWeightProps {
   value: number
@@ -39,8 +40,8 @@ export default function StepWeight({ value, onChange, onNext, onBack }: StepWeig
       )}
 
       <div className="w-full max-w-xs text-center mt-10">
-        <h2 className="text-2xl font-bold mb-2">What Is Your Weight?</h2>
-        <p className="text-sm text-gray-300 mb-6">
+        <h2 className="step-heading mb-2">What Is Your <strong>Weight?</strong></h2>
+        <p className="step-paragraph mb-6">
           Informe seu peso para estimarmos melhor seu desempenho.
         </p>
 
@@ -66,26 +67,29 @@ export default function StepWeight({ value, onChange, onNext, onBack }: StepWeig
           </div>
         </div>
         <div className="flex justify-center gap-6 my-6">
-          <button
+        <Button
+            variant="round"
             onClick={() => onChange(Math.max(value - 1, MIN_WEIGHT))}
-            className="bg-white text-black rounded-full w-10 h-10 flex items-center justify-center text-xl shadow"
             aria-label="Diminuir"
           >
-            ↓
-          </button>
-          <button
+           <ArrowDown className="w-5 h-5" color='black'/> 
+          </Button>
+          <Button
+            variant="round"
             onClick={() => onChange(Math.min(value + 1, MAX_WEIGHT))}
-            className="bg-white text-black rounded-full w-10 h-10 flex items-center justify-center text-xl shadow"
             aria-label="Aumentar"
           >
-            ↑
-          </button>
+            <ArrowUp className="w-5 h-5" color='black'/>
+          </Button>
         </div>
 
         <div className="flex justify-center">
-          <Button onClick={onNext} variant="secondary">
-            Continuar
-          </Button>
+        <Button
+        onClick={onNext}
+        variant="confirm"
+      >
+        Continue
+      </Button>
         </div>
       </div>
     </div>
