@@ -1,0 +1,22 @@
+{
+  "onboarding": {
+    "height": {
+      "title": "Qual é a sua altura?",
+      "subtitle": "Isso ajuda a gente a calcular seu esforço de forma mais precisa. É rapidinho!",
+      "unit": "cm",
+      "note": "Essas informações ajudam a estimar com mais precisão o gasto calórico nas suas rotas. 🚴‍♂️"
+    },
+    "weight": {
+      "title": "E o seu peso?",
+      "subtitle": "Fica tranquilo: usamos isso só pra calcular seu desempenho e gasto calórico de forma personalizada.",
+      "unit": "kg",
+      "note": "Quanto mais preciso, melhor a estimativa de calorias e esforço nas suas pedaladas. 💪"
+    },
+    "age": {
+      "title": "Qual sua idade?",
+      "subtitle": "Idade também conta na hora de entender seu ritmo e gasto energético. Bora personalizar sua experiência!",
+      "unit": "anos",
+      "note": "Esses dados ajudam a ajustar as rotas e previsões pro seu perfil. 😉"
+    }
+  }
+}
