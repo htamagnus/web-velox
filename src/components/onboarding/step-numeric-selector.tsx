@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowLeft } from "lucide-react"
 import Button from "../ui/button/button"
 
 interface StepNumericSelectorProps {
@@ -15,6 +15,7 @@ interface StepNumericSelectorProps {
     iconDown?: React.ReactNode
     displayMode?: 'list' | 'scroll'
     note?: string
+    extraActions?: React.ReactNode
   }
   
   export default function StepNumericSelector({
@@ -30,7 +31,8 @@ interface StepNumericSelectorProps {
     iconUp,
     iconDown,
     displayMode = 'list',
-    note
+    note, 
+    extraActions,
   }: StepNumericSelectorProps) {
     const getDisplayValues = () => {
       return [
@@ -54,10 +56,10 @@ interface StepNumericSelectorProps {
             <Button
               onClick={onBack}
               className="absolute top-6 left-4"
-              variant="round"
+              variant="back"
               aria-label="Voltar"
             >
-              ←
+              < ArrowLeft />
             </Button>
           )}
     
@@ -142,6 +144,11 @@ interface StepNumericSelectorProps {
               </Button>
             </div>
 
+            {extraActions && (
+            <div className="flex flex-col gap-3 items-center w-full mt-2">
+              {extraActions}
+            </div>
+          )}
             {note && (
                 <div className="w-full flex justify-center mt-15 px-4">
                     <p className="text-xs text-copy-lighter text-center max-w-xs">
