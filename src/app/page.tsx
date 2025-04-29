@@ -4,7 +4,7 @@ import LogoVelox from '@/components/ui/logo-velox/logo-velox'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay'
-import { Bike, LineChart, Flame, MountainSnow } from 'lucide-react'
+import { Bike, LineChart, Flame, MountainSnow, ArrowRight } from 'lucide-react'
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion'
 
 
@@ -119,83 +119,45 @@ export default function LandingPage() {
       </div>
     </section>
 
-      {/* PROBLEMA */}
-<section className="relative flex flex-col items-center text-center mt-24 space-y-6 max-w-2xl px-6 py-16 rounded-xl bg-gradient-to-br from-red-900/10 via-background to-background shadow-inner border border-white/10 backdrop-blur-md">
-  <motion.h2
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.7 }}
-    viewport={{ once: true }}
-    className="text-3xl md:text-4xl font-bold text-red-400"
-  >
-    A previsão te deixou na mão?
-  </motion.h2>
+    <section className="w-full py-32 px-6 bg-gradient-to-b from-red-900/20 via-background to-emerald-900/10 backdrop-blur-md">
+    <div className="max-w-2xl mx-auto flex flex-col items-center text-center space-y-24">
+      
+      {/* BLOCO PROBLEMA */}
+      <div className="w-full flex flex-col items-center space-y-6">
+        <motion.h2 className="text-3xl md:text-4xl font-bold">
+          A previsão te <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500 animate-pulse"> deixou na mão? </span>
+        </motion.h2>
+        <motion.div className="flex gap-6 items-center text-4xl md:text-5xl font-bold leading-none">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500 animate-pulse align-middle">
+            2h10
+          </span>
+          <ArrowRight className="w-7 h-7 text-foreground translate-y-[2px]" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-green-500 animate-pulse align-middle">
+            1h20
+          </span>
+        </motion.div>
+        <motion.p className="text-muted-foreground text-lg">
+          O Google estimou mais de 2 horas para 30km.<br />
+          Na prática? 1h20 — sem erro de cálculo.
+        </motion.p>
+      </div>
 
-  <motion.div 
-    initial={{ scale: 0.9, rotateX: -90 }}
-    whileInView={{ scale: 1, rotateX: 0 }}
-    transition={{ duration: 0.8, type: 'spring' }}
-    viewport={{ once: true }}
-    className="flex gap-6 items-center text-4xl md:text-5xl font-bold"
-  >
-    <span className="text-red-500 animate-pulse">2h10</span>
-    <span>➔</span>
-    <span className="text-green-500">1h20</span>
-  </motion.div>
+      {/* BLOCO SOLUÇÃO */}
+      <div className="space-y-6">
+        <Flame className="w-10 h-10 text-lime-400 mx-auto" />
+        <motion.h2 className="text-3xl md:text-4xl font-bold">
+          Com o Velox, a previsão é <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-green-500 animate-pulse">a sua realidade.</span>
+        </motion.h2>
+        <motion.p className="text-muted-foreground text-lg">
+          Integre seu Strava, selecione sua modalidade (MTB, Speed) e receba estimativas baseadas nos seus dados reais de treino.
+        </motion.p>
+        <div className="text-sm text-muted-foreground">
+          Precisão validada em treinos reais
+        </div>
+      </div>
 
-  <motion.p
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, delay: 0.2 }}
-    viewport={{ once: true }}
-    className="text-muted-foreground text-lg mt-4"
-  >
-    O Google estimou mais de 2 horas para 30km.<br />
-    Na prática? 1 hora e 20 minutos — e sem erro de cálculo.
-  </motion.p>
-</section>
-
-
-    {/* SOLUÇÃO */}
-    <section className="relative flex flex-col items-center text-center mt-24 space-y-6 max-w-2xl px-6 py-12 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl shadow-lg">
-  <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    viewport={{ once: true }}
-  >
-    <Flame className="w-10 h-10 text-lime-400 mb-2" />
-  </motion.div>
-
-  <motion.h2
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.7 }}
-    viewport={{ once: true }}
-    className="text-3xl md:text-4xl font-bold"
-  >
-    Com o Velox, a previsão é <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-green-500 animate-pulse">a sua realidade</span>.
-  </motion.h2>
-
-  <motion.p
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, delay: 0.2 }}
-    viewport={{ once: true }}
-    className="text-muted-foreground text-lg mt-4"
-  >
-    Integre seu Strava, selecione sua modalidade (MTB, Speed) e receba estimativas de tempo baseadas nos seus dados reais de treino — não em médias genéricas.
-  </motion.p>
-
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.4 }}
-    className="text-sm text-muted-foreground"
-  >
-    Precisão validada em treinos reais
-  </motion.div>
-</section>
+    </div>
+  </section>
 
     {/* FEATURES */}
     <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-18 max-w-4xl">
