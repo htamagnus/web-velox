@@ -17,15 +17,30 @@ const config: Config = {
   plugins: [
     plugin(function ({ addUtilities }) {
       addUtilities({
+        /* Backgrounds */
         '.bg-background': { backgroundColor: 'var(--background)' },
-        '.text-foreground': { color: 'var(--foreground)' },
-        '.text-muted': { color: 'var(--muted)' },
-        '.bg-accent': { backgroundColor: 'var(--accent)' },
-        '.border-border': { borderColor: 'var(--border)' },
         '.bg-primary': { backgroundColor: 'var(--primary)' },
+        '.bg-primary-light': { backgroundColor: 'var(--primary-light)' },
+        '.bg-primary-dark': { backgroundColor: 'var(--primary-dark)' },
+        '.bg-success': { backgroundColor: 'var(--success)' },
+        '.bg-warning': { backgroundColor: 'var(--warning)' },
+        '.bg-error': { backgroundColor: 'var(--error)' },
+  
+        /* Text colors */
+        '.text-foreground': { color: 'var(--foreground)' },
         '.text-primary': { color: 'var(--primary)' },
-        '.bg-secondary': { backgroundColor: 'var(--secondary)' },
-        '.text-secondary': { color: 'var(--secondary)' },
+        '.text-primary-light': { color: 'var(--primary-light)' },
+        '.text-primary-dark': { color: 'var(--primary-dark)' },
+        '.text-primary-content': { color: 'var(--primary-content)' },
+        '.text-success-content': { color: 'var(--success-content)' },
+        '.text-warning-content': { color: 'var(--warning-content)' },
+        '.text-error-content': { color: 'var(--error-content)' },
+        '.text-copy': { color: 'var(--copy)' },
+        '.text-copy-light': { color: 'var(--copy-light)' },
+        '.text-copy-lighter': { color: 'var(--copy-lighter)' },
+  
+        /* Borders */
+        '.border-border': { borderColor: 'var(--border)' },
       })
     }),
   ],
