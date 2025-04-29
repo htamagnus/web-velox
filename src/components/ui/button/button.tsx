@@ -2,6 +2,7 @@
 
 import React from 'react'
 import clsx from 'clsx'
+import styles from './button.module.css'
 
 type ButtonProps = {
   children: React.ReactNode
@@ -23,29 +24,35 @@ export default function Button({
   onClick,
 }: ButtonProps) {
   const baseClasses =
-    'inline-flex items-center justify-center font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2'
+  'inline-flex items-center justify-center font-semibold transition-all text-base focus:outline-none focus:ring-2 focus:ring-offset-2'
 
   const variants = {
-    confirm: 'w-full bg-white/7 button-confirm rounded-md py-2 cursor-pointer',
-    primary: 'button-confirm w-full',
-    secondary: 'bg-white text-gray-900 px-6 py-2 rounded-md font-semibold shadow-lg hover:opacity-90',
-    ghost: 'w-full bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-300 px-4 py-2 rounded-md',
-    round: 'rounded-button',
+    primary: 'w-full py-2 rounded-md bg-primary shadow hover:brightness-10 active:scale-95',
+    secondary: 'bg-copy text-background shadow hover:opacity-90 active:scale-95',
+    ghost: 'bg-transparent text-copy hover:bg-white/10 active:scale-95',
+    round: 'bg-primary-dark w-10 h-10 rounded-full hover:brightness-110 active:scale-95',
+    confirm: styles.confirm,
   }
-    
+
+  const isDisabled = disabled || loading
+
   return (
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled || loading}
+      disabled={isDisabled}
       className={clsx(
         baseClasses,
         variants[variant],
-        disabled || loading ? 'opacity-50 cursor-not-allowed' : '',
+        isDisabled && 'opacity-50 cursor-not-allowed',
         className
       )}
     >
-      {loading ? 'Carregando...' : children}
+      {loading ? (
+        <span className="w-5 h-5 border-2 border-t-transparent border-current rounded-full animate-spin" />
+      ) : (
+        children
+      )}
     </button>
   )
 }
