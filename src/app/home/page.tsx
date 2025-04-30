@@ -54,22 +54,22 @@ export default function HomePage() {
 
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/9 backdrop-blur-md border-border text-muted shadow-md">
+      <footer className="fixed bottom-0 left-0 right-0 bg-white/9 backdrop-blur-md border-border shadow-md">
         <div className="flex justify-between items-center px-16 py-2 text-sm">
           <button onClick={() => router.push('/saved-routes')} className="flex flex-col items-center">
-            <Map size={24} />
+            <Map size={28} stroke="#bfd572"/>
             Rotas
           </button>
 
           <button
             onClick={() => router.push('/calculate')}
-            className="bg-accent text-white rounded-full p-3 -mt-8 shadow-lg"
+            className="bg-accent rounded-full p-3 -mt-8 shadow-lg"
           >
-            <PlusCircle size={32} />
+            <PlusCircle size={40} stroke="#bfd572"/>
           </button>
 
           <button onClick={() => router.push('/profile')} className="flex flex-col items-center">
-            <User size={24} />
+            <User size={28} stroke="#bfd572"/>
             Perfil
           </button>
         </div>
