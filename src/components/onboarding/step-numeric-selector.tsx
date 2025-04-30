@@ -46,6 +46,10 @@ export default function StepNumericSelector({
   const centerIndex = range.findIndex((v) => v === value);
   const offset = (centerIndex - Math.floor(visibleTicks / 2)) * itemHeight;
 
+  const isSkippable = (value === 0 || value === min) && unit === 'km/h';
+  const showSkipLabel = isSkippable && (displayMode === 'list' || displayMode === 'scroll');
+  const primaryButtonLabel = showSkipLabel ? 'Pular' : 'Continuar';
+
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center relative px-4">
       {onBack && (
@@ -133,7 +137,7 @@ export default function StepNumericSelector({
 
         <div className="flex justify-center">
           <Button onClick={onNext} variant="confirm">
-            Continue
+            {primaryButtonLabel}
           </Button>
         </div>
 
