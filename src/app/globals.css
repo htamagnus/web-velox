@@ -136,6 +136,10 @@ body::-webkit-scrollbar {
     @apply text-base text-center mt-2;
     color: var(--copy-light);
   }
+
+  .title-primary {
+    @apply text-2xl text-center;
+  }
 }
 
 

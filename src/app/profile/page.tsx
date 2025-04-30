@@ -6,9 +6,11 @@ import ApiVeloxService from '@/providers/api-velox.provider'
 import Button from '@/components/ui/button/button'
 import { Athlete, UpdateAthleteDto } from '@/interfaces/athlete.interface'
 import Loader from '@/components/ui/loader/loader'
-import BackButton from '@/components/ui/back-button/back-button'
 import InputField from '@/components/ui/input-field/input-field'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTexts } from '@/helpers/use-texts'
+import { ArrowLeft } from 'lucide-react'
+import { FormWrapper } from '@/components/ui/form-wrapper/form-wrapper'
 
 export default function ProfilePage() {
   const api = new ApiVeloxService()
@@ -18,13 +20,15 @@ export default function ProfilePage() {
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [age, setAge] = useState<number>(0)
   const [weight, setWeight] = useState<number>(0)
   const [height, setHeight] = useState<number>(0)
   const [speedGeneral, setSpeedGeneral] = useState<number>(0)
   const [speedRoad, setSpeedRoad] = useState<number>(0)
   const [speedMtb, setSpeedMtb] = useState<number>(0)
+  const [isGeneralSpeedFromStrava, setIsGeneralSpeedFromStrava] = useState(false)
+  const { t } = useTexts('profile')
+  
 
   useEffect(() => {
     async function fetchProfile() {
@@ -39,9 +43,9 @@ export default function ProfilePage() {
         setSpeedGeneral(profile.averageSpeedGeneral ?? 0)
         setSpeedRoad(profile.averageSpeedRoad ?? 0)
         setSpeedMtb(profile.averageSpeedMtb ?? 0)
+        setIsGeneralSpeedFromStrava(profile.averageSpeedGeneralIsFromStrava ?? false)
       } catch (err) {
-        console.error('Erro ao buscar perfil:', err)
-        toast.error('Erro ao carregar perfil.')
+        toast.error(t('messages.loadError'))
       }
     }
     fetchProfile()
@@ -62,17 +66,16 @@ export default function ProfilePage() {
     if (speedMtb !== userData.averageSpeedMtb) payload.averageSpeedMtb = speedMtb
 
     if (Object.keys(payload).length === 0) {
-      toast.info('Nenhuma alteração foi feita.')
+      toast.info(t('messages.noChanges'))
       return
     }
 
     try {
       setIsSaving(true)
       await api.updateProfile(payload)
-      toast.success('Alterações salvas com sucesso!')
+      toast.success(t('messages.updateSuccess'))
     } catch (error) {
-      console.error('Erro ao atualizar perfil:', error)
-      toast.error('Erro ao salvar alterações.')
+      toast.error(t('messages.updateError'))
     } finally {
       setIsSaving(false)
     }
@@ -97,21 +100,29 @@ export default function ProfilePage() {
       className="max-w-xl mx-auto p-6 space-y-6"
     >
     <div className="max-w-xl mx-auto p-6 space-y-6">
-        <BackButton />
-      <h1 className="text-2xl font-bold text-foreground text-center">Meu Perfil</h1>
-
-      <div className="shadow-lg max-w-xl mx-auto p-4 bg-white/5 backdrop-blur-md text-foreground rounded-2xl shadow-xl space-y-3">
-        <InputField label="Nome" name="name" value={name} onChange={(e) => setName(e.target.value)} />
-        <InputField label="Email" name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <InputField label="Idade" name="age" type="number" value={age.toString()} onChange={(e) => setAge(Number(e.target.value))} />
-        <InputField label="Peso (kg)" name="weight" type="number" value={weight.toString()} onChange={(e) => setWeight(Number(e.target.value))} />
-        <InputField label="Altura (cm)" name="height" type="number" value={height.toString()} onChange={(e) => setHeight(Number(e.target.value))} />
-        <InputField label="Velocidade Geral (km/h)" name="speedGeneral" type="number" value={speedGeneral.toString()} onChange={(e) => setSpeedGeneral(Number(e.target.value))} />
-        <InputField label="Velocidade Speed (km/h)" name="speedRoad" type="number" value={speedRoad.toString()} onChange={(e) => setSpeedRoad(Number(e.target.value))} />
-        <InputField label="Velocidade MTB (km/h)" name="speedMtb" type="number" value={speedMtb.toString()} onChange={(e) => setSpeedMtb(Number(e.target.value))} />
-      </div>
-
-
+          <Button
+        className="absolute top-6 left-4"
+        variant="back"
+        aria-label="Voltar"
+      >
+        < ArrowLeft />
+      </Button>
+      <h1 className="title-primary text-primary font-bold text-center">{t('title')}</h1>
+      <FormWrapper>
+        <InputField label={t('name.label')} name="name" value={name} onChange={(e) => setName(e.target.value)} />
+        <InputField label={t('email.label')} name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <InputField label={t('age.label')} name="age" type="number" value={age.toString()} onChange={(e) => setAge(Number(e.target.value))} />
+        <InputField label={t('weight.label')} name="weight" type="number" value={weight.toString()} onChange={(e) => setWeight(Number(e.target.value))} />
+        <InputField label={t('height.label')} name="height" type="number" value={height.toString()} onChange={(e) => setHeight(Number(e.target.value))} />
+        <InputField label={t('speedGeneral.label')} name="speedGeneral" type="number" value={speedGeneral.toString()} onChange={(e) => setSpeedGeneral(Number(e.target.value))} />
+        {isGeneralSpeedFromStrava && (
+          <p className="text-sm text-yellow-400 mt-1">
+            {t('speedGeneral.stravaNote')}
+          </p>
+        )}
+        <InputField label={t('speedRoad.label')} name="speedRoad" type="number" value={speedRoad.toString()} onChange={(e) => setSpeedRoad(Number(e.target.value))} />
+        <InputField label={t('speedMtb.label')} name="speedMtb" type="number" value={speedMtb.toString()} onChange={(e) => setSpeedMtb(Number(e.target.value))} />
+      </FormWrapper>
       <div className="pt-4">
       <Button
         variant="confirm"
