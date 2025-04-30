@@ -21,6 +21,7 @@ export type Athlete = {
     averageSpeedGeneral: number
     createdAt: string
     updatedAt: string
+    averageSpeedGeneralIsFromStrava: boolean
 }  
 
 export type UpdateAthleteDto = {
