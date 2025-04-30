@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import React from 'react'
-import clsx from 'clsx'
-import styles from './button.module.css'
-import { useRouter } from 'next/navigation'
+import React from 'react';
+import clsx from 'clsx';
+import styles from './button.module.css';
+import { useRouter } from 'next/navigation';
 
 type ButtonProps = {
-  children?: React.ReactNode
-  type?: 'button' | 'submit' | 'reset'
-  variant?: 'primary' | 'secondary' | 'ghost' | 'round' | 'confirm' | 'strava' | 'back'
-  loading?: boolean
-  disabled?: boolean
-  className?: string
-  onClick?: () => void
-}
+  children?: React.ReactNode;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'round' | 'confirm' | 'strava' | 'back';
+  loading?: boolean;
+  disabled?: boolean;
+  className?: string;
+  onClick?: () => void;
+};
 
 export default function Button({
   children,
@@ -24,29 +24,29 @@ export default function Button({
   className,
   onClick,
 }: ButtonProps) {
-  const router = useRouter()
-  const isDisabled = disabled || loading
+  const router = useRouter();
+  const isDisabled = disabled || loading;
 
   const baseClasses =
-  'inline-flex items-center justify-center font-semibold transition-all text-base focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer'
+    'inline-flex items-center justify-center font-semibold transition-all text-base focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer';
 
   const variants = {
     primary: 'w-full py-2 rounded-md bg-primary shadow hover:brightness-10 active:scale-95',
     secondary: 'bg-copy text-background shadow hover:opacity-90 active:scale-95',
     ghost: 'bg-transparent text-copy hover:bg-white/10 active:scale-95',
     round: 'bg-primary-dark w-10 h-10 rounded-full hover:brightness-110 active:scale-95',
-    back: 'w-10 h-10 absolute top-6 left-4 rounded-full text-copy-lighter hover:bg-white/10 active:scale-95',
+    back: 'w-10 h-10 rounded-full text-copy-lighter hover:bg-white/10 active:scale-95',
     confirm: styles.confirm,
     strava: styles.strava,
-  }
+  };
 
   const handleClick = () => {
     if (onClick) {
-      onClick()
+      onClick();
     } else if (variant === 'back') {
-      router.back()
+      router.back();
     }
-  }
+  };
 
   return (
     <button
@@ -57,7 +57,7 @@ export default function Button({
         baseClasses,
         variants[variant],
         isDisabled && 'opacity-50 cursor-not-allowed',
-        className
+        className,
       )}
     >
       {loading ? (
@@ -66,5 +66,5 @@ export default function Button({
         children
       )}
     </button>
-  )
+  );
 }

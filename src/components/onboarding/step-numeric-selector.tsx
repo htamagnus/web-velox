@@ -51,24 +51,24 @@ export default function StepNumericSelector({
   const primaryButtonLabel = showSkipLabel ? 'Pular' : 'Continuar';
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center relative px-4">
+    <div className="w-full min-h-screen flex items-center justify-center relative px-4 py-10 lg:py-20">
       {onBack && (
-        <Button
-          onClick={onBack}
-          className="absolute top-6 left-4"
-          variant="back"
-          aria-label="Voltar"
-        >
-          <ArrowLeft />
-        </Button>
+        <div className="absolute top-6 left-6 z-50">
+          <Button onClick={onBack} variant="back" aria-label="Voltar">
+            <ArrowLeft />
+          </Button>
+        </div>
       )}
 
-      <div className="w-full max-w-xs text-center">
-        <h2 className="step-heading flex items-center gap-2 justify-center">
+      <div className="w-full max-w-xl mx-auto text-center">
+        <h2 className="step-heading flex items-center gap-2 justify-center text-2xl md:text-2xl lg:text-3xl">
           <span>{iconTitle}</span>
           {title}
         </h2>
-        <p className="step-paragraph mt-4 mb-4">{subtitle}</p>
+
+        <p className="step-paragraph mt-4 mb-4 max-w-md mx-auto text-sm md:text-base lg:text-lg">
+          {subtitle}
+        </p>
 
         {displayMode === 'list' ? (
           <div className="relative h-60 flex flex-col items-center justify-center">
@@ -79,8 +79,8 @@ export default function StepNumericSelector({
                   key={v}
                   className={`transition-all flex items-center justify-center ${
                     v === value
-                      ? 'text-4xl font-extrabold text-white'
-                      : 'text-lg text-gray-400 opacity-80'
+                      ? 'text-4xl md:text-5xl font-extrabold text-white'
+                      : 'text-lg md:text-xl text-gray-400 opacity-80'
                   }`}
                 >
                   {v}
@@ -144,9 +144,10 @@ export default function StepNumericSelector({
         {extraActions && (
           <div className="flex flex-col gap-3 items-center w-full mt-2">{extraActions}</div>
         )}
+
         {note && (
-          <div className="w-full flex justify-center mt-15 px-4">
-            <p className="text-s text-copy-lighter text-center max-w-xs">{note}</p>
+          <div className="w-full flex justify-center mt-6 px-4">
+            <p className="text-s text-copy-lighter text-center max-w-md italic">{note}</p>
           </div>
         )}
       </div>

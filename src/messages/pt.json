@@ -4,35 +4,35 @@
       "title": "Qual é a sua altura?",
       "subtitle": "Isso ajuda a gente a calcular seu esforço de forma mais precisa. É rapidinho!",
       "unit": "cm",
-      "note": "Essas informações ajudam a estimar com mais precisão o gasto calórico nas suas rotas. 🚴‍♂️"
+      "note": "* essas informações ajudam a estimar com mais precisão o gasto calórico nas suas rotas"
     },
     "weight": {
       "title": "E o seu peso?",
       "subtitle": "Fica tranquilo: usamos isso só pra calcular seu desempenho e gasto calórico de forma personalizada.",
       "unit": "kg",
-      "note": "Quanto mais preciso, melhor a estimativa de calorias e esforço nas suas pedaladas. 💪"
+      "note": "*quanto mais preciso, melhor a estimativa de calorias e esforço nas suas pedaladas"
     },
     "age": {
       "title": "Qual sua idade?",
       "subtitle": "Idade também conta na hora de entender seu ritmo e gasto energético. Bora personalizar sua experiência!",
       "unit": "anos",
-      "note": "Esses dados ajudam a ajustar as rotas e previsões pro seu perfil. 😉"
+      "note": "*esses dados ajudam a ajustar as rotas e previsões pro seu perfil"
     },
     "speedGeneral": {
       "title": "Velocidade Média Geral",
       "subtitle": "Você pode informar manualmente ou importar do Strava em poucos segundos.",
       "unit": "km/h",
-      "note": "Conectando com o Strava, a gente importa automaticamente sua velocidade média geral de pedaladas"
+      "note": "*conectando com o Strava, a gente importa automaticamente sua velocidade média geral de pedaladas"
     },
     "speedRoad": {
       "title": "Velocidade Média - Road",
       "subtitle": "Informe uma média para seus pedais de speed.",
-      "note": "Essa velocidade será usada para estimar o tempo de rota quando você selecionar a bike Speed. 🚴‍♂️"
+      "note": "*essa velocidade será usada para estimar o tempo de rota quando você selecionar a bike Speed"
     },
     "speedMtb": {
       "title": "Velocidade Média - MTB",
       "subtitle": "Informe uma média para seus pedais de mountain bike.",
-      "note": "Essa velocidade será usada para estimar o tempo nas rotas quando você selecionar a bike MTB. 🌄🚵‍♀️"
+      "note": "*essa velocidade será usada para estimar o tempo nas rotas quando você selecionar a bike MTB"
     }
   },
   "profile": {
