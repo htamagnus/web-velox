@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Calendar } from "lucide-react";
 import StepNumericSelector from "../step-numeric-selector";
 import { StepProps } from "@/interfaces/step.interface";
 import { useTexts } from "@/helpers/use-texts";
@@ -9,6 +9,7 @@ export default function StepAge(props: StepProps) {
     <StepNumericSelector
       title={t('title')}
       subtitle={t('subtitle')}
+      iconTitle={<Calendar />}
       unit={t('unit')}
       min={8}
       max={100}

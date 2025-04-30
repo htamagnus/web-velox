@@ -1,4 +1,4 @@
-import { MapContainer, Polyline, TileLayer, useMap } from 'react-leaflet'
+import { AttributionControl, MapContainer, Polyline, TileLayer, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect } from 'react'
 
@@ -29,9 +29,11 @@ export default function MiniMap({ polyline }: MiniMapProps) {
         doubleClickZoom={false}
         touchZoom={false}
         attributionControl={false}
+        className="w-full h-full"
         center={polyline.length > 0 ? polyline[0] : [0, 0]}
         zoom={13}
       >
+        <AttributionControl position="topright" />
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
@@ -41,7 +43,6 @@ export default function MiniMap({ polyline }: MiniMapProps) {
             pathOptions={{ color: 'purple', weight: 4 }}
           />
         )}
-        {/* <<< Essa parte é o segredo */}
         <FitBounds polyline={polyline} />
       </MapContainer>
     </div>

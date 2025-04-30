@@ -27,7 +27,7 @@ const config: Config = {
         '.bg-error': { backgroundColor: 'var(--error)' },
   
         /* Text colors */
-        '.text-foreground': { color: 'var(--foreground)' },
+        // '.text-foreground': { color: 'var(--foreground)' },
         '.text-primary': { color: 'var(--primary)' },
         '.text-primary-light': { color: 'var(--primary-light)' },
         '.text-primary-dark': { color: 'var(--primary-dark)' },

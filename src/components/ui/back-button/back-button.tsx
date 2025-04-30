@@ -23,7 +23,7 @@ export default function BackButton({ onBack, className }: BackButtonProps) {
     <button
       onClick={handleBack}
       aria-label="Voltar"
-      className={`absolute top-6 left-4 rounded-full p-2 cursor-pointer bg-background border border-border text-foreground hover:bg-accent transition ${className}`}
+      className={`absolute top-6 left-4 rounded-full p-2 cursor-pointer bg-background border border-border hover:bg-accent transition ${className}`}
     >
       <ArrowLeft size={20} />
     </button>

@@ -10,20 +10,21 @@ import { useRouter } from 'next/navigation'
 import InputField from '../ui/input-field/input-field'
 import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
 import LogoVelox from '../ui/logo-velox/logo-velox'
+import { useTexts } from '@/helpers/use-texts'
+import { toast } from 'sonner'
 
 export default function LoginForm() {
   const apiVelox = new ApiVeloxService()
   const router = useRouter()
 
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
-  const [globalError, setGlobalError] = useState('')
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
+  const { t } = useTexts('login')
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     setFieldErrors({})
-    setGlobalError('')
     setLoading(true)
 
     const form = event.target as HTMLFormElement
@@ -55,9 +56,9 @@ export default function LoginForm() {
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INVALID_CREDENTIALS') {
-          setGlobalError('E-mail ou senha inválidos.')
+          toast.error(t('errors.invalidCredentials'))
         } else {
-          setGlobalError(err.message || 'Erro inesperado. Tente novamente.')
+          toast.error(err.message || t('errors.unexpected'))
         }
       }
     } finally {
@@ -69,11 +70,11 @@ export default function LoginForm() {
     <FormWrapper onSubmit={handleSubmit}>
       <LogoVelox className="mb-8" /> 
     <div className="text-center space-y-2">
-      <h2 className="text-2xl font-bold text-primary-light">Entrar no Velox</h2>
-      <p className="text-s text-copy-light">Acesse sua conta para começar a planejar rotas.</p>
+      <h2 className="text-2xl font-bold text-primary-light">{t('title')}</h2>
+      <p className="text-s text-copy-light">{t('subtitle')}</p>
     </div>
     <InputField
-      label="E-mail"
+      label={t('email.label')}
       name="email"
       type="email"
       placeholder="Digite seu e-mail"
@@ -81,7 +82,7 @@ export default function LoginForm() {
       required
     />
     <InputField
-      label="Senha"
+      label={t('password.label')}
       name="password"
       type="password"
       placeholder="Digite sua senha"
@@ -91,12 +92,6 @@ export default function LoginForm() {
     <Button type="submit" variant="primary" loading={loading}>
       {loading ? 'Entrando...' : 'Entrar'}
     </Button>
-
-    {globalError && (
-      <p className="text-center text-sm text-red-500 mt-2">
-        {globalError}
-      </p>
-    )}
   </FormWrapper>
   )
 }

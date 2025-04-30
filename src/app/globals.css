@@ -9,7 +9,7 @@
 
   /* neutral colors */
   --background: #111827;
-  --foreground: #282a22;
+  /* --foreground: #282a22; */
   --border: #434639;
 
   --copy: #fbfcfb;
@@ -60,7 +60,6 @@
 
 html, body {
   background-color: var(--background);
-  color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
   scrollbar-width: none;
   @apply text-base leading-relaxed antialiased;
@@ -128,8 +127,8 @@ body::-webkit-scrollbar {
 
 @layer components {
   .step-heading {
-    @apply text-3xl text-center;
-    color: var(--copy);
+    @apply text-2xl text-center font-semibold;
+    color: var(--primary);
   }
 
   .step-paragraph {
@@ -139,7 +138,18 @@ body::-webkit-scrollbar {
 
   .title-primary {
     @apply text-2xl text-center;
+    color: var(--primary);
   }
 }
 
-
+.leaflet-control-attribution {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  bottom: auto !important;
+  left: auto !important;
+  background: transparent !important;
+  font-size: 11px;
+  padding: 4px 8px;
+  z-index: 9999;
+}

@@ -25,8 +25,8 @@ export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
   ]
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white/5 backdrop-blur-md text-foreground rounded-2xl shadow-xl shadow-lg space-y-2">
-      <h3 className="text-l font-bold text-foreground">Escolha o tipo de velocidade</h3>
+    <div className="w-full max-w-md mx-auto p-6 bg-white/5 backdrop-blur-md rounded-2xl shadow-xl shadow-lg space-y-2">
+      <h3 className="text-lg text-primary-light font-bold">Escolha o tipo de velocidade</h3>
 
       <div className="space-y-3">
         {options.map((option) => {
@@ -51,7 +51,7 @@ export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
                   }
                 }}                
               />
-              <span>{option.label} - {option.speed?.toFixed(1)} km/h</span>
+              <span className='text-copy' >{option.label} - {option.speed?.toFixed(1)} km/h</span>
             </label>
           )
         })}
@@ -61,7 +61,7 @@ export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
       <Tooltip id="tooltip-road" />
       <Tooltip id="tooltip-mtb" />
 
-      <p className="text-xs pt-2">
+      <p className="text-xs text-copy-light pt-2">
         Para alterar suas velocidades, acesse seu perfil.
       </p>
     </div>

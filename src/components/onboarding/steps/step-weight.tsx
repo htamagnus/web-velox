@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Weight } from "lucide-react";
 import StepNumericSelector from "../step-numeric-selector";
 import { StepProps } from "@/interfaces/step.interface";
 import { useTexts } from "@/helpers/use-texts";
@@ -10,6 +10,7 @@ export default function StepWeight(props: StepProps) {
     <StepNumericSelector
       title={t('title')}
       subtitle={t('subtitle')}
+      iconTitle={<Weight />}
       unit={t('unit')}
       min={40}
       max={120}

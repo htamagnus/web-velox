@@ -15,9 +15,9 @@ export default function LogoVelox({ className }: { className?: string }) {
         src="/velox-logo.svg" 
         alt="Velox Logo"
         width={140}
-        height={50}
+        height={20}
         priority
-        className="w-32 sm:w-36 md:w-40 lg:w-48 h-auto"
+        className="h-auto"
       />
     </motion.div>
   )

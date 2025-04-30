@@ -1,6 +1,6 @@
 export type CreateAthleteDto = {
-    name: string
-    email: string
+    name?: string
+    email?: string
     age: number
     weight: number
     height: number

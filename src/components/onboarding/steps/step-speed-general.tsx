@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Button from '@/components/ui/button/button'
 import StepNumericSelector from '../step-numeric-selector'
 import { useTexts } from '@/helpers/use-texts'
-import { Flame } from 'lucide-react'
+import { Flame, Gauge } from 'lucide-react'
 
 interface StepSpeedGeneralProps {
   value: number
@@ -33,6 +33,7 @@ export default function StepSpeedGeneral({ value, onChange, onNext, onBack }: St
     <StepNumericSelector
       title={t('title')}
       subtitle={t('subtitle')}
+      iconTitle={<Gauge />}
       value={value}
       min={0}
       max={50}

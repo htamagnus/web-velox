@@ -12,11 +12,13 @@ import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
 import { toast } from 'sonner'
 import LogoVelox from '../ui/logo-velox/logo-velox'
 import Link from 'next/link'
+import { useTexts } from '@/helpers/use-texts'
 
 export default function RegisterForm() {
   const apiVelox = new ApiVeloxService()
   const router = useRouter()
   const { login } = useAuth()
+  const { t } = useTexts('register')
 
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string }>({})
   const [loading, setLoading] = useState(false)
@@ -55,17 +57,15 @@ export default function RegisterForm() {
       const response = await apiVelox.registerAndLogin(validData)
       login(response)
 
-      toast.success('Conta criada com sucesso! Vamos configurar seu perfil ✨')
+      toast.success(t('toasts.success'))
 
       router.push('/onboarding')
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'EMAIL_ALREADY_EXISTS') {
-          setFieldErrors({ email: 'Este e-mail já está em uso.' })
-          toast.error('Este e-mail já está em uso.')
+          toast.error(t('toasts.emailExists'))
         } else if (err.code === 'INVALID_PASSWORD') {
-          setFieldErrors({ password: 'Senha inválida. Tente outra.' })
-          toast.error('Senha inválida. Corrija e tente novamente.')
+          toast.error(t('toasts.invalidPassword'))
         } else if (err.message) {
           toast.error(err.message)
         } else {
@@ -88,8 +88,8 @@ export default function RegisterForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
-      <div className="text-center space-y-1">
-      <LogoVelox className="mb-8" /> 
+      <div className="text-center space-y-2 mt-2">
+      <LogoVelox className="mb-4" /> 
       {/* <div className="relative w-full flex items-center justify-center">
         <div className="absolute w-62 h-0.5 bg-primary" />
       </div> */}
@@ -99,26 +99,26 @@ export default function RegisterForm() {
       </div>
 
       <InputField 
-        label="Nome"
+        label={t('name.label')}
         name="name"
-        placeholder="Digite seu nome"
+        placeholder={t('name.placeholder')}
         error={fieldErrors.name}
         required
       />
       <InputField 
-        label="E-mail"
+        label={t('email.label')}
         name="email"
         type="email"
-        placeholder="Digite seu e-mail"
+        placeholder={t('email.placeholder')}
         error={fieldErrors.email}
         required
       />
       <InputField
-        label="Senha"
+        label={t('password.label')}
         name="password"
         type="password"
         value={password}
-        placeholder="Digite sua senha"
+        placeholder={t('password.placeholder')}
         onChange={(e) => {
           setPassword(e.target.value)
           if (fieldErrors.password) {
@@ -130,10 +130,10 @@ export default function RegisterForm() {
       />
 
       <div className="mt-4 space-y-1 text-sm text-copy-lighter">
-        <p className={passwordChecks.length ? 'text-green-500' : 'text-muted'}>• Pelo menos 8 caracteres</p>
-        <p className={passwordChecks.uppercase ? 'text-green-500' : 'text-muted'}>• Uma letra maiúscula</p>
-        <p className={passwordChecks.number ? 'text-green-500' : 'text-muted'}>• Um número</p>
-        <p className={passwordChecks.specialChar ? 'text-green-500' : 'text-muted'}>• Um caractere especial</p>
+        <p className={passwordChecks.length ? 'text-green-500' : 'text-muted'}>{t('password.requirements.length')}</p>
+        <p className={passwordChecks.uppercase ? 'text-green-500' : 'text-muted'}>{t('password.requirements.uppercase')}</p>
+        <p className={passwordChecks.number ? 'text-green-500' : 'text-muted'}>{t('password.requirements.number')}</p>
+        <p className={passwordChecks.specialChar ? 'text-green-500' : 'text-muted'}>{t('password.requirements.specialChar')}</p>
       </div>
 
       <Button
@@ -145,9 +145,9 @@ export default function RegisterForm() {
         {loading ? 'Enviando...' : 'Registrar'}
       </Button>
       <div className="mt-2 text-center text-sm text-copy-light">
-        Já tem uma conta?{" "}
+      {t('link.alreadyAccount')}
         <Link href="/login" className="text-primary hover:underline font-medium">
-          Clique aqui para entrar
+        {t('link.login')}
         </Link>
       </div>
     </FormWrapper>

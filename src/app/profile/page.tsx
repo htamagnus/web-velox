@@ -45,7 +45,7 @@ export default function ProfilePage() {
         setSpeedMtb(profile.averageSpeedMtb ?? 0)
         setIsGeneralSpeedFromStrava(profile.averageSpeedGeneralIsFromStrava ?? false)
       } catch (err) {
-        toast.error(t('messages.loadError'))
+        toast.error(t('errors.loadError'))
       }
     }
     fetchProfile()
@@ -66,16 +66,16 @@ export default function ProfilePage() {
     if (speedMtb !== userData.averageSpeedMtb) payload.averageSpeedMtb = speedMtb
 
     if (Object.keys(payload).length === 0) {
-      toast.info(t('messages.noChanges'))
+      toast.info(t('errors.noChanges'))
       return
     }
 
     try {
       setIsSaving(true)
       await api.updateProfile(payload)
-      toast.success(t('messages.updateSuccess'))
+      toast.success(t('errors.updateSuccess'))
     } catch (error) {
-      toast.error(t('messages.updateError'))
+      toast.error(t('errors.updateError'))
     } finally {
       setIsSaving(false)
     }
@@ -107,7 +107,7 @@ export default function ProfilePage() {
       >
         < ArrowLeft />
       </Button>
-      <h1 className="title-primary text-primary font-bold text-center">{t('title')}</h1>
+      <h1 className="title-primary text-primary text-center">{t('title')}</h1>
       <FormWrapper>
         <InputField label={t('name.label')} name="name" value={name} onChange={(e) => setName(e.target.value)} />
         <InputField label={t('email.label')} name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />

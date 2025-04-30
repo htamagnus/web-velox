@@ -19,20 +19,162 @@
       "note": "Esses dados ajudam a ajustar as rotas e previsões pro seu perfil. 😉"
     },
     "speedGeneral": {
-      "title": "Sua Velocidade Média Geral",
+      "title": "Velocidade Média Geral",
       "subtitle": "Você pode informar manualmente ou importar do Strava em poucos segundos.",
       "unit": "km/h",
-      "note": "Conectando com o Strava, a gente importa automaticamente sua velocidade média geral de pedaladas para calcular tudo com mais precisão. 🚴‍♀️⚡"
+      "note": "Conectando com o Strava, a gente importa automaticamente sua velocidade média geral de pedaladas"
     },
-    "speedRoad" : {
-        "title": "Sua Velocidade Média na Modalidade Road",
-        "subtitle": "Informe uma média para essa modalidade específica de pedal.",
-        "note": "Essa velocidade será usada para estimar o tempo de rota quando você selecionar a bike Speed. 🚴‍♂️"
+    "speedRoad": {
+      "title": "Velocidade Média - Road",
+      "subtitle": "Informe uma média para seus pedais de speed.",
+      "note": "Essa velocidade será usada para estimar o tempo de rota quando você selecionar a bike Speed. 🚴‍♂️"
     },
-    "speedMtb" : {
-        "title": "Sua Velocidade Média na Modalidade MTB",
-        "subtitle": "Informe uma média para seus pedais de mountain bike.",
-        "note": "Essa velocidade será usada para estimar o tempo nas rotas quando você selecionar a bike MTB. 🌄🚵‍♀️"
+    "speedMtb": {
+      "title": "Velocidade Média - MTB",
+      "subtitle": "Informe uma média para seus pedais de mountain bike.",
+      "note": "Essa velocidade será usada para estimar o tempo nas rotas quando você selecionar a bike MTB. 🌄🚵‍♀️"
     }
+  },
+  "profile": {
+    "title": "Meu Perfil",
+    "name": {
+      "label": "Nome"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "age": {
+      "label": "Idade",
+      "unit": "anos"
+    },
+    "weight": {
+      "label": "Peso (kg)",
+      "unit": "kg"
+    },
+    "height": {
+      "label": "Altura (cm)",
+      "unit": "cm"
+    },
+    "speedGeneral": {
+      "label": "Velocidade Geral (km/h)",
+      "stravaNote": "Essa velocidade foi importada do Strava. Se você alterar, usaremos esse novo valor no lugar."
+    },
+    "speedRoad": {
+      "label": "Velocidade Speed (km/h)"
+    },
+    "speedMtb": {
+      "label": "Velocidade MTB (km/h)"
+    },
+    "button": {
+      "save": "Salvar alterações",
+      "saving": "Salvando..."
+    },
+    "errors": {
+      "noChanges": "Nenhuma alteração foi feita.",
+      "loadError": "Erro ao carregar perfil. Tente novamente mais tarde.",
+      "updateSuccess": "Alterações salvas com sucesso!",
+      "updateError": "Erro ao salvar alterações. Tente novamente mais tarde."
+    }
+  },
+  "planner": {
+    "loadingProfile": "Carregando perfil...",
+    "summary": {
+      "distance": "Distância:",
+      "time": "Tempo estimado:",
+      "elevationGain": "Ganho de elevação:",
+      "elevationLoss": "Perda de elevação:",
+      "calories": "Calorias estimadas:",
+      "modality": "Modalidade:",
+      "averageSpeedInfo": "Sua média nessa modalidade é de {{speed}} km/h."
+    },
+    "buttons": {
+      "newRoute": "Nova Rota",
+      "saveRoute": "Salvar Rota"
+    },
+    "errors": {
+      "missingOriginOrDestination": "Defina origem e destino antes de calcular a rota.",
+      "calculateFail": "Não foi possível calcular a rota. Tente ajustar os nomes ou a modalidade.",
+      "saveFail": "Erro ao salvar rota:"
+    }
+  },
+  "login": {
+    "title": "Entrar no Velox",
+    "subtitle": "Acesse sua conta para começar a planejar rotas.",
+    "email": {
+      "label": "E-mail",
+      "placeholder": "Digite seu e-mail"
+    },
+    "password": {
+      "label": "Senha",
+      "placeholder": "Digite sua senha"
+    },
+    "button": {
+      "submit": "Entrar",
+      "submitting": "Entrando..."
+    },
+    "errors": {
+      "invalidCredentials": "E-mail ou senha inválidos.",
+      "unexpected": "Erro inesperado. Tente novamente.",
+      "email": "E-mail inválido.",
+      "password": "Senha inválida."
+    }
+  },
+  "register": {
+    "title": "Criar Conta",
+    "subtitle": "Preencha os dados abaixo para começar a usar o Velox",
+    "name": {
+      "label": "Nome",
+      "placeholder": "Digite seu nome"
+    },
+    "email": {
+      "label": "E-mail",
+      "placeholder": "Digite seu e-mail"
+    },
+    "password": {
+      "label": "Senha",
+      "placeholder": "Digite sua senha",
+      "requirements": {
+        "length": "• Pelo menos 8 caracteres",
+        "uppercase": "• Uma letra maiúscula",
+        "number": "• Um número",
+        "specialChar": "• Um caractere especial"
+      }
+    },
+    "button": {
+      "submit": "Registrar",
+      "submitting": "Enviando..."
+    },
+    "link": {
+      "alreadyAccount": "Já tem uma conta?",
+      "login": "Clique aqui para entrar"
+    },
+    "toasts": {
+      "success": "Conta criada com sucesso! Vamos configurar seu perfil ✨",
+      "emailExists": "Este e-mail já está em uso.",
+      "invalidPassword": "Senha inválida. Corrija e tente novamente.",
+      "unexpected": "Erro inesperado. Tente novamente."
+    }
+  },
+  "savedRoutes": {
+    "title": "Minhas Rotas",
+    "empty": "Nenhuma rota salva ainda.",
+    "error": "Erro ao carregar rotas.",
+    "routeTitle": "Percurso de {{origin}} para {{destination}}",
+    "modalityLabel": "Modalidade:",
+    "averageSpeed": "Velocidade Média:",
+    "time": "{{hours}}h {{minutes}}min",
+    "distance": "{{distance}} km",
+    "elevationGain": "+{{gain}} m",
+    "elevationLoss": "-{{loss}} m"
+  },
+  "plannerPanel": {
+    "title": "Planejador de rotas",
+    "backButton": "Início",
+    "cancelButton": "Cancelar",
+    "originPlaceholder": "Localização atual",
+    "destinationPlaceholder": "Escolher destino",
+    "save": "Salvar",
+    "plan": "Planejar",
+    "planning": "Calculando rota..."
   }
 }

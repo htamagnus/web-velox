@@ -33,7 +33,6 @@ export default function OnboardingForm() {
   
     setReady(true)
   }, [])
-  
 
   const [formData, setFormData] = useState<CreateAthleteDto>({
     age: 22,
@@ -113,7 +112,7 @@ export default function OnboardingForm() {
   if (!ready) return null
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-background text-foreground">
+    <div className="w-full h-screen flex items-center justify-center bg-background">
     <AnimatePresence mode="wait">
       {StepComponent && (
         <motion.div

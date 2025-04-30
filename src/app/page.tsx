@@ -41,7 +41,7 @@ export default function LandingPage() {
   return (
     <>
     <PageTransitionOverlay visible={showTransition} />
-        <main className="min-h-screen bg-background text-foreground flex flex-col items-center justify-start">
+        <main className="min-h-screen bg-background flex flex-col items-center justify-start">
           {/* HERO */}
           <section className="relative w-full min-h-[80vh] flex items-center justify-center text-center text-foreground">
       {/* BACKGROUND IMAGE */}

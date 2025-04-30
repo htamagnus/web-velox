@@ -1,4 +1,4 @@
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Ruler } from "lucide-react";
 import StepNumericSelector from "../step-numeric-selector";
 import { StepProps } from "@/interfaces/step.interface";
 import { useTexts } from "@/helpers/use-texts";
@@ -10,6 +10,7 @@ export default function StepHeight(props: StepProps) {
   return (
     <StepNumericSelector
       title={t('title')}
+      iconTitle={<Ruler />}
       subtitle={t('subtitle')}
       unit={t('unit')}
       min={140}
