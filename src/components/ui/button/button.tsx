@@ -3,6 +3,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import styles from './button.module.css'
+import { useRouter } from 'next/navigation'
 
 type ButtonProps = {
   children: React.ReactNode
@@ -23,6 +24,9 @@ export default function Button({
   className,
   onClick,
 }: ButtonProps) {
+  const router = useRouter()
+  const isDisabled = disabled || loading
+
   const baseClasses =
   'inline-flex items-center justify-center font-semibold transition-all text-base focus:outline-none focus:ring-2 focus:ring-offset-2'
 
@@ -36,12 +40,18 @@ export default function Button({
     strava: styles.strava,
   }
 
-  const isDisabled = disabled || loading
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+    } else if (variant === 'back') {
+      router.back()
+    }
+  }
 
   return (
     <button
       type={type}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={isDisabled}
       className={clsx(
         baseClasses,
