@@ -82,8 +82,8 @@ export default function RegisterForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
-      <div className="text-center space-y-2 mt-2">
-      <LogoVelox className="mb-4" /> 
+      <div className="text-center space-y-2">
+      <LogoVelox size="md" /> 
       {/* <div className="relative w-full flex items-center justify-center">
         <div className="absolute w-62 h-0.5 bg-primary" />
       </div> */}
@@ -133,8 +133,8 @@ export default function RegisterForm() {
       <Button
         type="submit"
         loading={loading}
-        variant="primary"
-        className="transition-transform active:scale-95 hover:brightness-110 mt-6"
+        variant="confirm"
+        className="transition-transform active:scale-95 hover:brightness-110 mt-2 w-full"
       >
         {loading ? 'Enviando...' : 'Registrar'}
       </Button>

@@ -68,7 +68,7 @@ export default function LoginForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
-      <LogoVelox className="mb-8" /> 
+      <LogoVelox className="mb-8" size="md" /> 
     <div className="text-center space-y-2">
       <h2 className="text-2xl font-bold text-primary-light">{t('title')}</h2>
       <p className="text-s text-copy-light">{t('subtitle')}</p>
@@ -89,7 +89,7 @@ export default function LoginForm() {
       error={fieldErrors.password}
       required
     />
-    <Button type="submit" variant="primary" loading={loading}>
+    <Button type="submit" variant="confirm" className='w-full mt-4 mb-4' loading={loading}>
       {loading ? 'Entrando...' : 'Entrar'}
     </Button>
   </FormWrapper>

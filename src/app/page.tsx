@@ -88,7 +88,7 @@ export default function LandingPage() {
 
           {/* HERO CONTENT */}
           <div className="relative z-10 flex flex-col items-center space-y-6 max-w-3xl px-4">
-            <LogoVelox className="mb-6" />
+            <LogoVelox className="mb-6" size="lg" />
 
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -308,7 +308,7 @@ export default function LandingPage() {
             >
               Criar Conta Agora <ArrowRight className="w-5 h-5" />
             </motion.button>
-            <LogoVelox className="mt-10 w-30" />
+            <LogoVelox className="mt-10" size="md" />
           </div>
         </section>
       </main>

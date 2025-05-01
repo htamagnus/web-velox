@@ -88,6 +88,7 @@ export default function ProfilePage() {
       </div>
     )
   }
+  
 
   return (
     <AnimatePresence mode="wait">
@@ -97,9 +98,8 @@ export default function ProfilePage() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
-      className="max-w-xl mx-auto p-6 space-y-6"
     >
-    <div className="max-w-xl mx-auto p-6 space-y-6">
+    <div className="max-w-xl mx-auto p-6 space-y-2 mt-10">
           <Button
         className="absolute top-6 left-4"
         variant="back"

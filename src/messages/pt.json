@@ -145,7 +145,7 @@
       "submitting": "Enviando..."
     },
     "link": {
-      "alreadyAccount": "Já tem uma conta?",
+      "alreadyAccount": "Já tem uma conta? ",
       "login": "Clique aqui para entrar"
     },
     "toasts": {
@@ -158,6 +158,9 @@
   "savedRoutes": {
     "title": "Minhas Rotas",
     "empty": "Nenhuma rota salva ainda.",
+    "emptyTitle": "Você ainda não criou nenhuma rota",
+    "emptyDescription": "Crie sua primeira rota e tenha controle sobre seus percursos.",
+    "ctaCreate": "Planejar agora",
     "error": "Erro ao carregar rotas.",
     "routeTitle": "Percurso de {{origin}} para {{destination}}",
     "modalityLabel": "Modalidade:",

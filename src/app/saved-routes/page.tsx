@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import ApiVeloxService from '@/providers/api-velox.provider';
 import {
-  Timer,
-  MapPin,
+  Map, 
   TrendingUp,
   TrendingDown,
   TimerIcon,
@@ -16,17 +15,18 @@ import {
 } from 'lucide-react';
 import Loader from '@/components/ui/loader/loader';
 import polyline from '@mapbox/polyline';
-import BackButton from '@/components/ui/back-button/back-button';
 import { toast } from 'sonner';
 import { getModalityLabel } from '@/helpers/modality.helper';
 import MiniMap from '@/components/mini-map/mini-map.component';
 import { useTexts } from '@/helpers/use-texts';
 import Button from '@/components/ui/button/button';
+import { useRouter } from 'next/navigation';
 
 export default function SavedRoutesPage() {
   const api = new ApiVeloxService();
   const [routes, setRoutes] = useState<SaveRouteDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const { t } = useTexts('savedRoutes');
 
   useEffect(() => {
@@ -54,7 +54,15 @@ export default function SavedRoutesPage() {
   // TO DO: aqui criar uma mensagem incentivando a criar uma rota
   if (routes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-screen text-center">{t('empty')}</div>
+      
+      <div className="flex flex-col items-center justify-center h-screen text-center px-6 space-y-6">
+        <Map size={96} stroke="#bfd572" className="mb-4" />
+        <h2 className="text-2xl font-semibold text-white">{t('emptyTitle') || 'Você ainda não criou nenhuma rota'}</h2>
+        <p className="text-copy-light">{t('emptyDescription') || 'Que tal começar agora e planejar seu próximo percurso?'}</p>
+        <Button onClick={() => router.push('/planner')} variant="confirm">
+          {t('ctaCreate') || 'Criar rota'}
+        </Button>
+      </div>
     );
   }
 
