@@ -168,7 +168,8 @@
     "time": "{{hours}}h {{minutes}}min",
     "distance": "{{distance}} km",
     "elevationGain": "+{{gain}} m",
-    "elevationLoss": "-{{loss}} m"
+    "elevationLoss": "-{{loss}} m",
+    "caloriesLabel": "Calorias:"
   },
   "plannerPanel": {
     "title": "Planejador de rotas",

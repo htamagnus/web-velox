@@ -168,24 +168,24 @@ export default function ProfilePage() {
             {form.isGeneralSpeedFromStrava && (
               <p className="text-sm text-yellow-400 mt-1">{t('speedGeneral.stravaNote')}</p>
             )}
-                      <div className="pt-4">
-            <Button
-              variant="confirm"
-              onClick={handleSave}
-              loading={isSaving}
-              disabled={isSaving}
-              className="w-full mt-4"
-            >
-              {isSaving ? (
-                <div className="flex items-center justify-center gap-2">
-                  <Loader size={18} />
-                  Salvando...
-                </div>
-              ) : (
-                'Salvar alterações'
-              )}
-            </Button>
-          </div>
+            <div className="pt-4">
+              <Button
+                variant="confirm"
+                onClick={handleSave}
+                loading={isSaving}
+                disabled={isSaving}
+                className="w-full mt-4"
+              >
+                {isSaving ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <Loader size={18} />
+                    Salvando...
+                  </div>
+                ) : (
+                  'Salvar alterações'
+                )}
+              </Button>
+            </div>
           </FormWrapper>
         </div>
       </motion.div>

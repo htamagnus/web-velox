@@ -16,12 +16,20 @@ import {
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 
 export default function LandingPage() {
+  const [isPageReady, setIsPageReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
   const router = useRouter();
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsPageReady(true);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -44,6 +52,10 @@ export default function LandingPage() {
       router.push('/register');
     }, 600);
   };
+
+  if (!isPageReady) {
+    return <PageTransitionOverlay visible={true} />;
+  }
 
   return (
     <>
@@ -113,6 +125,8 @@ export default function LandingPage() {
             </motion.p>
 
             <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleStart}
