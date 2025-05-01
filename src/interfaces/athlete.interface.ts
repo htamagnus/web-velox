@@ -34,3 +34,13 @@ export type UpdateAthleteDto = {
     averageSpeedMtb?: number
     averageSpeedGeneral?: number
 }
+
+export interface OnboardingAthleteData {
+    age: number
+    weight: number
+    height: number
+    averageSpeedRoad: number
+    averageSpeedMtb: number
+    averageSpeedGeneral: number
+  }
+  

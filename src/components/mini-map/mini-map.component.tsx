@@ -1,21 +1,21 @@
-import { AttributionControl, MapContainer, Polyline, TileLayer, useMap } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
-import { useEffect } from 'react'
+import { AttributionControl, MapContainer, Polyline, TileLayer, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import { useEffect } from 'react';
 
 type MiniMapProps = {
-  polyline: [number, number][]
-}
+  polyline: [number, number][];
+};
 
 function FitBounds({ polyline }: { polyline: [number, number][] }) {
-  const map = useMap()
+  const map = useMap();
 
   useEffect(() => {
     if (polyline.length > 0) {
-      map.fitBounds(polyline as any, { padding: [3, 3] })
+      map.fitBounds(polyline as any, { padding: [3, 3] });
     }
-  }, [map, polyline])
+  }, [map, polyline]);
 
-  return null
+  return null;
 }
 
 export default function MiniMap({ polyline }: MiniMapProps) {
@@ -34,17 +34,12 @@ export default function MiniMap({ polyline }: MiniMapProps) {
         zoom={13}
       >
         <AttributionControl position="topright" />
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        />
+        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
         {polyline.length > 0 && (
-          <Polyline
-            positions={polyline}
-            pathOptions={{ color: 'purple', weight: 4 }}
-          />
+          <Polyline positions={polyline} pathOptions={{ color: 'purple', weight: 4 }} />
         )}
         <FitBounds polyline={polyline} />
       </MapContainer>
     </div>
-  )
+  );
 }

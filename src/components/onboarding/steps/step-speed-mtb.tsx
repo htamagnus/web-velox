@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useTexts } from '@/helpers/use-texts'
-import StepNumericSelector from '../step-numeric-selector'
-import { StepProps } from '@/interfaces/step.interface'
-import { MountainSnow } from 'lucide-react'
+import { useTexts } from '@/helpers/use-texts';
+import StepNumericSelector from '../step-numeric-selector';
+import { StepProps } from '@/interfaces/step.interface';
+import { MountainSnow } from 'lucide-react';
 
 export default function StepSpeedMtb({ value, onChange, onNext, onBack }: StepProps) {
-  const { t } = useTexts('onboarding.speedMtb')
+  const { t } = useTexts('onboarding.speedMtb');
 
   return (
     <StepNumericSelector
@@ -22,5 +22,5 @@ export default function StepSpeedMtb({ value, onChange, onNext, onBack }: StepPr
       onBack={onBack}
       note={t('note')}
     />
-  )
+  );
 }

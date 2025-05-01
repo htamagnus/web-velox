@@ -1,13 +1,12 @@
 'use client';
 
-import { ArrowLeft, LocateFixed, Plus, RefreshCcw, X } from 'lucide-react';
-import SearchBar from '../ui/search-bar/search-bar';
-import SpeedOptions from '../speed-modal/speed-options';
-import BackButton from '../ui/back-button/back-button';
-import Loader from '../ui/loader/loader';
+import { ArrowLeft, LocateFixed, Plus, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTexts } from '@/helpers/use-texts';
 import Button from '../ui/button/button';
+import Loader from '../ui/loader/loader';
+import SpeedOptions from '../speed-modal/speed-options';
+import RouteInput from '../route-input/route-input';
 
 type Props = {
   origin: [number, number] | null;
@@ -46,6 +45,7 @@ export default function RoutePlannerPanel({
 }: Props) {
   const { t } = useTexts('plannerPanel');
   const router = useRouter();
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-background px-4 pt-4 pb-6 rounded-t-2xl z-[9999] shadow-2xl space-y-4">
       <div className="flex justify-between items-center">
@@ -56,41 +56,38 @@ export default function RoutePlannerPanel({
           <ArrowLeft size={18} />
           <span className="text-sm hidden sm:inline">{t('backButton')}</span>
         </button>
-        <span className="text-m flex items-center">
-          <div className="mr-2 font-bold text-primary-light text-lg">{t('title')}</div>
-        </span>
+
+        <div className="mr-2 font-bold text-primary-light text-lg">{t('title')}</div>
+
         <button onClick={onCancel} className="text-gray-400 hover:text-white">
           <X size={18} />
         </button>
       </div>
 
-      <div className="flex items-center bg-gray-800 rounded-lg px-3 py-2">
-        <LocateFixed size={16} className="mr-2 text-gray-300" />
-        <SearchBar
-          placeholder={t('originPlaceholder')}
-          initialValue={originLabel ?? undefined}
-          onSelect={onSetOrigin}
-        />
-      </div>
+      <RouteInput
+        icon={<LocateFixed size={16} />}
+        placeholder={t('originPlaceholder')}
+        initialValue={originLabel ?? undefined}
+        onSelect={onSetOrigin}
+      />
 
-      <div className="flex items-center bg-gray-800 rounded-lg px-3 py-2">
-        <Plus size={16} className="mr-2 text-gray-300" />
-        <SearchBar
-          placeholder={t('destinationPlaceholder')}
-          initialValue={destinationLabel ?? undefined}
-          onSelect={onSetDestination}
-        />
-      </div>
+      <RouteInput
+        icon={<Plus size={16} />}
+        placeholder={t('destinationPlaceholder')}
+        initialValue={destinationLabel ?? undefined}
+        onSelect={onSetDestination}
+      />
 
-      <SpeedOptions onClose={onCloseSpeedOptions} onSelect={onSelectModality} speeds={speeds} />
+        <SpeedOptions
+          onClose={onCloseSpeedOptions}
+          onSelect={onSelectModality}
+          speeds={speeds}
+        />
 
       <div className="flex justify-between pt-2">
         <button className="text-sm text-gray-300 underline">{t('save')}</button>
-        <Button
-          onClick={onStart}
-          variant="confirm"
-        >
-          {isCalculatingRoute ? <Loader size={18} /> : 'Planejar'}
+        <Button onClick={onStart} variant="confirm">
+          {isCalculatingRoute ? <Loader size={18} /> : t('plan')}
         </Button>
       </div>
     </div>

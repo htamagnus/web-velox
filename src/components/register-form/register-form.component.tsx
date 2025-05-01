@@ -62,17 +62,11 @@ export default function RegisterForm() {
       router.push('/onboarding')
     } catch (err) {
       if (err instanceof ApiError) {
-        if (err.code === 'EMAIL_ALREADY_EXISTS') {
-          toast.error(t('toasts.emailExists'))
-        } else if (err.code === 'INVALID_PASSWORD') {
-          toast.error(t('toasts.invalidPassword'))
-        } else if (err.message) {
-          toast.error(err.message)
-        } else {
-          toast.error('Erro inesperado. Tente novamente.')
-        }
+        if (err.code === 'EMAIL_ALREADY_EXISTS') toast.error(t('toasts.emailExists'))
+        else if (err.code === 'INVALID_PASSWORD') toast.error(t('toasts.invalidPassword'))
+        else if (err.message) toast.error(err.message || (t('toasts.unexpected')) )
       } else {
-        toast.error('Erro inesperado. Tente novamente.')
+        toast.error(t('toasts.unexpected'))
       }
     } finally {
       setLoading(false)

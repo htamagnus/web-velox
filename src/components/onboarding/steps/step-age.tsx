@@ -1,10 +1,10 @@
-import { ArrowDown, ArrowUp, Calendar } from "lucide-react";
-import StepNumericSelector from "../step-numeric-selector";
-import { StepProps } from "@/interfaces/step.interface";
-import { useTexts } from "@/helpers/use-texts";
+import { ArrowDown, ArrowUp, Calendar } from 'lucide-react';
+import StepNumericSelector from '../step-numeric-selector';
+import { StepProps } from '@/interfaces/step.interface';
+import { useTexts } from '@/helpers/use-texts';
 
 export default function StepAge(props: StepProps) {
-  const { t } = useTexts('onboarding.age')
+  const { t } = useTexts('onboarding.age');
   return (
     <StepNumericSelector
       title={t('title')}
@@ -18,5 +18,5 @@ export default function StepAge(props: StepProps) {
       {...props}
       note={t('note')}
     />
-  )
+  );
 }

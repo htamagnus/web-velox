@@ -1,10 +1,10 @@
-import { ArrowDown, ArrowUp, Weight } from "lucide-react";
-import StepNumericSelector from "../step-numeric-selector";
-import { StepProps } from "@/interfaces/step.interface";
-import { useTexts } from "@/helpers/use-texts";
+import { ArrowDown, ArrowUp, Weight } from 'lucide-react';
+import StepNumericSelector from '../step-numeric-selector';
+import { StepProps } from '@/interfaces/step.interface';
+import { useTexts } from '@/helpers/use-texts';
 
 export default function StepWeight(props: StepProps) {
-  const { t } = useTexts('onboarding.weight')
+  const { t } = useTexts('onboarding.weight');
 
   return (
     <StepNumericSelector
@@ -19,5 +19,5 @@ export default function StepWeight(props: StepProps) {
       {...props}
       note={t('note')}
     />
-  )
+  );
 }

@@ -1,11 +1,10 @@
-import { Minus, Plus, Ruler } from "lucide-react";
-import StepNumericSelector from "../step-numeric-selector";
-import { StepProps } from "@/interfaces/step.interface";
-import { useTexts } from "@/helpers/use-texts";
-
+import { Minus, Plus, Ruler } from 'lucide-react';
+import StepNumericSelector from '../step-numeric-selector';
+import { StepProps } from '@/interfaces/step.interface';
+import { useTexts } from '@/helpers/use-texts';
 
 export default function StepHeight(props: StepProps) {
-  const { t } = useTexts('onboarding.height')
+  const { t } = useTexts('onboarding.height');
 
   return (
     <StepNumericSelector
@@ -21,5 +20,5 @@ export default function StepHeight(props: StepProps) {
       {...props}
       note={t('note')}
     />
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { CreateAthleteDto } from "@/interfaces/athlete.interface"
+import { OnboardingAthleteData } from "@/interfaces/athlete.interface"
 import StepHeight from "./step-height"
 import StepWeight from "./step-weight"
 import StepAge from "./step-age"
@@ -14,7 +14,7 @@ interface StepConfig {
       onNext: () => void
       onBack?: () => void
     }>
-    prop: keyof CreateAthleteDto
+    prop: keyof OnboardingAthleteData
   }
   
   export const onboardingSteps: StepConfig[] = [

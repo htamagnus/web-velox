@@ -7,7 +7,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 type Props = {
   onClose: () => void
-  onSelect: (choice: Modality, speed?: number) => void
+  onSelect: (choice: Modality, speed: number) => void
   speeds: {
     general: number
     road: number
