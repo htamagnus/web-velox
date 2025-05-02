@@ -6,7 +6,7 @@ import { useTexts } from '@/helpers/use-texts';
 import Button from '../ui/button/button';
 import Loader from '../ui/loader/loader';
 import SpeedOptions from '../speed-modal/speed-options';
-import RouteInput from '../route-input/route-input';
+import AutocompleteInput from '../route-input/route-input';
 
 type Props = {
   origin: [number, number] | null;
@@ -64,15 +64,15 @@ export default function RoutePlannerPanel({
         </button>
       </div>
 
-      <RouteInput
-        icon={<LocateFixed size={16} />}
+      <AutocompleteInput
+        icon={<LocateFixed size={20} stroke="#adc94b"/>}
         placeholder={t('originPlaceholder')}
         initialValue={originLabel ?? undefined}
         onSelect={onSetOrigin}
       />
 
-      <RouteInput
-        icon={<Plus size={16} />}
+      <AutocompleteInput
+        icon={<Plus size={20} stroke="#adc94b"/>}
         placeholder={t('destinationPlaceholder')}
         initialValue={destinationLabel ?? undefined}
         onSelect={onSetDestination}
