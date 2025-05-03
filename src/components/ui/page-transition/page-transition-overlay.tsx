@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import LogoVelox from '@/components/ui/logo-velox/logo-velox';
 import Loader from '@/components/ui/loader/loader'; // seu loader real
 
-export default function PageTransitionOverlay({ visible }: { visible: boolean }) {
+export default function PageTransitionOverlay({ visible, message }: { visible: boolean; message?: string }) {
   return (
     <AnimatePresence>
       {visible && (
@@ -31,6 +31,17 @@ export default function PageTransitionOverlay({ visible }: { visible: boolean })
           >
             <Loader size={38} />
           </motion.div>
+
+          {message && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-6 text-md text-copy text-center px-6"
+            >
+              {message}
+            </motion.p>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
