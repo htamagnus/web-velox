@@ -73,70 +73,73 @@ export default function SavedRoutesPage() {
   }
 
   return (
-    <div className="mx-auto p-6 space-y-4">
+    <div className="mx-auto p-6 space-y-6 max-w-7xl">
       <Button variant="back" aria-label="Voltar">
         <ArrowLeft />
       </Button>
       <h1 className="title-primary">{t('title')}</h1>
-
-      {routes.map((route, index) => {
-        const decoded = polyline.decode(route.polyline) as [number, number][];
-        const iconProps = { size: 16, stroke: '#bfd572' };
-
-        const routeInfoItems = [
-          {
-            icon: <TimerIcon {...iconProps} />,
-            label: `${Math.floor(route.estimatedTimeMinutes / 60)}h ${route.estimatedTimeMinutes % 60}min`,
-          },
-          {
-            icon: <RouteIcon {...iconProps} />,
-            label: `${route.distanceKm.toFixed(1)} km`,
-          },
-          {
-            icon: <TrendingUp {...iconProps} />,
-            label: `+${route.elevationGain} m`,
-          },
-          {
-            icon: <TrendingDown {...iconProps} />,
-            label: `-${route.elevationLoss} m`,
-          },
-          {
-            icon: <BikeIcon {...iconProps} />,
-            label: `${t('modalityLabel')} ${getModalityLabel(route.modality)}`,
-          },
-          {
-            icon: <GaugeIcon {...iconProps} />,
-            label: `${t('averageSpeed')} ${route.averageSpeedUsed} km/h`,
-          },
-          {
-            icon: <Flame {...iconProps} />,
-            label: `${route.estimatedCalories} kcal`,
-          },
-        ];
-
-        return (
-          <div
-            key={index}
-            className="shadow-lg max-w-xl mx-auto p-4 bg-white/5 backdrop-blur-md rounded-2xl space-y-2"
-          >
-            <MiniMap polyline={decoded} />
-
-            <div className="p-4 space-y-2">
-              <div className="text-copy text-lg">
-                Percurso de {route.origin} para {route.destination}
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm pt-2">
-                {routeInfoItems.map(({ icon, label }, i) => (
-                  <div key={i} className="flex items-center gap-2 text-copy-light">
-                    {icon} {label}
-                  </div>
-                ))}
+  
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
+        {routes.map((route, index) => {
+          const decoded = polyline.decode(route.polyline) as [number, number][];
+          const iconProps = { size: 16, stroke: '#bfd572' };
+  
+          const routeInfoItems = [
+            {
+              icon: <TimerIcon {...iconProps} />,
+              label: `${Math.floor(route.estimatedTimeMinutes / 60)}h ${route.estimatedTimeMinutes % 60}min`,
+            },
+            {
+              icon: <RouteIcon {...iconProps} />,
+              label: `${route.distanceKm.toFixed(1)} km`,
+            },
+            {
+              icon: <TrendingUp {...iconProps} />,
+              label: `+${route.elevationGain} m`,
+            },
+            {
+              icon: <TrendingDown {...iconProps} />,
+              label: `-${route.elevationLoss} m`,
+            },
+            {
+              icon: <BikeIcon {...iconProps} />,
+              label: `${t('modalityLabel')} ${getModalityLabel(route.modality)}`,
+            },
+            {
+              icon: <GaugeIcon {...iconProps} />,
+              label: `${t('averageSpeed')} ${route.averageSpeedUsed} km/h`,
+            },
+            {
+              icon: <Flame {...iconProps} />,
+              label: `${route.estimatedCalories} kcal`,
+            },
+          ];
+  
+          return (
+            <div
+              key={index}
+              className="shadow-lg p-4 bg-white/5 backdrop-blur-md rounded-2xl space-y-2"
+            >
+              <MiniMap polyline={decoded} />
+  
+              <div className="p-4 space-y-2">
+                <div className="text-copy text-lg">
+                  Percurso de {route.origin} para {route.destination}
+                </div>
+  
+                <div className="grid grid-cols-2 gap-4 text-sm pt-2">
+                  {routeInfoItems.map(({ icon, label }, i) => (
+                    <div key={i} className="flex items-center gap-2 text-copy-light">
+                      {icon} {label}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
+  
 }
