@@ -28,7 +28,7 @@ export default function Button({
   const isDisabled = disabled || loading;
 
   const baseClasses =
-    'inline-flex items-center justify-center font-semibold transition-all text-base focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer';
+    'inline-flex items-center justify-center font-semibold transition-all text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer';
 
   const variants = {
     primary: 'w-full py-2 rounded-md bg-primary shadow hover:brightness-10 active:scale-95',
