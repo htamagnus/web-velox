@@ -34,7 +34,7 @@ export default function MiniMap({ polyline }: MiniMapProps) {
         zoom={13}
       >
         <AttributionControl position="topright" />
-        <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+        <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
         {polyline.length > 0 && (
           <Polyline positions={polyline} pathOptions={{ color: 'purple', weight: 4 }} />
         )}
