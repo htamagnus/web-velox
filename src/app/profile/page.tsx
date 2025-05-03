@@ -150,24 +150,24 @@ export default function ProfilePage() {
 
           <FormWrapper>
             {inputFields.map(({ name, type, value, label }) => (
-              <InputField
-                key={name}
-                name={name}
-                type={type}
-                value={value}
-                label={label}
-                onChange={(e) =>
-                  handleInputChange(
-                    name,
-                    type === 'number' ? Number(e.target.value) : e.target.value,
-                  )
-                }
-              />
+              <div key={name}>
+                <InputField
+                  name={name}
+                  type={type}
+                  value={value}
+                  label={label}
+                  onChange={(e) =>
+                    handleInputChange(
+                      name,
+                      type === 'number' ? Number(e.target.value) : e.target.value,
+                    )
+                  }
+                />
+                {name === 'speedGeneral' && form.isGeneralSpeedFromStrava && (
+                  <p className="text-sm text-copy-lighter mt-1">{t('speedGeneral.stravaNote')}</p>
+                )}
+              </div>
             ))}
-
-            {form.isGeneralSpeedFromStrava && (
-              <p className="text-sm text-yellow-400 mt-1">{t('speedGeneral.stravaNote')}</p>
-            )}
             <div className="pt-4">
               <Button
                 variant="confirm"
