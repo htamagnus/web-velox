@@ -3,8 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { Map, PlusCircle, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useProtectedRoute } from '@/hooks/use-protected-route';
 
 export default function HomePage() {
+  useProtectedRoute()
   const router = useRouter();
 
   return (
@@ -70,8 +72,6 @@ export default function HomePage() {
                 <PlusCircle size={40} stroke="#bfd572" />
                 Criar rota
               </button>
-              {/* TO DO: escrever "criar" rota aqui e centralizar o icone acima  do texto*/}
-
               <button
                 onClick={() => router.push('/profile')}
                 className="flex flex-col items-center cursor-pointer text-copy-light"

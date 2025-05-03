@@ -1,5 +1,6 @@
 import { ApiError } from "@/errors/api-errors"
 import { Athlete, CreateAthleteDto, UpdateAthleteDto } from "@/interfaces/athlete.interface"
+import { AuthData } from "@/interfaces/auth-data.interface"
 
 type RegisterData = {
   name: string
@@ -10,12 +11,6 @@ type RegisterData = {
 type LoginData = {
   email: string
   password: string
-}
-
-type LoginResponse = {
-  token: string
-  expiresIn: number
-  athleteId: string
 }
 
 type ApiErrorResponse = {
@@ -31,7 +26,7 @@ export default class ApiVeloxService {
     this.url = process.env.NEXT_PUBLIC_VELOX_API ?? ''
   }
 
-  async registerAndLogin(userData: RegisterData): Promise<LoginResponse> {
+  async registerAndLogin(userData: RegisterData): Promise<AuthData> {
     const response = await fetch(`${this.url}/athlete/register`, {
       method: 'POST',
       headers: {
@@ -50,10 +45,10 @@ export default class ApiVeloxService {
 
     localStorage.setItem('velox_token', json.token)
 
-    return json as LoginResponse
+    return json as AuthData
   }
 
-  async login(loginData: LoginData): Promise<LoginResponse> {
+  async login(loginData: LoginData): Promise<AuthData> {
     const response = await fetch(`${this.url}/athlete/login`, {
       method: 'POST',
       headers: {
@@ -64,7 +59,7 @@ export default class ApiVeloxService {
     })
 
     const text = await response.text()
-    const json: LoginResponse | ApiErrorResponse = text ? JSON.parse(text) : {}
+    const json: AuthData | ApiErrorResponse = text ? JSON.parse(text) : {}
 
     if (!response.ok) {
       throw new ApiError((json as ApiErrorResponse).message || 'Erro no login', response.status, (json as ApiErrorResponse).code, json)
@@ -72,7 +67,7 @@ export default class ApiVeloxService {
 
     localStorage.setItem('velox_token', json.token)
 
-    return json as LoginResponse
+    return json as AuthData
   }
 
   async completeProfile(data: CreateAthleteDto): Promise<Athlete> {

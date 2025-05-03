@@ -13,8 +13,10 @@ import Button from '@/components/ui/button/button';
 import Loader from '@/components/ui/loader/loader';
 import InputField from '@/components/ui/input-field/input-field';
 import { FormWrapper } from '@/components/ui/form-wrapper/form-wrapper';
+import { useProtectedRoute } from '@/hooks/use-protected-route';
 
 export default function ProfilePage() {
+  useProtectedRoute()
   const api = new ApiVeloxService();
   const { t } = useTexts('profile');
 

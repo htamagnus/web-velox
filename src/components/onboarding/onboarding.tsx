@@ -8,9 +8,17 @@ import { OnboardingAthleteData } from '@/interfaces/athlete.interface';
 import { motion, AnimatePresence } from 'framer-motion';
 import { onboardingSteps } from './steps';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function OnboardingForm() {
+  const { login, user } = useAuth()
   const router = useRouter();
+  useEffect(() => {
+    if (user?.hasCompletedOnboarding) {
+      router.replace('/home');
+    }
+  }, [user]);
+  
   const apiVelox = new ApiVeloxService();
   const [ready, setReady] = useState(false);
 
@@ -64,6 +72,12 @@ export default function OnboardingForm() {
       try {
         setLoading(true);
         await apiVelox.completeProfile(formData);
+
+        login({
+          ...user!,
+          hasCompletedOnboarding: true,
+        });        
+        
         router.push('/home');
       } catch (err) {
         if (err instanceof ApiError) {

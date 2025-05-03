@@ -10,24 +10,21 @@ import { Athlete } from '@/interfaces/athlete.interface';
 import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Timer,
-  MapPin,
   TrendingUp,
   TrendingDown,
   TimerIcon,
   RouteIcon,
-  BikeIcon,
-  GaugeIcon,
-  ArrowLeft,
   Flame,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useProtectedRoute } from '@/hooks/use-protected-route';
 
 type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][];
 };
 
 export default function CalculateRoutePage() {
+  useProtectedRoute()
   const api = new ApiVeloxService();
 
   const [origin, setOrigin] = useState<[number, number] | null>(null);

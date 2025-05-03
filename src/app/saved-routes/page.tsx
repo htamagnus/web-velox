@@ -24,8 +24,10 @@ import ApiVeloxService from '@/providers/api-velox.provider';
 import Loader from '@/components/ui/loader/loader';
 import Button from '@/components/ui/button/button';
 import MiniMap from '@/components/mini-map/mini-map.component';
+import { useProtectedRoute } from '@/hooks/use-protected-route';
 
 export default function SavedRoutesPage() {
+  useProtectedRoute()
   const api = new ApiVeloxService();
   const [routes, setRoutes] = useState<SaveRouteDto[]>([]);
   const [loading, setLoading] = useState(true);

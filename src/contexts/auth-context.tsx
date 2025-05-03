@@ -2,12 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-
-type AuthData = {
-  token: string
-  athleteId: string
-  expiresIn: number
-}
+import { AuthData } from '@/interfaces/auth-data.interface'
 
 type AuthContextType = {
   user: AuthData | null
