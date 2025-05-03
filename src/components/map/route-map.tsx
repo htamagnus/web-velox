@@ -14,14 +14,14 @@ import { useEffect } from 'react';
 import { Icon } from 'leaflet';
 
 const originIcon = new Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // TO DO: alterar icones
-  iconSize: [30, 30],
+  iconUrl: '/icons/marker-origin.svg',
+  iconSize: [25, 25],
   iconAnchor: [15, 30],
 });
 
 const destinationIcon = new Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/252/252025.png',
-  iconSize: [30, 30],
+  iconUrl: '/icons/marker-destination.svg',
+  iconSize: [25, 25],
   iconAnchor: [15, 30],
 });
 
@@ -69,19 +69,6 @@ export default function RouteMap({
   distanceKm,
   estimatedTimeMinutes,
 }: MapProps) {
-  useEffect(() => {
-    async function fixLeafletIcons() {
-      const L = await import('leaflet');
-
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-2x.png',
-        iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
-      });
-    }
-
-    fixLeafletIcons();
-  }, []);
 
   const center = origin ?? [-28.678, -49.369];
 
@@ -120,22 +107,22 @@ export default function RouteMap({
           </Marker>
         )}
       </>
-      {/* TO DO: alterar mapa pra um mais clean */}
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        attribution='© OpenStreetMap contributors, © CartoDB'
       />
+
       <FitBoundsToPolyline polyline={polyline} />
       <ClickHandler onMapClick={onMapClick} />
 
       {origin && (
-        <Marker position={{ lat: origin[0], lng: origin[1] }} icon={destinationIcon}>
+        <Marker position={{ lat: origin[0], lng: origin[1] }} icon={originIcon}>
           <Popup>Origem</Popup>
         </Marker>
       )}
 
       {destination && (
-        <Marker position={{ lat: destination[0], lng: destination[1] }}>
+        <Marker position={{ lat: destination[0], lng: destination[1] }} icon={destinationIcon}>
           <Popup>Destino</Popup>
         </Marker>
       )}
@@ -143,7 +130,7 @@ export default function RouteMap({
       {polyline.length > 0 && (
         <Polyline
           positions={polyline.map(([lat, lng]) => ({ lat, lng }))}
-          pathOptions={{ color: 'purple', weight: 5 }}
+          pathOptions={{ color: '#92a848', weight: 5 }}
         />
       )}
     </MapContainer>
