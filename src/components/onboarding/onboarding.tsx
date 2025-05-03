@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ApiVeloxService from '@/providers/api-velox.provider';
 import { ApiError } from '@/errors/api-errors';
-import { CreateAthleteDto, OnboardingAthleteData } from '@/interfaces/athlete.interface';
+import { OnboardingAthleteData } from '@/interfaces/athlete.interface';
 import { motion, AnimatePresence } from 'framer-motion';
 import { onboardingSteps } from './steps';
 import { toast } from 'sonner';

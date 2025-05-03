@@ -20,9 +20,9 @@ export default function HomePage() {
         <div className="flex flex-col min-h-screen bg-background">
           <main className="flex-1 p-4">
             <div className="space-y-6 p-6 max-w-4xl mx-auto">
-              <h1 className="text-3xl font-bold">Bem-vindo de volta!</h1>
+              <h1 className="text-3xl font-bold">TO DO: desenvolver Home</h1>
 
-              <section className="grid grid-cols-2 gap-4">
+              {/* <section className="grid grid-cols-2 gap-4">
                 <div className="card p-4">
                   <div className="text-xl font-semibold">8</div>
                   <div>Rotas Salvas</div>
@@ -39,7 +39,7 @@ export default function HomePage() {
                   <div className="text-xl font-semibold">Speed</div>
                   <div>Modalidade Mais Usada</div>
                 </div>
-              </section>
+              </section> */}
 
               <section className="space-y-4">
                 <h2 className="text-2xl font-bold">Últimas Rotas</h2>

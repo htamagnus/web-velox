@@ -66,12 +66,12 @@ export default function StepNumericSelector({
           {title}
         </h2>
 
-        <p className="step-paragraph mt-4 mb-4 max-w-md mx-auto text-sm md:text-base lg:text-lg">
+        <p className="step-paragraph mt-4 mb-8 max-w-md mx-auto text-sm md:text-base lg:text-lg px-8">
           {subtitle}
         </p>
 
         {displayMode === 'list' ? (
-          <div className="relative h-60 flex flex-col items-center justify-center">
+          <div className="relative h-40 flex flex-col items-center justify-center">
             <div className="absolute top-[calc(50%+1.5rem)] w-20 h-[1px] bg-gray-400 opacity-60 z-10" />
             <div className="space-y-2 z-20">
               {getDisplayValues().map((v) => (
@@ -146,8 +146,8 @@ export default function StepNumericSelector({
         )}
 
         {note && (
-          <div className="w-full flex justify-center mt-6 px-4">
-            <p className="text-s text-copy-lighter text-center max-w-md italic">{note}</p>
+          <div className="w-full flex justify-center mt-8 px-8">
+            <p className="text-sm text-copy-lighter text-center max-w-md italic">{note}</p>
           </div>
         )}
       </div>
