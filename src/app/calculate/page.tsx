@@ -33,8 +33,6 @@ export default function CalculateRoutePage() {
   const [destinationLabel, setDestinationLabel] = useState<string | null>(null);
   const [routeData, setRouteData] = useState<RouteData | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-
-  const [showSpeedOptions, setShowSpeedOptions] = useState(false);
   const [selectedModality, setSelectedModality] = useState<Modality>('general');
   const [averageSpeed, setAverageSpeed] = useState<number | null>(null);
   const [userData, setUserData] = useState<Athlete | null>(null);
@@ -206,9 +204,7 @@ export default function CalculateRoutePage() {
             className="absolute bottom-0 left-0 right-0"
           >
             <RoutePlannerPanel
-              origin={origin}
               originLabel={originLabel}
-              destination={destination}
               destinationLabel={destinationLabel}
               onSetOrigin={(coords, label) => {
                 setOrigin(coords);
@@ -224,8 +220,6 @@ export default function CalculateRoutePage() {
                 setDestination(null);
                 setRouteData(null);
               }}
-              showSpeedOptions={showSpeedOptions}
-              onCloseSpeedOptions={() => setShowSpeedOptions(false)}
               onSelectModality={(modality, speed) => {
                 setSelectedModality(modality);
                 setAverageSpeed(speed);

@@ -6,7 +6,6 @@ import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
 type Props = {
-  onClose: () => void
   onSelect: (choice: Modality, speed: number) => void
   speeds: {
     general: number
@@ -15,7 +14,7 @@ type Props = {
   }
 }
 
-export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
+export default function SpeedOptions({ onSelect, speeds }: Props) {
   const [selected, setSelected] = useState<Modality>('general')
 
   const options = [
@@ -25,7 +24,7 @@ export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
   ]
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white/5 backdrop-blur-md rounded-2xl shadow-xl shadow-lg space-y-2">
+    <div className="w-full max-w-md mx-auto p-6 bg-white/5 backdrop-blur-md rounded-2xl shadow-xl space-y-2">
       <h3 className="text-lg text-primary-light font-bold">Escolha o tipo de velocidade</h3>
 
       <div className="space-y-3">
@@ -47,7 +46,6 @@ export default function SpeedOptions({ onClose, onSelect, speeds }: Props) {
                   setSelected(option.value as Modality)
                   if (option.speed && option.speed > 0) {
                     onSelect(option.value as Modality, option.speed) // chama o pai já
-                    onClose() // fecha o modal se quiser
                   }
                 }}                
               />

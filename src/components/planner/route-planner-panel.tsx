@@ -9,16 +9,12 @@ import SpeedOptions from '../speed-modal/speed-options';
 import AutocompleteInput from '../route-input/route-input';
 
 type Props = {
-  origin: [number, number] | null;
   originLabel: string | null;
-  destination: [number, number] | null;
   destinationLabel: string | null;
   onSetOrigin: (coords: [number, number], label: string) => void;
   onSetDestination: (coords: [number, number], label: string) => void;
   onStart: () => void;
   onCancel: () => void;
-  showSpeedOptions: boolean;
-  onCloseSpeedOptions: () => void;
   onSelectModality: (modality: Modality, speed: number) => void;
   speeds: {
     general: number;
@@ -29,16 +25,12 @@ type Props = {
 };
 
 export default function RoutePlannerPanel({
-  origin,
   originLabel,
-  destination,
   destinationLabel,
   onSetOrigin,
   onSetDestination,
   onStart,
   onCancel,
-  showSpeedOptions,
-  onCloseSpeedOptions,
   onSelectModality,
   speeds,
   isCalculatingRoute,
@@ -79,7 +71,6 @@ export default function RoutePlannerPanel({
       />
 
         <SpeedOptions
-          onClose={onCloseSpeedOptions}
           onSelect={onSelectModality}
           speeds={speeds}
         />
