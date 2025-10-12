@@ -194,7 +194,7 @@ export default function ProfilePage() {
                   onChange={(e) => handleInputChange('age', Number(e.target.value))}
                   className="bg-transparent outline-none w-full text-white font-bold text-lg"
                 />
-                <span className="text-xs font-semibold text-primary-light/70 bg-primary-light/10 px-2 py-1 rounded">{t('age.unit')}</span>
+                <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('age.unit')}</span>
               </div>
             </div>
 
@@ -208,7 +208,7 @@ export default function ProfilePage() {
                   onChange={(e) => handleInputChange('weight', Number(e.target.value))}
                   className="bg-transparent outline-none w-full text-white font-bold text-lg"
                 />
-                <span className="text-xs font-semibold text-primary-light/70 bg-primary-light/10 px-2 py-1 rounded">{t('weight.unit')}</span>
+                <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('weight.unit')}</span>
               </div>
             </div>
 
@@ -222,7 +222,7 @@ export default function ProfilePage() {
                   onChange={(e) => handleInputChange('height', Number(e.target.value))}
                   className="bg-transparent outline-none w-full text-white font-bold text-lg"
                 />
-                <span className="text-xs font-semibold text-primary-light/70 bg-primary-light/10 px-2 py-1 rounded">{t('height.unit')}</span>
+                <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('height.unit')}</span>
               </div>
             </div>
           </div>

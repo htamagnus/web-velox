@@ -251,10 +251,17 @@
     "title": "Perfil de elevação"
   },
   "home": {
-    "title": "TO DO: desenvolver Home",
+    "title": "Bem-vindo ao velox",
+    "subtitle": "planeje suas rotas de bike com precisão",
     "lastRoutes": "Últimas Rotas",
-    "newRoute": "Nova Rota",
-    "myRoutes": "Minhas Rotas",
+    "newRoute": "Nova rota",
+    "newRouteDesc": "planeje seu percurso",
+    "myRoutes": "Minhas rotas",
+    "myRoutesDesc": "veja rotas salvas",
+    "profile": "Perfil",
+    "profileDesc": "edite suas informações",
+    "comingSoon": "Em breve",
+    "comingSoonDesc": "novidades chegando",
     "footer": {
       "routes": "Rotas",
       "createRoute": "Criar rota",
