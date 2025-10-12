@@ -70,7 +70,7 @@ export default function RouteSelector({
   return (
     <div className={clsx('space-y-3', className)}>
       {routes.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide sm:grid sm:grid-cols-3 sm:gap-3 sm:overflow-visible">
           {routes.map((route, index) => {
             const isSelected = index === selectedIndex;
             const timeDiff = route.estimatedTimeMinutes - routes[0].estimatedTimeMinutes;
@@ -85,7 +85,7 @@ export default function RouteSelector({
                   borderColor: isSelected ? routeColor : 'rgba(251, 252, 251, 0.2)',
                 }}
                 className={clsx(
-                  'relative flex-shrink-0 px-4 py-2.5 rounded-lg border-2 transition-all duration-200',
+                  'relative flex-shrink-0 px-4 py-2.5 rounded-lg border-2 transition-all duration-200 sm:flex-shrink',
                   'hover:scale-[1.02] active:scale-[0.98]',
                   isSelected ? 'text-white shadow-md' : 'text-copy hover:border-copy/40'
                 )}
@@ -146,7 +146,7 @@ export default function RouteSelector({
             </div>
           )}
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-sm">
             <div className="flex items-center gap-1.5">
               <RouteIcon size={16} className="flex-shrink-0" style={{ color: getRouteColor(selectedIndex) }} />
               <span className="font-medium">{selectedRoute.distanceKm.toFixed(2)} km</span>
