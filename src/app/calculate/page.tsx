@@ -13,6 +13,7 @@ import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
+import { User, Gauge } from 'lucide-react';
 
 type RouteOption = {
   polyline: [number, number][];
@@ -214,6 +215,39 @@ export default function CalculateRoutePage() {
         onMapClick={handleMapClick}
       />
 
+      {isCalculatingRoute && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm z-[9998] flex items-center justify-center"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] p-8 rounded-2xl shadow-2xl border border-primary-light/20"
+          >
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative">
+                <svg className="animate-spin h-12 w-12 text-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                  className="absolute inset-0 rounded-full bg-primary-light/20 blur-xl"
+                />
+              </div>
+              <div className="text-center">
+                <div className="text-white font-bold text-lg mb-1">calculando rota</div>
+                <div className="text-copy/60 text-sm">encontrando o melhor caminho para você...</div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
       <AnimatePresence mode="wait">
         {!userData ? (
           <motion.div
@@ -242,6 +276,29 @@ export default function CalculateRoutePage() {
                 onSelect={setSelectedRouteIndex}
               />
 
+              <div className="relative bg-gradient-to-r from-[#92a848]/20 to-[#92a848]/10 border-l-4 border-[#92a848] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-[#92a848] animate-pulse"></div>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[#92a848]">
+                    rota personalizada para você
+                  </span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-sm text-copy">
+                    <User size={16} className="text-primary-light flex-shrink-0" />
+                    <span>
+                      modalidade: <span className="font-bold text-primary-light">{getModalityLabel(selectedModality)}</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-copy">
+                    <Gauge size={16} className="text-primary-light flex-shrink-0" />
+                    <span>
+                      velocidade média: <span className="font-bold text-primary-light">{routeOptions[selectedRouteIndex].averageSpeedUsed} km/h</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {routeOptions[selectedRouteIndex]?.elevationProfile && (
                 <ElevationProfile
                   elevationData={routeOptions[selectedRouteIndex].elevationProfile!}
@@ -250,27 +307,47 @@ export default function CalculateRoutePage() {
                 />
               )}
 
-              <div className="pt-2 border-t border-copy/10">
-                <div className="text-xs text-copy/60 mb-2">
-                  modalidade: {getModalityLabel(selectedModality)}, {routeOptions[selectedRouteIndex].averageSpeedUsed} km/h
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2 w-full">
-                  <Button
-                    variant="confirm"
-                    loading={isSaving}
-                    onClick={handleSaveRoute}
-                    className="flex-1"
-                  >
-                    salvar rota
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    onClick={handleReset}
-                    className="flex-1"
-                  >
+              <div className="flex flex-col sm:flex-row gap-3 w-full pt-2">
+                <button
+                  onClick={handleSaveRoute}
+                  disabled={isSaving}
+                  className="flex-1 group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-semibold py-3.5 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    {isSaving ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        salvando...
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                          <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        salvar rota
+                      </>
+                    )}
+                  </span>
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="flex-1 bg-background hover:bg-copy/5 border-2 border-copy/20 hover:border-copy/40 text-copy font-semibold py-3.5 px-6 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 2v6h-6"></path>
+                      <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                      <path d="M3 22v-6h6"></path>
+                      <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                    </svg>
                     nova busca
-                  </Button>
-                </div>
+                  </span>
+                </button>
               </div>
             </div>
           </motion.div>

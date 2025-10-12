@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
+import { Bike, Mountain, Zap, Info, Settings, ArrowRight } from 'lucide-react'
+import clsx from 'clsx'
 
 type Props = {
   onSelect: (choice: Modality, speed: number) => void
@@ -16,52 +18,152 @@ type Props = {
 
 export default function SpeedOptions({ onSelect, speeds }: Props) {
   const [selected, setSelected] = useState<Modality>('general')
+  const router = useRouter()
 
   const options = [
-    { label: 'Velocidade geral (Strava)', value: 'general', speed: speeds.general },
-    { label: 'Speed (Road)', value: 'road', speed: speeds.road },
-    { label: 'MTB', value: 'mtb', speed: speeds.mtb },
+    { 
+      label: 'geral (urbano)', 
+      value: 'general', 
+      speed: speeds.general,
+      icon: Bike,
+      color: '#92a848',
+      description: 'velocidade média geral do strava'
+    },
+    { 
+      label: 'speed (estrada)', 
+      value: 'road', 
+      speed: speeds.road,
+      icon: Zap,
+      color: '#4a9eff',
+      description: 'velocidade para bike de estrada'
+    },
+    { 
+      label: 'mtb (trilha)', 
+      value: 'mtb', 
+      speed: speeds.mtb,
+      icon: Mountain,
+      color: '#ff8c42',
+      description: 'velocidade para mountain bike'
+    },
   ]
 
-  return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white/5 backdrop-blur-md rounded-2xl shadow-xl space-y-2">
-      <h3 className="text-lg text-primary-light font-bold">Escolha o tipo de velocidade</h3>
+  const handleOptionClick = (option: typeof options[0]) => {
+    const isDisabled = !option.speed || option.speed <= 0
+    
+    if (isDisabled) {
+      router.push('/profile')
+      return
+    }
+    
+    setSelected(option.value as Modality)
+    if (option.speed && option.speed > 0) {
+      onSelect(option.value as Modality, option.speed)
+    }
+  }
 
-      <div className="space-y-3">
+  return (
+    <div className="w-full space-y-3">
+      <div className="flex items-center gap-2 px-1">
+        <h3 className="text-sm font-semibold text-white">modalidade</h3>
+        <div 
+          className="text-copy/60 hover:text-white transition-colors cursor-help"
+          data-tooltip-id="modality-info"
+          data-tooltip-content="escolha a modalidade para calcular a rota com base na sua velocidade média"
+        >
+          <Info size={14} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-2">
         {options.map((option) => {
           const isDisabled = !option.speed || option.speed <= 0
+          const isSelected = selected === option.value
+          const Icon = option.icon
+          
           return (
-            <label
+            <button
               key={option.value}
-              className={`flex items-center space-x-3 ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-              data-tooltip-id={isDisabled ? `tooltip-${option.value}` : undefined}
-              data-tooltip-content={isDisabled ? 'Velocidade não cadastrada. Acesse seu perfil.' : undefined}
+              onClick={() => handleOptionClick(option)}
+              style={{
+                borderColor: isDisabled 
+                  ? 'rgba(251, 252, 251, 0.1)' 
+                  : isSelected 
+                    ? option.color 
+                    : 'rgba(251, 252, 251, 0.1)',
+                backgroundColor: isDisabled
+                  ? 'rgba(0, 0, 0, 0.3)'
+                  : isSelected 
+                    ? `${option.color}15` 
+                    : 'rgba(0, 0, 0, 0.2)',
+              }}
+              className={clsx(
+                'relative p-4 rounded-xl border-2 transition-all duration-200 text-left',
+                'hover:scale-[1.02] active:scale-[0.98]',
+                isDisabled 
+                  ? 'cursor-pointer hover:border-amber-500/50' 
+                  : 'cursor-pointer hover:shadow-md',
+                isSelected && 'shadow-lg'
+              )}
             >
-              <input
-                type="radio"
-                value={option.value}
-                checked={selected === option.value}
-                disabled={isDisabled}
-                onChange={() => {
-                  setSelected(option.value as Modality)
-                  if (option.speed && option.speed > 0) {
-                    onSelect(option.value as Modality, option.speed) // chama o pai já
-                  }
-                }}                
-              />
-              <span className='text-copy' >{option.label} - {option.speed?.toFixed(1)} km/h</span>
-            </label>
+              <div className="flex items-center gap-3">
+                <div 
+                  className="p-2 rounded-lg"
+                  style={{ 
+                    backgroundColor: isDisabled ? 'rgba(251, 252, 251, 0.05)' : `${option.color}20`
+                  }}
+                >
+                  <Icon size={20} style={{ color: isDisabled ? 'rgba(251, 252, 251, 0.3)' : option.color }} />
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={clsx(
+                      "font-semibold capitalize",
+                      isDisabled ? "text-gray-400" : "text-white"
+                    )}>
+                      {option.label}
+                    </span>
+                    {isSelected && !isDisabled && (
+                      <div 
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: option.color }}
+                      />
+                    )}
+                    {isDisabled && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 flex items-center gap-1 font-medium">
+                        <Settings size={10} />
+                        configurar
+                      </span>
+                    )}
+                  </div>
+                  <div className={clsx(
+                    "text-xs",
+                    isDisabled ? "text-gray-400" : "text-gray-300"
+                  )}>
+                    {isDisabled ? 'clique para configurar no seu perfil' : option.description}
+                  </div>
+                </div>
+
+                {isDisabled ? (
+                  <ArrowRight size={20} className="text-amber-400" />
+                ) : (
+                  <div className="text-right">
+                    <div 
+                      className="text-lg font-bold"
+                      style={{ color: isSelected ? option.color : 'rgba(251, 252, 251, 0.9)' }}
+                    >
+                      {option.speed?.toFixed(1)}
+                    </div>
+                    <div className="text-xs text-copy/60">km/h</div>
+                  </div>
+                )}
+              </div>
+            </button>
           )
         })}
       </div>
 
-      <Tooltip id="tooltip-general" />
-      <Tooltip id="tooltip-road" />
-      <Tooltip id="tooltip-mtb" />
-
-      <p className="text-xs text-copy-light pt-2">
-        Para alterar suas velocidades, acesse seu perfil.
-      </p>
+      <Tooltip id="modality-info" />
     </div>
   )
 }

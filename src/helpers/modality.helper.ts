@@ -1,10 +1,10 @@
 export function getModalityLabel(modality: Modality): string {
     switch (modality) {
       case 'road':
-        return 'Speed (Road)'
+        return 'speed (estrada)'
       case 'mtb':
-        return 'MTB (Trilha)'
+        return 'mtb (trilha)'
       default:
-        return 'Geral'
+        return 'geral (urbano)'
     }
   }

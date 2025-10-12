@@ -120,16 +120,22 @@ export default function GoogleRouteMap({
   }, [routes, selectedRouteIndex, origin, destination]);
 
   const getRouteColor = (index: number, isSelected: boolean) => {
-    if (isSelected) return '#92a848';
-    return index === 0 ? '#cbd5aa' : index === 1 ? '#a8b87a' : '#8a9956';
+    const colors = [
+      '#92a848', // verde principal
+      '#4a9eff', // azul
+      '#ff8c42', // laranja
+    ];
+    
+    const color = colors[index] || colors[0];
+    return isSelected ? color : color;
   };
 
   const getRouteOpacity = (isSelected: boolean) => {
-    return isSelected ? 1.0 : 0.5;
+    return isSelected ? 1.0 : 0.4;
   };
 
   const getRouteWeight = (isSelected: boolean) => {
-    return isSelected ? 6 : 4;
+    return isSelected ? 7 : 4;
   };
 
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {

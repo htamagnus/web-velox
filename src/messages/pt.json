@@ -36,44 +36,57 @@
     }
   },
   "profile": {
-    "title": "Meu Perfil",
+    "title": "Meu perfil",
+    "loadingMessage": "carregando perfil...",
+    "sections": {
+      "personal": "Dados pessoais",
+      "metrics": "Métricas físicas",
+      "speeds": "Velocidades das modalidades",
+      "speedsDescription": "Configure suas velocidades médias para cálculos personalizados de rotas"
+    },
     "name": {
-      "label": "Nome"
+      "label": "nome"
     },
     "email": {
-      "label": "Email"
+      "label": "email"
     },
     "age": {
-      "label": "Idade",
+      "label": "idade",
       "unit": "anos"
     },
     "weight": {
-      "label": "Peso (kg)",
+      "label": "peso",
       "unit": "kg"
     },
     "height": {
-      "label": "Altura (cm)",
+      "label": "altura",
       "unit": "cm"
     },
     "speedGeneral": {
-      "label": "Velocidade Geral (km/h)",
-      "stravaNote": "Essa velocidade foi importada do Strava. Se você alterar, usaremos esse novo valor no lugar."
+      "label": "Geral (urbano)",
+      "description": "velocidade média geral do strava",
+      "stravaSync": "✓ sincronizado com strava",
+      "unit": "km/h"
     },
     "speedRoad": {
-      "label": "Velocidade Speed (km/h)"
+      "label": "Speed (estrada)",
+      "description": "velocidade para bike de estrada",
+      "unit": "km/h"
     },
     "speedMtb": {
-      "label": "Velocidade MTB (km/h)"
+      "label": "MTB (trilha)",
+      "description": "velocidade para mountain bike",
+      "unit": "km/h"
     },
     "button": {
       "save": "Salvar alterações",
-      "saving": "Salvando..."
+      "saving": "salvando alterações..."
     },
     "errors": {
-      "noChanges": "Nenhuma alteração foi feita.",
-      "loadError": "Erro ao carregar perfil. Tente novamente mais tarde.",
-      "updateSuccess": "Alterações salvas com sucesso!",
-      "updateError": "Erro ao salvar alterações. Tente novamente mais tarde."
+      "noChanges": "nenhuma alteração foi feita.",
+      "loadError": "erro ao carregar perfil. tente novamente mais tarde.",
+      "updateSuccess": "alterações salvas com sucesso!",
+      "updateError": "erro ao salvar alterações. tente novamente mais tarde."
     }
   },
   "planner": {
