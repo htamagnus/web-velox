@@ -199,39 +199,39 @@
     "profileError": "erro ao buscar perfil",
     "loadingProfile": "carregando perfil...",
     "requireOriginDestination": "defina origem e destino antes de calcular a rota.",
-    "fastestRoute": "rota mais rápida",
+    "fastestRoute": "Rota mais rápida",
     "routeError": "erro ao calcular rota",
     "routeSaved": "rota salva com sucesso!",
     "routeSaveError": "erro ao salvar rota",
     "calculating": {
-      "title": "calculando rota",
+      "title": "Calculando rota",
       "subtitle": "encontrando o melhor caminho para você..."
     },
     "personalized": {
-      "title": "rota personalizada para você",
-      "modality": "modalidade:",
-      "averageSpeed": "velocidade média:"
+      "title": "Rota personalizada para você",
+      "modality": "Modalidade:",
+      "averageSpeed": "Velocidade média:"
     },
     "buttons": {
-      "save": "salvar rota",
+      "save": "Salvar rota",
       "saving": "salvando...",
-      "newSearch": "nova busca"
+      "newSearch": "Nova busca"
     }
   },
   "speedModal": {
-    "title": "modalidade",
+    "title": "Modalidade",
     "tooltip": "escolha a modalidade para calcular a rota com base na sua velocidade média",
     "options": {
       "general": {
-        "label": "geral (urbano)",
+        "label": "Geral (urbano)",
         "description": "velocidade média geral do strava"
       },
       "road": {
-        "label": "speed (estrada)",
+        "label": "Speed (estrada)",
         "description": "velocidade para bike de estrada"
       },
       "mtb": {
-        "label": "mtb (trilha)",
+        "label": "MTB (trilha)",
         "description": "velocidade para mountain bike"
       }
     },
@@ -241,14 +241,14 @@
   },
   "routeSelector": {
     "labels": {
-      "recommended": "recomendada",
-      "alternative": "alternativa",
-      "main": "principal",
-      "alt": "alt."
+      "recommended": "Recomendada",
+      "alternative": "Alternativa",
+      "main": "Principal",
+      "alt": "Alt."
     }
   },
   "elevationProfile": {
-    "title": "perfil de elevação"
+    "title": "Perfil de elevação"
   },
   "home": {
     "title": "TO DO: desenvolver Home",
@@ -262,7 +262,7 @@
     }
   },
   "savedRoutesPage": {
-    "routeFrom": "percurso de"
+    "routeFrom": "Percurso de"
   },
   "loginForm": {
     "emailPlaceholder": "Digite seu e-mail",

@@ -99,12 +99,12 @@ export default function SpeedOptions({ onSelect, speeds }: Props) {
                     : 'rgba(0, 0, 0, 0.2)',
               }}
               className={clsx(
-                'relative p-4 rounded-xl border-2 transition-all duration-200 text-left',
+                'relative p-4 rounded-xl border-2 transition-all duration-300 ease-out text-left backdrop-blur-sm',
                 'hover:scale-[1.02] active:scale-[0.98]',
                 isDisabled 
                   ? 'cursor-pointer hover:border-amber-500/50' 
-                  : 'cursor-pointer hover:shadow-md',
-                isSelected && 'shadow-lg'
+                  : 'cursor-pointer hover:shadow-lg',
+                isSelected && 'shadow-xl'
               )}
             >
               <div className="flex items-center gap-3">

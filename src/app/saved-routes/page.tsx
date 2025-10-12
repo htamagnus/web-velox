@@ -22,7 +22,6 @@ import { getModalityLabel } from '@/helpers/modality.helper';
 import ApiVeloxService from '@/providers/api-velox.provider';
 
 import Loader from '@/components/ui/loader/loader';
-import Button from '@/components/ui/button/button';
 import GoogleMiniMap from '@/components/mini-map/google-mini-map';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 
@@ -68,21 +67,35 @@ export default function SavedRoutesPage() {
         <p className="text-copy-light">
           {t('emptyDescription') || 'Que tal começar agora e planejar seu próximo percurso?'}
         </p>
-        <Button onClick={() => router.push('/calculate')} variant="confirm">
+        <button
+          onClick={() => router.push('/calculate')}
+          className="bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3 px-8 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105"
+        >
           {t('ctaCreate') || 'Criar rota'}
-        </Button>
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto p-6 space-y-6 max-w-7xl">
-      <Button variant="back" aria-label="Voltar">
-        <ArrowLeft />
-      </Button>
-      <h1 className="title-primary">{t('title')}</h1>
-  
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
+    <div className="min-h-screen bg-background pb-20">
+      <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
+        <div className="flex items-center justify-between pt-4">
+          <button
+            onClick={() => router.back()}
+            className="text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          
+          <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
+            <Map size={20} className="text-primary-light" />
+            <h1 className="text-xl font-bold text-gray-100 tracking-tight">{t('title')}</h1>
+          </div>
+          
+          <div className="w-20"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
         {routes.map((route, index) => {
           const decoded = polyline.decode(route.polyline) as [number, number][];
           const iconProps = { size: 16, stroke: '#bfd572' };
@@ -141,8 +154,8 @@ export default function SavedRoutesPage() {
             </div>
           );
         })}
+        </div>
       </div>
     </div>
   );
-  
 }

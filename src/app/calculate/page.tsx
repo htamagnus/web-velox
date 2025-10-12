@@ -313,7 +313,7 @@ export default function CalculateRoutePage() {
                 <button
                   onClick={handleSaveRoute}
                   disabled={isSaving}
-                  className="flex-1 group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-semibold py-3.5 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 group relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {isSaving ? (
@@ -338,7 +338,7 @@ export default function CalculateRoutePage() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="flex-1 bg-background hover:bg-copy/5 border-2 border-copy/20 hover:border-copy/40 text-copy font-semibold py-3.5 px-6 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  className="flex-1 bg-copy/10 hover:bg-copy/20 border border-copy/20 hover:border-copy/30 text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
                 >
                   <span className="flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

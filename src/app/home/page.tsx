@@ -24,7 +24,7 @@ export default function HomePage() {
         <div className="flex flex-col min-h-screen bg-background">
           <main className="flex-1 p-4">
             <div className="space-y-6 p-6 max-w-4xl mx-auto">
-              <h1 className="text-3xl font-bold">{t('title')}</h1>
+              <h1 className="text-2xl font-bold text-primary-light">{t('title')}</h1>
 
               {/* <section className="grid grid-cols-2 gap-4">
                 <div className="card p-4">
@@ -46,7 +46,7 @@ export default function HomePage() {
               </section> */}
 
               <section className="space-y-4">
-                <h2 className="text-2xl font-bold">{t('lastRoutes')}</h2>
+                <h2 className="text-lg font-bold text-white">{t('lastRoutes')}</h2>
                 {/* Aqui você mapeia e mostra 3 ou 5 últimas rotas */}
               </section>
 
@@ -61,7 +61,7 @@ export default function HomePage() {
             <div className="flex justify-between items-center px-16 py-2 text-sm">
               <button
                 onClick={() => router.push('/saved-routes')}
-                className="flex flex-col items-center cursor-pointer text-copy-light"
+                className="flex flex-col items-center cursor-pointer text-copy-light transition-all duration-300 ease-out hover:text-primary hover:scale-110 active:scale-95 rounded-xl p-2 hover:bg-white/5"
               >
                 <Map size={28} stroke="#bfd572" />
                 {t('footer.routes')}
@@ -69,14 +69,14 @@ export default function HomePage() {
 
               <button
                 onClick={() => router.push('/calculate')}
-                className="flex flex-col items-center cursor-pointer text-copy-light p-1 -mt-6"
+                className="flex flex-col items-center cursor-pointer text-copy-light p-1 -mt-6 transition-all duration-300 ease-out hover:scale-110 active:scale-95 rounded-xl hover:bg-white/5"
               >
                 <PlusCircle size={40} stroke="#bfd572" />
                 {t('footer.createRoute')}
               </button>
               <button
                 onClick={() => router.push('/profile')}
-                className="flex flex-col items-center cursor-pointer text-copy-light"
+                className="flex flex-col items-center cursor-pointer text-copy-light transition-all duration-300 ease-out hover:text-primary hover:scale-110 active:scale-95 rounded-xl p-2 hover:bg-white/5"
               >
                 <User size={28} stroke="#bfd572" />
                 {t('footer.profile')}

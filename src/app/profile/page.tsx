@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain, Save } from 'lucide-react';
+import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import ApiVeloxService from '@/providers/api-velox.provider';
@@ -117,12 +117,15 @@ export default function ProfilePage() {
         <div className="flex items-center justify-between pt-4">
           <button
             onClick={() => router.back()}
-            className="text-copy/60 hover:text-copy flex items-center gap-2 transition-colors p-2 -m-2 rounded-lg hover:bg-white/5"
+            className="text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
           >
             <ArrowLeft size={20} />
           </button>
           
-          <h1 className="text-2xl font-bold text-primary-light">{t('title')}</h1>
+          <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
+            <User size={20} className="text-primary-light" />
+            <h1 className="text-xl font-bold text-gray-100 tracking-tight">{t('title')}</h1>
+          </div>
           
           <div className="w-20"></div>
         </div>
@@ -322,9 +325,9 @@ export default function ProfilePage() {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="w-full group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="w-full group relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            <span className="relative z-10 flex items-center justify-center gap-2 text-base">
+            <span className="relative z-10 flex items-center justify-center gap-2">
               {isSaving ? (
                 <>
                   <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -335,7 +338,11 @@ export default function ProfilePage() {
                 </>
               ) : (
                 <>
-                  <Save size={20} />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                  </svg>
                   {t('button.save')}
                 </>
               )}
