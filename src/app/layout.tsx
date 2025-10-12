@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/auth-context';
-import 'leaflet/dist/leaflet.css';
 import { Toaster } from 'sonner';
 import GoogleMapsLoader from '@/components/google-maps-loader/google-maps-loader';
 

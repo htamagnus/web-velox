@@ -141,15 +141,3 @@ body::-webkit-scrollbar {
     color: var(--primary);
   }
 }
-
-.leaflet-control-attribution {
-  position: absolute !important;
-  top: 0;
-  right: 0;
-  bottom: auto !important;
-  left: auto !important;
-  background: transparent !important;
-  font-size: 11px;
-  padding: 4px 8px;
-  z-index: 9999;
-}

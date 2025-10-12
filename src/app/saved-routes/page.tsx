@@ -23,7 +23,7 @@ import ApiVeloxService from '@/providers/api-velox.provider';
 
 import Loader from '@/components/ui/loader/loader';
 import Button from '@/components/ui/button/button';
-import MiniMap from '@/components/mini-map/mini-map.component';
+import GoogleMiniMap from '@/components/mini-map/google-mini-map';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 
 export default function SavedRoutesPage() {
@@ -122,7 +122,7 @@ export default function SavedRoutesPage() {
               key={index}
               className="shadow-lg p-4 bg-white/5 backdrop-blur-md rounded-2xl space-y-2"
             >
-              <MiniMap polyline={decoded} />
+              <GoogleMiniMap polyline={decoded} />
   
               <div className="p-4 space-y-2">
                 <div className="text-copy text-lg">

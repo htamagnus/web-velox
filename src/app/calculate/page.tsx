@@ -3,28 +3,36 @@
 import { useEffect, useState } from 'react';
 import polyline from '@mapbox/polyline';
 import ApiVeloxService from '@/providers/api-velox.provider';
-import RouteMap from '@/components/map/route-map';
+import GoogleRouteMap from '@/components/map/google-route-map';
+import RouteSelector from '@/components/map/route-selector';
+import ElevationProfile from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
 import Button from '@/components/ui/button/button';
 import { Athlete } from '@/interfaces/athlete.interface';
 import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  TrendingUp,
-  TrendingDown,
-  TimerIcon,
-  RouteIcon,
-  Flame,
-} from 'lucide-react';
 import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
+
+type RouteOption = {
+  polyline: [number, number][];
+  distanceKm: number;
+  estimatedTimeMinutes: number;
+  elevationGain: number;
+  elevationLoss: number;
+  estimatedCalories: number;
+  averageSpeedUsed: number;
+  elevationProfile?: ElevationPoint[];
+  summary?: string;
+  warnings?: string[];
+};
 
 type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][];
 };
 
 export default function CalculateRoutePage() {
-  useProtectedRoute()
+  useProtectedRoute();
   const api = new ApiVeloxService();
 
   const [origin, setOrigin] = useState<[number, number] | null>(null);
@@ -32,6 +40,8 @@ export default function CalculateRoutePage() {
   const [originLabel, setOriginLabel] = useState<string | null>(null);
   const [destinationLabel, setDestinationLabel] = useState<string | null>(null);
   const [routeData, setRouteData] = useState<RouteData | null>(null);
+  const [routeOptions, setRouteOptions] = useState<RouteOption[]>([]);
+  const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [selectedModality, setSelectedModality] = useState<Modality>('general');
   const [averageSpeed, setAverageSpeed] = useState<number | null>(null);
@@ -46,7 +56,7 @@ export default function CalculateRoutePage() {
         setMapCenter(coords);
       },
       (err) => {
-        toast.info('Não foi possível pegar localização');
+        toast.info('não foi possível pegar localização');
       },
     );
   }, []);
@@ -57,14 +67,16 @@ export default function CalculateRoutePage() {
         const profile = await api.getProfile();
         setUserData(profile);
       } catch (err) {
-        toast.error('Erro ao buscar perfil');
+        toast.error('erro ao buscar perfil');
       }
     }
     fetchProfile();
   }, []);
 
-  const handleMapClick = (e: { latlng: { lat: number; lng: number } }) => {
-    const coords: [number, number] = [e.latlng.lat, e.latlng.lng];
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    if (!e.latLng) return;
+    
+    const coords: [number, number] = [e.latLng.lat(), e.latLng.lng()];
     if (!origin) {
       setOrigin(coords);
       setOriginLabel(null);
@@ -74,9 +86,24 @@ export default function CalculateRoutePage() {
     }
   };
 
+  const generateMockElevationProfile = (distance: number, variation = 1): ElevationPoint[] => {
+    const points: ElevationPoint[] = [];
+    const numPoints = 50;
+    const baseElevation = 100;
+    
+    for (let i = 0; i <= numPoints; i++) {
+      const distancePoint = (distance * 1000 * i) / numPoints;
+      const elevation = baseElevation + Math.sin((i / 5) + variation) * 20 + Math.random() * 10;
+      points.push({ distance: distancePoint, elevation });
+    }
+    
+    return points;
+  };
+
+
   const handleCalculate = async () => {
     if (!originLabel || !destinationLabel) {
-      toast.info('Defina origem e destino antes de calcular a rota.');
+      toast.info('defina origem e destino antes de calcular a rota.');
       return;
     }
 
@@ -91,27 +118,100 @@ export default function CalculateRoutePage() {
       const response = await api.planRoute(payload);
       const decoded = polyline.decode(response.polyline) as [number, number][];
 
+      const mainRoute: RouteOption = {
+        polyline: decoded,
+        distanceKm: response.distanceKm,
+        estimatedTimeMinutes: response.estimatedTimeMinutes,
+        elevationGain: response.elevationGain,
+        elevationLoss: response.elevationLoss,
+        estimatedCalories: response.estimatedCalories,
+        averageSpeedUsed: response.averageSpeedUsed,
+        elevationProfile: generateMockElevationProfile(response.distanceKm),
+        summary: 'rota mais rápida',
+      };
+
+      const alternatives: RouteOption[] = [];
+      
+      if (response.alternatives && response.alternatives.length > 0) {
+        for (const alt of response.alternatives) {
+          const altDecoded = polyline.decode(alt.polyline) as [number, number][];
+          alternatives.push({
+            polyline: altDecoded,
+            distanceKm: alt.distanceKm,
+            estimatedTimeMinutes: alt.estimatedTimeMinutes,
+            elevationGain: alt.elevationGain,
+            elevationLoss: alt.elevationLoss,
+            estimatedCalories: alt.estimatedCalories,
+            averageSpeedUsed: alt.averageSpeedUsed,
+            elevationProfile: alt.elevationProfile || generateMockElevationProfile(alt.distanceKm),
+            summary: alt.summary,
+            warnings: alt.warnings,
+          });
+        }
+      }
+
       setRouteData({
         ...response,
         decodedPolyline: decoded,
       });
+      
+      setRouteOptions([mainRoute, ...alternatives]);
+      setSelectedRouteIndex(0);
+      
     } catch (error) {
-      toast.error('Erro ao calcular rota');
+      toast.error('erro ao calcular rota');
     } finally {
       setIsCalculatingRoute(false);
     }
   };
 
+  const handleSaveRoute = async () => {
+    if (!routeData || routeOptions.length === 0) return;
+    
+    const selectedRoute = routeOptions[selectedRouteIndex];
+    
+    try {
+      setIsSaving(true);
+      await api.saveRoute({
+        origin: originLabel!,
+        destination: destinationLabel!,
+        modality: selectedModality,
+        polyline: polyline.encode(selectedRoute.polyline),
+        distanceKm: selectedRoute.distanceKm,
+        estimatedTimeMinutes: selectedRoute.estimatedTimeMinutes,
+        elevationGain: selectedRoute.elevationGain,
+        elevationLoss: selectedRoute.elevationLoss,
+        estimatedCalories: selectedRoute.estimatedCalories,
+        averageSpeedUsed: selectedRoute.averageSpeedUsed,
+      });
+      toast.success('rota salva com sucesso!');
+    } catch (error) {
+      toast.error('erro ao salvar rota');
+      console.error('erro ao salvar rota:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleReset = () => {
+    setOrigin(null);
+    setDestination(null);
+    setOriginLabel(null);
+    setDestinationLabel(null);
+    setRouteData(null);
+    setRouteOptions([]);
+    setSelectedRouteIndex(0);
+  };
+
   return (
     <div className="relative w-full h-screen pb-48">
-      <RouteMap
-        center={mapCenter}
+      <GoogleRouteMap
         origin={origin}
         destination={destination}
-        polyline={routeData?.decodedPolyline ?? []}
+        routes={routeOptions}
+        selectedRouteIndex={selectedRouteIndex}
+        onRouteSelect={setSelectedRouteIndex}
         onMapClick={handleMapClick}
-        distanceKm={routeData?.distanceKm}
-        estimatedTimeMinutes={routeData?.estimatedTimeMinutes}
       />
 
       <AnimatePresence mode="wait">
@@ -124,75 +224,54 @@ export default function CalculateRoutePage() {
             className="absolute bottom-4 left-4 right-4 text-center p-4"
           >
             <div className="absolute bottom-4 left-4 right-4 text-center p-4">
-              Carregando perfil...
+              carregando perfil...
             </div>
           </motion.div>
-        ) : routeData ? (
+        ) : routeOptions.length > 0 ? (
           <motion.div
             key="route-result"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute bottom-4 left-4 right-4 bg-background p-4 rounded-xl shadow-lg z-[999] text-copy"
+            className="absolute bottom-4 left-4 right-4 bg-background p-4 rounded-xl shadow-lg z-[999] text-copy max-h-[60vh] overflow-y-auto"
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-md">
-              <div className="flex items-center gap-1">
-                <RouteIcon size={20} stroke="#bfd572" />
-                {routeData.distanceKm.toFixed(2)} km
-              </div>
-              <div className="flex items-center gap-1">
-                <TimerIcon size={20} stroke="#bfd572" />
-                {Math.floor(routeData.estimatedTimeMinutes / 60)}h{' '}
-                {routeData.estimatedTimeMinutes % 60}min
-              </div>
-              <div className="flex items-center gap-1">
-                <TrendingUp size={20} stroke="#bfd572" />
-                {routeData.elevationGain} m
-              </div>
-              <div className="flex items-center gap-1">
-                <TrendingDown size={20} stroke="#bfd572" />
-                {routeData.elevationLoss} m
-              </div>
-              <div className="flex items-center gap-1">
-                <Flame size={20} stroke="#bfd572" />
-                {routeData.estimatedCalories} kcal
-              </div>
-              <div className="flex items-center gap-1 col-span-2 sm:col-span-1">
-                Modalidade: {getModalityLabel(selectedModality)},{' '}
-                {routeData.averageSpeedUsed} km/h
-              </div>
-            </div>
+            <div className="space-y-4">
+              <RouteSelector
+                routes={routeOptions}
+                selectedIndex={selectedRouteIndex}
+                onSelect={setSelectedRouteIndex}
+              />
 
-            <div className="flex flex-col sm:flex-row gap-2 pt-4 w-full mt-3">
-              <Button
-                variant="confirm"
-                loading={isSaving}
-                onClick={async () => {
-                  if (!routeData) return;
-                  try {
-                    setIsSaving(true);
-                    await api.saveRoute({
-                      origin: originLabel!,
-                      destination: destinationLabel!,
-                      modality: selectedModality,
-                      polyline: routeData.polyline,
-                      distanceKm: routeData.distanceKm,
-                      estimatedTimeMinutes: routeData.estimatedTimeMinutes,
-                      elevationGain: routeData.elevationGain,
-                      elevationLoss: routeData.elevationLoss,
-                      estimatedCalories: routeData.estimatedCalories,
-                      averageSpeedUsed: routeData.averageSpeedUsed,
-                    });
-                  } catch (error) {
-                    console.error('Erro ao salvar rota:', error);
-                  } finally {
-                    setIsSaving(false);
-                  }
-                }}
-                className="flex-1"
-              >
-                Salvar Rota
-              </Button>
+              {routeOptions[selectedRouteIndex]?.elevationProfile && (
+                <ElevationProfile
+                  elevationData={routeOptions[selectedRouteIndex].elevationProfile!}
+                  elevationGain={routeOptions[selectedRouteIndex].elevationGain}
+                  elevationLoss={routeOptions[selectedRouteIndex].elevationLoss}
+                />
+              )}
+
+              <div className="pt-2 border-t border-copy/10">
+                <div className="text-xs text-copy/60 mb-2">
+                  modalidade: {getModalityLabel(selectedModality)}, {routeOptions[selectedRouteIndex].averageSpeedUsed} km/h
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2 w-full">
+                  <Button
+                    variant="confirm"
+                    loading={isSaving}
+                    onClick={handleSaveRoute}
+                    className="flex-1"
+                  >
+                    salvar rota
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={handleReset}
+                    className="flex-1"
+                  >
+                    nova busca
+                  </Button>
+                </div>
+              </div>
             </div>
           </motion.div>
         ) : (
@@ -215,11 +294,7 @@ export default function CalculateRoutePage() {
                 setDestinationLabel(label);
               }}
               onStart={() => handleCalculate()}
-              onCancel={() => {
-                setOrigin(null);
-                setDestination(null);
-                setRouteData(null);
-              }}
+              onCancel={() => handleReset()}
               onSelectModality={(modality, speed) => {
                 setSelectedModality(modality);
                 setAverageSpeed(speed);

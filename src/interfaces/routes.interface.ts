@@ -5,6 +5,24 @@ type GetPlannedRouteInputDto = {
   destination: string
   modality: Modality
 }
+
+type ElevationPoint = {
+  distance: number
+  elevation: number
+}
+
+type RouteAlternative = {
+  distanceKm: number
+  estimatedTimeMinutes: number
+  estimatedCalories: number
+  elevationGain: number
+  elevationLoss: number
+  polyline: string
+  averageSpeedUsed: number
+  elevationProfile?: ElevationPoint[]
+  summary?: string
+  warnings?: string[]
+}
   
 type GetPlannedRouteResponseDto = {
   distanceKm: number
@@ -14,6 +32,7 @@ type GetPlannedRouteResponseDto = {
   elevationLoss: number
   polyline: string
   averageSpeedUsed: number
+  alternatives?: RouteAlternative[]
 }
 
 type SaveRouteDto = {
