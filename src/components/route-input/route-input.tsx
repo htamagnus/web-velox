@@ -5,7 +5,7 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from 'use-places-autocomplete';
 import { useEffect, useState } from 'react';
-import { MapPin, Building2, Home } from 'lucide-react';
+import { MapPin, Building2, Home, X } from 'lucide-react';
 
 type Props = {
   icon?: React.ReactNode;
@@ -97,10 +97,7 @@ export default function AutocompleteInput({
             onClick={() => setValue('', false)}
             className="flex-shrink-0 text-copy/40 hover:text-copy transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            <X size={16} />
           </button>
         )}
       </div>

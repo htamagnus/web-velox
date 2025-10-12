@@ -13,7 +13,7 @@ import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
-import { User, Gauge } from 'lucide-react';
+import { User, Gauge, Loader2, Save, RotateCcw } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 
 type RouteOption = {
@@ -231,10 +231,7 @@ export default function CalculateRoutePage() {
           >
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
-                <svg className="animate-spin h-12 w-12 text-primary-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
+                <Loader2 size={48} className="animate-spin text-primary-light" />
                 <motion.div
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
@@ -318,19 +315,12 @@ export default function CalculateRoutePage() {
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {isSaving ? (
                       <>
-                        <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                        <Loader2 size={20} className="animate-spin" />
                         {t('buttons.saving')}
                       </>
                     ) : (
                       <>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                          <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                          <polyline points="7 3 7 8 15 8"></polyline>
-                        </svg>
+                        <Save size={20} />
                         {t('buttons.save')}
                       </>
                     )}
@@ -341,12 +331,7 @@ export default function CalculateRoutePage() {
                   className="flex-1 bg-copy/10 hover:bg-copy/20 border border-copy/20 hover:border-copy/30 text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
                 >
                   <span className="flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 2v6h-6"></path>
-                      <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
-                      <path d="M3 22v-6h6"></path>
-                      <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
-                    </svg>
+                    <RotateCcw size={20} />
                     {t('buttons.newSearch')}
                   </span>
                 </button>
