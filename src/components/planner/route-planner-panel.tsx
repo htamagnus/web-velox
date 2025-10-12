@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, LocateFixed, Plus, X, Route } from 'lucide-react';
+import { ArrowLeft, LocateFixed, Plus, Route } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTexts } from '@/helpers/use-texts';
 import SpeedOptions from '../speed-modal/speed-options';
@@ -12,7 +12,6 @@ type Props = {
   onSetOrigin: (coords: [number, number], label: string) => void;
   onSetDestination: (coords: [number, number], label: string) => void;
   onStart: () => void;
-  onCancel: () => void;
   onSelectModality: (modality: Modality, speed: number) => void;
   speeds: {
     general: number;
@@ -28,7 +27,6 @@ export default function RoutePlannerPanel({
   onSetOrigin,
   onSetDestination,
   onStart,
-  onCancel,
   onSelectModality,
   speeds,
   isCalculatingRoute,
@@ -43,10 +41,9 @@ export default function RoutePlannerPanel({
       <div className="flex justify-between items-center mb-3">
         <button
           onClick={() => router.push('/home')}
-          className="text-copy/60 hover:text-copy flex items-center gap-2 transition-all duration-300 p-2 -m-2 rounded-xl hover:bg-white/5 hover:scale-105 active:scale-95"
+          className="text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
         >
           <ArrowLeft size={20} />
-          <span className="text-sm font-medium hidden sm:inline">{t('backButton')}</span>
         </button>
 
         <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
@@ -56,12 +53,7 @@ export default function RoutePlannerPanel({
           </h2>
         </div>
 
-        <button 
-          onClick={onCancel} 
-          className="text-copy/60 hover:text-copy transition-all duration-300 p-2 -m-2 rounded-xl hover:bg-white/5 hover:scale-105 active:scale-95"
-        >
-          <X size={20} />
-        </button>
+        <div className="w-20"></div>
       </div>
 
       <div className="space-y-3">

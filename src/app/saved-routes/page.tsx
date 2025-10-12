@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import polyline from '@mapbox/polyline';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 import {
   Map,
@@ -11,10 +12,10 @@ import {
   TrendingDown,
   TimerIcon,
   RouteIcon,
-  BikeIcon,
   GaugeIcon,
   ArrowLeft,
   Flame,
+  MapPin,
 } from 'lucide-react';
 
 import { useTexts } from '@/helpers/use-texts';
@@ -31,7 +32,6 @@ export default function SavedRoutesPage() {
   const [routes, setRoutes] = useState<SaveRouteDto[]>([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTexts('savedRoutes');
-  const tPage = useTexts('savedRoutesPage').t;
   const router = useRouter();
 
   useEffect(() => {
@@ -51,28 +51,49 @@ export default function SavedRoutesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader />
+      <div className="flex flex-col items-center justify-center h-screen bg-background">
+        <Loader size={48} />
+        <p className="text-copy mt-4">{t('loading') || 'carregando suas rotas...'}</p>
       </div>
     );
   }
 
   if (routes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen text-center px-6 space-y-6">
-        <Map size={96} stroke="#bfd572" className="mb-4" />
-        <h2 className="text-2xl font-semibold text-white">
-          {t('emptyTitle') || 'Você ainda não criou nenhuma rota'}
-        </h2>
-        <p className="text-copy-light">
-          {t('emptyDescription') || 'Que tal começar agora e planejar seu próximo percurso?'}
-        </p>
-        <button
-          onClick={() => router.push('/calculate')}
-          className="bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3 px-8 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105"
+      <div className="flex flex-col items-center justify-center h-screen bg-background text-center px-6 space-y-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative"
         >
-          {t('ctaCreate') || 'Criar rota'}
-        </button>
+          <div className="absolute inset-0 bg-primary-light/20 blur-3xl rounded-full"></div>
+          <Map size={96} className="text-primary-light relative z-10" />
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <h2 className="text-2xl font-bold text-white">
+            {t('emptyTitle') || 'você ainda não criou nenhuma rota'}
+          </h2>
+          <p className="text-copy-light max-w-md">
+            {t('emptyDescription') || 'que tal começar agora e planejar seu próximo percurso?'}
+          </p>
+        </motion.div>
+
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          onClick={() => router.push('/calculate')}
+          className="bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3.5 px-8 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105"
+        >
+          {t('ctaCreate') || 'criar rota'}
+        </motion.button>
       </div>
     );
   }
@@ -95,63 +116,80 @@ export default function SavedRoutesPage() {
           
           <div className="w-20"></div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {routes.map((route, index) => {
           const decoded = polyline.decode(route.polyline) as [number, number][];
-          const iconProps = { size: 16, stroke: '#bfd572' };
-  
-          const routeInfoItems = [
-            {
-              icon: <TimerIcon {...iconProps} />,
-              label: `${Math.floor(route.estimatedTimeMinutes / 60)}h ${route.estimatedTimeMinutes % 60}min`,
-            },
-            {
-              icon: <RouteIcon {...iconProps} />,
-              label: `${route.distanceKm.toFixed(1)} km`,
-            },
-            {
-              icon: <TrendingUp {...iconProps} />,
-              label: `+${route.elevationGain} m`,
-            },
-            {
-              icon: <TrendingDown {...iconProps} />,
-              label: `-${route.elevationLoss} m`,
-            },
-            {
-              icon: <BikeIcon {...iconProps} />,
-              label: `${t('modalityLabel')} ${getModalityLabel(route.modality)}`,
-            },
-            {
-              icon: <GaugeIcon {...iconProps} />,
-              label: `${t('averageSpeed')} ${route.averageSpeedUsed} km/h`,
-            },
-            {
-              icon: <Flame {...iconProps} />,
-              label: `${route.estimatedCalories} kcal`,
-            },
-          ];
   
           return (
-            <div
+            <motion.div
               key={index}
-              className="shadow-lg p-4 bg-white/5 backdrop-blur-md rounded-2xl space-y-2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] rounded-2xl border border-copy/10 shadow-xl hover:shadow-2xl hover:border-primary-light/20 transition-all duration-300 overflow-hidden group"
             >
-              <GoogleMiniMap polyline={decoded} />
-  
-              <div className="p-4 space-y-2">
-                <div className="text-copy text-lg">
-                  {tPage('routeFrom')} {route.origin} para {route.destination}
-                </div>
-  
-                <div className="grid grid-cols-2 gap-4 text-sm pt-2">
-                  {routeInfoItems.map(({ icon, label }, i) => (
-                    <div key={i} className="flex items-center gap-2 text-copy-light">
-                      {icon} {label}
-                    </div>
-                  ))}
+              <div className="relative overflow-hidden rounded-t-2xl">
+                <GoogleMiniMap polyline={decoded} />
+                <div className="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10">
+                  <span className="text-xs font-semibold text-primary-light">
+                    {getModalityLabel(route.modality)}
+                  </span>
                 </div>
               </div>
-            </div>
+
+              <div className="p-5 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin size={20} className="text-primary-light flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-semibold text-base leading-tight">
+                      {route.origin}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="h-px flex-1 bg-gradient-to-r from-primary-light/50 to-transparent"></div>
+                      <span className="text-xs text-copy/60">para</span>
+                      <div className="h-px flex-1 bg-gradient-to-l from-primary-light/50 to-transparent"></div>
+                    </div>
+                    <p className="text-gray-300 font-medium text-base leading-tight mt-1">
+                      {route.destination}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="flex items-center gap-2 bg-primary-light/5 border border-primary-light/10 rounded-lg p-2.5 group-hover:border-primary-light/20 transition-colors">
+                    <RouteIcon size={16} className="text-primary-light" />
+                    <span className="text-sm font-semibold text-white">{route.distanceKm.toFixed(1)} km</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 bg-primary-light/5 border border-primary-light/10 rounded-lg p-2.5 group-hover:border-primary-light/20 transition-colors">
+                    <TimerIcon size={16} className="text-primary-light" />
+                    <span className="text-sm font-semibold text-white">
+                      {Math.floor(route.estimatedTimeMinutes / 60)}h {route.estimatedTimeMinutes % 60}min
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 bg-green-500/5 border border-green-500/10 rounded-lg p-2.5">
+                    <TrendingUp size={16} className="text-green-400" />
+                    <span className="text-sm font-semibold text-gray-200">+{route.elevationGain}m</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 bg-red-500/5 border border-red-500/10 rounded-lg p-2.5">
+                    <TrendingDown size={16} className="text-red-400" />
+                    <span className="text-sm font-semibold text-gray-200">-{route.elevationLoss}m</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 bg-blue-500/5 border border-blue-500/10 rounded-lg p-2.5">
+                    <GaugeIcon size={16} className="text-blue-400" />
+                    <span className="text-sm font-semibold text-gray-200">{route.averageSpeedUsed} km/h</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 bg-orange-500/5 border border-orange-500/10 rounded-lg p-2.5">
+                    <Flame size={16} className="text-orange-400" />
+                    <span className="text-sm font-semibold text-gray-200">{route.estimatedCalories} kcal</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           );
         })}
         </div>

@@ -373,7 +373,6 @@ export default function CalculateRoutePage() {
                 setDestinationLabel(label);
               }}
               onStart={() => handleCalculate()}
-              onCancel={() => handleReset()}
               onSelectModality={(modality, speed) => {
                 setSelectedModality(modality);
                 setAverageSpeed(speed);
