@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 import { User, Gauge } from 'lucide-react';
+import { useTexts } from '@/helpers/use-texts';
 
 type RouteOption = {
   polyline: [number, number][];
@@ -35,6 +36,7 @@ type RouteData = GetPlannedRouteResponseDto & {
 export default function CalculateRoutePage() {
   useProtectedRoute();
   const api = new ApiVeloxService();
+  const { t } = useTexts('calculate');
 
   const [origin, setOrigin] = useState<[number, number] | null>(null);
   const [destination, setDestination] = useState<[number, number] | null>(null);
@@ -57,7 +59,7 @@ export default function CalculateRoutePage() {
         setMapCenter(coords);
       },
       (err) => {
-        toast.info('não foi possível pegar localização');
+        toast.info(t('geolocationError'));
       },
     );
   }, []);
@@ -68,7 +70,7 @@ export default function CalculateRoutePage() {
         const profile = await api.getProfile();
         setUserData(profile);
       } catch (err) {
-        toast.error('erro ao buscar perfil');
+        toast.error(t('profileError'));
       }
     }
     fetchProfile();
@@ -104,7 +106,7 @@ export default function CalculateRoutePage() {
 
   const handleCalculate = async () => {
     if (!originLabel || !destinationLabel) {
-      toast.info('defina origem e destino antes de calcular a rota.');
+      toast.info(t('requireOriginDestination'));
       return;
     }
 
@@ -128,7 +130,7 @@ export default function CalculateRoutePage() {
         estimatedCalories: response.estimatedCalories,
         averageSpeedUsed: response.averageSpeedUsed,
         elevationProfile: generateMockElevationProfile(response.distanceKm),
-        summary: 'rota mais rápida',
+        summary: t('fastestRoute'),
       };
 
       const alternatives: RouteOption[] = [];
@@ -160,7 +162,7 @@ export default function CalculateRoutePage() {
       setSelectedRouteIndex(0);
       
     } catch (error) {
-      toast.error('erro ao calcular rota');
+      toast.error(t('routeError'));
     } finally {
       setIsCalculatingRoute(false);
     }
@@ -185,9 +187,9 @@ export default function CalculateRoutePage() {
         estimatedCalories: selectedRoute.estimatedCalories,
         averageSpeedUsed: selectedRoute.averageSpeedUsed,
       });
-      toast.success('rota salva com sucesso!');
+      toast.success(t('routeSaved'));
     } catch (error) {
-      toast.error('erro ao salvar rota');
+      toast.error(t('routeSaveError'));
       console.error('erro ao salvar rota:', error);
     } finally {
       setIsSaving(false);
@@ -240,8 +242,8 @@ export default function CalculateRoutePage() {
                 />
               </div>
               <div className="text-center">
-                <div className="text-white font-bold text-lg mb-1">calculando rota</div>
-                <div className="text-copy/60 text-sm">encontrando o melhor caminho para você...</div>
+                <div className="text-white font-bold text-lg mb-1">{t('calculating.title')}</div>
+                <div className="text-copy/60 text-sm">{t('calculating.subtitle')}</div>
               </div>
             </div>
           </motion.div>
@@ -258,7 +260,7 @@ export default function CalculateRoutePage() {
             className="absolute bottom-4 left-4 right-4 text-center p-4"
           >
             <div className="absolute bottom-4 left-4 right-4 text-center p-4">
-              carregando perfil...
+              {t('loadingProfile')}
             </div>
           </motion.div>
         ) : routeOptions.length > 0 ? (
@@ -280,20 +282,20 @@ export default function CalculateRoutePage() {
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-[#92a848] animate-pulse"></div>
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#92a848]">
-                    rota personalizada para você
+                    {t('personalized.title')}
                   </span>
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2 text-sm text-copy">
                     <User size={16} className="text-primary-light flex-shrink-0" />
                     <span>
-                      modalidade: <span className="font-bold text-primary-light">{getModalityLabel(selectedModality)}</span>
+                      {t('personalized.modality')} <span className="font-bold text-primary-light">{getModalityLabel(selectedModality)}</span>
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-copy">
                     <Gauge size={16} className="text-primary-light flex-shrink-0" />
                     <span>
-                      velocidade média: <span className="font-bold text-primary-light">{routeOptions[selectedRouteIndex].averageSpeedUsed} km/h</span>
+                      {t('personalized.averageSpeed')} <span className="font-bold text-primary-light">{routeOptions[selectedRouteIndex].averageSpeedUsed} km/h</span>
                     </span>
                   </div>
                 </div>
@@ -320,7 +322,7 @@ export default function CalculateRoutePage() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        salvando...
+                        {t('buttons.saving')}
                       </>
                     ) : (
                       <>
@@ -329,7 +331,7 @@ export default function CalculateRoutePage() {
                           <polyline points="17 21 17 13 7 13 7 21"></polyline>
                           <polyline points="7 3 7 8 15 8"></polyline>
                         </svg>
-                        salvar rota
+                        {t('buttons.save')}
                       </>
                     )}
                   </span>
@@ -345,7 +347,7 @@ export default function CalculateRoutePage() {
                       <path d="M3 22v-6h6"></path>
                       <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
                     </svg>
-                    nova busca
+                    {t('buttons.newSearch')}
                   </span>
                 </button>
               </div>

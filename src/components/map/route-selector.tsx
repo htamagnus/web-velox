@@ -10,6 +10,7 @@ import {
   Flame,
   AlertTriangle,
 } from 'lucide-react';
+import { useTexts } from '@/helpers/use-texts';
 
 type RouteOption = {
   polyline: [number, number][];
@@ -35,15 +36,15 @@ function formatTime(minutes: number): string {
   return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`;
 }
 
-function getRouteLabel(index: number): string {
-  if (index === 0) return 'recomendada';
-  if (index === 1) return 'alternativa 1';
-  return `alternativa ${index}`;
+function getRouteLabel(index: number, t: (key: string) => string): string {
+  if (index === 0) return t('labels.recommended');
+  if (index === 1) return `${t('labels.alternative')} 1`;
+  return `${t('labels.alternative')} ${index}`;
 }
 
-function getRouteLabelShort(index: number): string {
-  if (index === 0) return 'principal';
-  return `alt. ${index}`;
+function getRouteLabelShort(index: number, t: (key: string) => string): string {
+  if (index === 0) return t('labels.main');
+  return `${t('labels.alt')} ${index}`;
 }
 
 function getRouteColor(index: number): string {
@@ -61,6 +62,7 @@ export default function RouteSelector({
   onSelect,
   className,
 }: RouteSelectorProps) {
+  const { t } = useTexts('routeSelector');
   if (routes.length === 0) return null;
 
   const selectedRoute = routes[selectedIndex];
@@ -93,7 +95,7 @@ export default function RouteSelector({
                     'text-xs font-semibold uppercase tracking-wide',
                     isSelected ? 'text-white' : 'text-copy/60'
                   )}>
-                    {getRouteLabelShort(index)}
+                    {getRouteLabelShort(index, t)}
                   </span>
                   <div className="flex items-center gap-1.5">
                     <TimerIcon size={14} className={isSelected ? 'text-white' : ''} style={{ color: isSelected ? 'white' : routeColor }} />
@@ -134,7 +136,7 @@ export default function RouteSelector({
               className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: getRouteColor(selectedIndex) }}
             >
-              {getRouteLabel(selectedIndex)}
+              {getRouteLabel(selectedIndex, t)}
             </span>
           </div>
 

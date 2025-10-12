@@ -4,10 +4,12 @@ import { useRouter } from 'next/navigation';
 import { Map, PlusCircle, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
+import { useTexts } from '@/helpers/use-texts';
 
 export default function HomePage() {
   useProtectedRoute()
   const router = useRouter();
+  const { t } = useTexts('home');
 
   return (
     <AnimatePresence mode="wait">
@@ -22,7 +24,7 @@ export default function HomePage() {
         <div className="flex flex-col min-h-screen bg-background">
           <main className="flex-1 p-4">
             <div className="space-y-6 p-6 max-w-4xl mx-auto">
-              <h1 className="text-3xl font-bold">TO DO: desenvolver Home</h1>
+              <h1 className="text-3xl font-bold">{t('title')}</h1>
 
               {/* <section className="grid grid-cols-2 gap-4">
                 <div className="card p-4">
@@ -44,13 +46,13 @@ export default function HomePage() {
               </section> */}
 
               <section className="space-y-4">
-                <h2 className="text-2xl font-bold">Últimas Rotas</h2>
+                <h2 className="text-2xl font-bold">{t('lastRoutes')}</h2>
                 {/* Aqui você mapeia e mostra 3 ou 5 últimas rotas */}
               </section>
 
               <section className="flex gap-4">
-                <button className="btn-primary">Nova Rota</button>
-                <button className="btn-secondary">Minhas Rotas</button>
+                <button className="btn-primary">{t('newRoute')}</button>
+                <button className="btn-secondary">{t('myRoutes')}</button>
               </section>
             </div>
           </main>
@@ -62,7 +64,7 @@ export default function HomePage() {
                 className="flex flex-col items-center cursor-pointer text-copy-light"
               >
                 <Map size={28} stroke="#bfd572" />
-                Rotas
+                {t('footer.routes')}
               </button>
 
               <button
@@ -70,14 +72,14 @@ export default function HomePage() {
                 className="flex flex-col items-center cursor-pointer text-copy-light p-1 -mt-6"
               >
                 <PlusCircle size={40} stroke="#bfd572" />
-                Criar rota
+                {t('footer.createRoute')}
               </button>
               <button
                 onClick={() => router.push('/profile')}
                 className="flex flex-col items-center cursor-pointer text-copy-light"
               >
                 <User size={28} stroke="#bfd572" />
-                Perfil
+                {t('footer.profile')}
               </button>
             </div>
           </footer>

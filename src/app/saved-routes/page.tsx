@@ -32,6 +32,7 @@ export default function SavedRoutesPage() {
   const [routes, setRoutes] = useState<SaveRouteDto[]>([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTexts('savedRoutes');
+  const tPage = useTexts('savedRoutesPage').t;
   const router = useRouter();
 
   useEffect(() => {
@@ -126,7 +127,7 @@ export default function SavedRoutesPage() {
   
               <div className="p-4 space-y-2">
                 <div className="text-copy text-lg">
-                  Percurso de {route.origin} para {route.destination}
+                  {tPage('routeFrom')} {route.origin} para {route.destination}
                 </div>
   
                 <div className="grid grid-cols-2 gap-4 text-sm pt-2">

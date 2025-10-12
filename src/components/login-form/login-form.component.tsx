@@ -21,6 +21,7 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
   const { t } = useTexts('login')
+  const tForm = useTexts('loginForm').t
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -77,7 +78,7 @@ export default function LoginForm() {
       label={t('email.label')}
       name="email"
       type="email"
-      placeholder="Digite seu e-mail"
+      placeholder={tForm('emailPlaceholder')}
       error={fieldErrors.email}
       required
     />
@@ -85,12 +86,12 @@ export default function LoginForm() {
       label={t('password.label')}
       name="password"
       type="password"
-      placeholder="Digite sua senha"
+      placeholder={tForm('passwordPlaceholder')}
       error={fieldErrors.password}
       required
     />
     <Button type="submit" variant="confirm" className='w-full mt-4 mb-4' loading={loading}>
-      {loading ? 'Entrando...' : 'Entrar'}
+      {loading ? tForm('enteringButton') : tForm('enterButton')}
     </Button>
   </FormWrapper>
   )

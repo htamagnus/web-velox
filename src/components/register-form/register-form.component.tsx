@@ -19,6 +19,7 @@ export default function RegisterForm() {
   const router = useRouter()
   const { login } = useAuth()
   const { t } = useTexts('register')
+  const tForm = useTexts('registerForm').t
 
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string }>({})
   const [loading, setLoading] = useState(false)
@@ -88,8 +89,8 @@ export default function RegisterForm() {
         <div className="absolute w-62 h-0.5 bg-primary" />
       </div> */}
 
-        <h2 className="text-2xl font-bold text-primary-light mt-8">Criar Conta</h2>
-        <p className="text-s text-copy-light">Preencha os dados abaixo para começar a usar o Velox</p>
+        <h2 className="text-2xl font-bold text-primary-light mt-8">{tForm('createAccountTitle')}</h2>
+        <p className="text-s text-copy-light">{tForm('createAccountSubtitle')}</p>
       </div>
 
       <InputField 
@@ -136,7 +137,7 @@ export default function RegisterForm() {
         variant="confirm"
         className="transition-transform active:scale-95 hover:brightness-110 mt-2 w-full"
       >
-        {loading ? 'Enviando...' : 'Registrar'}
+        {loading ? tForm('sendingButton') : tForm('registerButton')}
       </Button>
       <div className="mt-2 text-center text-sm text-copy-light">
       {t('link.alreadyAccount')}

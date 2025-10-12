@@ -6,6 +6,7 @@ import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 import { Bike, Mountain, Zap, Info, Settings, ArrowRight } from 'lucide-react'
 import clsx from 'clsx'
+import { useTexts } from '@/helpers/use-texts'
 
 type Props = {
   onSelect: (choice: Modality, speed: number) => void
@@ -19,31 +20,32 @@ type Props = {
 export default function SpeedOptions({ onSelect, speeds }: Props) {
   const [selected, setSelected] = useState<Modality>('general')
   const router = useRouter()
+  const { t } = useTexts('speedModal')
 
   const options = [
     { 
-      label: 'geral (urbano)', 
+      label: t('options.general.label'), 
       value: 'general', 
       speed: speeds.general,
       icon: Bike,
       color: '#92a848',
-      description: 'velocidade média geral do strava'
+      description: t('options.general.description')
     },
     { 
-      label: 'speed (estrada)', 
+      label: t('options.road.label'), 
       value: 'road', 
       speed: speeds.road,
       icon: Zap,
       color: '#4a9eff',
-      description: 'velocidade para bike de estrada'
+      description: t('options.road.description')
     },
     { 
-      label: 'mtb (trilha)', 
+      label: t('options.mtb.label'), 
       value: 'mtb', 
       speed: speeds.mtb,
       icon: Mountain,
       color: '#ff8c42',
-      description: 'velocidade para mountain bike'
+      description: t('options.mtb.description')
     },
   ]
 
@@ -64,11 +66,11 @@ export default function SpeedOptions({ onSelect, speeds }: Props) {
   return (
     <div className="w-full space-y-3">
       <div className="flex items-center gap-2 px-1">
-        <h3 className="text-sm font-semibold text-white">modalidade</h3>
+        <h3 className="text-sm font-semibold text-white">{t('title')}</h3>
         <div 
           className="text-copy/60 hover:text-white transition-colors cursor-help"
           data-tooltip-id="modality-info"
-          data-tooltip-content="escolha a modalidade para calcular a rota com base na sua velocidade média"
+          data-tooltip-content={t('tooltip')}
         >
           <Info size={14} />
         </div>
@@ -132,7 +134,7 @@ export default function SpeedOptions({ onSelect, speeds }: Props) {
                     {isDisabled && (
                       <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 flex items-center gap-1 font-medium">
                         <Settings size={10} />
-                        configurar
+                        {t('configure')}
                       </span>
                     )}
                   </div>
@@ -140,7 +142,7 @@ export default function SpeedOptions({ onSelect, speeds }: Props) {
                     "text-xs",
                     isDisabled ? "text-gray-400" : "text-gray-300"
                   )}>
-                    {isDisabled ? 'clique para configurar no seu perfil' : option.description}
+                    {isDisabled ? t('configureMessage') : option.description}
                   </div>
                 </div>
 
@@ -154,7 +156,7 @@ export default function SpeedOptions({ onSelect, speeds }: Props) {
                     >
                       {option.speed?.toFixed(1)}
                     </div>
-                    <div className="text-xs text-copy/60">km/h</div>
+                    <div className="text-xs text-copy/60">{t('speedUnit')}</div>
                   </div>
                 )}
               </div>
