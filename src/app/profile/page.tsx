@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain, Loader2, Save } from 'lucide-react';
+import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import ApiVeloxService from '@/providers/api-velox.provider';
@@ -116,6 +116,8 @@ export default function ProfilePage() {
       setIsSaving(false);
     }
   };
+
+  const hasChanges = Object.keys(getPayload()).length > 0;
 
   if (!userData) {
     return (
@@ -342,10 +344,10 @@ export default function ProfilePage() {
         >
           <button
             onClick={handleSave}
-            disabled={isSaving}
-            className="w-full group relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            disabled={isSaving || !hasChanges}
+            className="w-full group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            <span className="relative z-10 flex items-center justify-center gap-2">
+            <span className="relative z-10 flex items-center justify-center gap-2 text-base">
               {isSaving ? (
                 <>
                   <Loader2 size={20} className="animate-spin" />
@@ -353,7 +355,6 @@ export default function ProfilePage() {
                 </>
               ) : (
                 <>
-                  <Save size={20} />
                   {t('button.save')}
                 </>
               )}
