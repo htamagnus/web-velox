@@ -132,7 +132,7 @@ export default function SavedRoutesPage() {
                 <GoogleMiniMap polyline={decoded} />
                 <div className="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10">
                   <span className="text-xs font-semibold text-primary-light">
-                    {getModalityLabel(route.modality)}
+                    {getModalityLabel(route.modality)}: {route.averageSpeedUsed} km/h
                   </span>
                 </div>
               </div>
