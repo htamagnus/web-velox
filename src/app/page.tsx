@@ -132,7 +132,7 @@ export default function LandingPage() {
               onClick={handleStart}
               disabled={loading}
               transition={{ duration: 0.2 }}
-              className="mt-4 px-8 py-4 bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content rounded-2xl text-lg font-semibold shadow-[0_8px_30px_rgba(191,213,114,0.3)] hover:shadow-[0_12px_40px_rgba(191,213,114,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
+              className="mt-4 bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-t-transparent border-primary-content rounded-full  animate-spin" />
@@ -318,7 +318,7 @@ export default function LandingPage() {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
               onClick={handleStart}
-              className="mt-4 px-8 py-4 bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content rounded-2xl text-lg font-semibold shadow-[0_8px_30px_rgba(191,213,114,0.3)] hover:shadow-[0_12px_40px_rgba(191,213,114,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
+              className="mt-4 bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
             >
               Criar Conta Agora <ArrowRight className="w-5 h-5" />
             </motion.button>
