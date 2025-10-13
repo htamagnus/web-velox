@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@googlemaps/js-api-loader": "^2.0.1",
     "@headlessui/react": "^2.2.1",
     "@mapbox/polyline": "^1.2.1",
