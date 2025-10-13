@@ -1,39 +1,42 @@
 .confirm {
-    padding: 0.5rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    color: var(--copy-light);
-    font-weight: 600;
-    border-radius: 0.8rem;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(16px);
-    /* box-shadow: 0 4px 20px rgba(0, 255, 150, 0.05); */
-    box-shadow:
-        0 0 6px var(--primary),
-        0 0 4px var(--primary),
-        0 0 4px var(--primary);
-    transition:
-      background-color 0.6s ease,
-      color 1s ease,
-      opacity 1s ease,
-      transform 5s ease;
-  }
-  
-  .confirm:hover {
-    background-color: var(--primary-dark);
-    color: var(--primary-content);
-    opacity: 0.9;
-  }
-  
-  .confirm:active {
-    transform: scale(0.95);
-  }
-  
-  .confirm:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(191, 213, 114, 0.5);
-  }
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background-image: linear-gradient(90deg, #92a848, #a8b87a);
+  border: none;
+  box-shadow: 0 10px 20px rgba(146, 168, 72, 0.25);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease,
+    background-position 0.2s ease;
+}
+
+.confirm:hover {
+  transform: scale(1.02);
+  box-shadow: 0 14px 28px rgba(146, 168, 72, 0.35);
+  filter: brightness(1.03);
+  background-image: linear-gradient(90deg, #a8b87a, #92a848);
+}
+
+.confirm:active {
+  transform: scale(0.98);
+}
+
+.confirm:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(191, 213, 114, 0.45), 0 10px 20px rgba(146, 168, 72, 0.25);
+}
+
+.confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
   
   .strava {
     padding: 0.5rem;
