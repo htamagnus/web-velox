@@ -22,7 +22,20 @@ export default function ProfilePage() {
   const [userData, setUserData] = useState<Athlete | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [form, setForm] = useState({
+  type Numeric = number | '';
+  type FormState = {
+    name: string;
+    email: string;
+    age: Numeric;
+    weight: Numeric;
+    height: Numeric;
+    speedGeneral: Numeric;
+    speedRoad: Numeric;
+    speedMtb: Numeric;
+    isGeneralSpeedFromStrava: boolean;
+  };
+
+  const [form, setForm] = useState<FormState>({
     name: '',
     email: '',
     age: 0,
@@ -58,8 +71,13 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
-  const handleInputChange = (field: string, value: string | number) => {
+  const handleInputChange = (field: keyof FormState, value: string | number) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleNumericChange = (field: keyof FormState, value: string) => {
+    const nextValue: Numeric = value === '' ? '' : Number(value);
+    setForm((prev) => ({ ...prev, [field]: nextValue }));
   };
 
   const getPayload = (): UpdateAthleteDto => {
@@ -69,13 +87,13 @@ export default function ProfilePage() {
 
     if (form.name !== userData.name) payload.name = form.name;
     if (form.email !== userData.email) payload.email = form.email;
-    if (form.age !== userData.age) payload.age = form.age;
-    if (form.weight !== userData.weight) payload.weight = form.weight;
-    if (form.height !== userData.height) payload.height = form.height;
-    if (form.speedGeneral !== userData.averageSpeedGeneral)
+    if (form.age !== '' && form.age !== userData.age) payload.age = form.age;
+    if (form.weight !== '' && form.weight !== userData.weight) payload.weight = form.weight;
+    if (form.height !== '' && form.height !== userData.height) payload.height = form.height;
+    if (form.speedGeneral !== '' && form.speedGeneral !== userData.averageSpeedGeneral)
       payload.averageSpeedGeneral = form.speedGeneral;
-    if (form.speedRoad !== userData.averageSpeedRoad) payload.averageSpeedRoad = form.speedRoad;
-    if (form.speedMtb !== userData.averageSpeedMtb) payload.averageSpeedMtb = form.speedMtb;
+    if (form.speedRoad !== '' && form.speedRoad !== userData.averageSpeedRoad) payload.averageSpeedRoad = form.speedRoad;
+    if (form.speedMtb !== '' && form.speedMtb !== userData.averageSpeedMtb) payload.averageSpeedMtb = form.speedMtb;
 
     return payload;
   };
@@ -191,7 +209,7 @@ export default function ProfilePage() {
                 <input
                   type="number"
                   value={form.age}
-                  onChange={(e) => handleInputChange('age', Number(e.target.value))}
+                  onChange={(e) => handleNumericChange('age', e.target.value)}
                   className="bg-transparent outline-none w-full text-white font-bold text-lg"
                 />
                 <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('age.unit')}</span>
@@ -205,7 +223,7 @@ export default function ProfilePage() {
                 <input
                   type="number"
                   value={form.weight}
-                  onChange={(e) => handleInputChange('weight', Number(e.target.value))}
+                  onChange={(e) => handleNumericChange('weight', e.target.value)}
                   className="bg-transparent outline-none w-full text-white font-bold text-lg"
                 />
                 <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('weight.unit')}</span>
@@ -219,7 +237,7 @@ export default function ProfilePage() {
                 <input
                   type="number"
                   value={form.height}
-                  onChange={(e) => handleInputChange('height', Number(e.target.value))}
+                  onChange={(e) => handleNumericChange('height', e.target.value)}
                   className="bg-transparent outline-none w-full text-white font-bold text-lg"
                 />
                 <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('height.unit')}</span>
@@ -262,7 +280,7 @@ export default function ProfilePage() {
                   type="number"
                   step="0.1"
                   value={form.speedGeneral}
-                  onChange={(e) => handleInputChange('speedGeneral', Number(e.target.value))}
+                  onChange={(e) => handleNumericChange('speedGeneral', e.target.value)}
                   disabled={form.isGeneralSpeedFromStrava}
                   className="bg-transparent outline-none w-full text-white font-bold text-2xl disabled:opacity-50"
                 />
@@ -285,7 +303,7 @@ export default function ProfilePage() {
                   type="number"
                   step="0.1"
                   value={form.speedRoad}
-                  onChange={(e) => handleInputChange('speedRoad', Number(e.target.value))}
+                  onChange={(e) => handleNumericChange('speedRoad', e.target.value)}
                   className="bg-transparent outline-none w-full text-white font-bold text-2xl"
                 />
                 <span className="text-xs font-bold text-[#4a9eff] bg-[#4a9eff]/20 px-2.5 py-1.5 rounded whitespace-nowrap">{t('speedRoad.unit')}</span>
@@ -307,7 +325,7 @@ export default function ProfilePage() {
                   type="number"
                   step="0.1"
                   value={form.speedMtb}
-                  onChange={(e) => handleInputChange('speedMtb', Number(e.target.value))}
+                  onChange={(e) => handleNumericChange('speedMtb', e.target.value)}
                   className="bg-transparent outline-none w-full text-white font-bold text-2xl"
                 />
                 <span className="text-xs font-bold text-[#ff8c42] bg-[#ff8c42]/20 px-2.5 py-1.5 rounded whitespace-nowrap">{t('speedMtb.unit')}</span>
