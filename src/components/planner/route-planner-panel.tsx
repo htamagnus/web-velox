@@ -90,7 +90,6 @@ export default function RoutePlannerPanel({
             </>
           ) : (
             <>
-              <Clock size={20} strokeWidth={2.5} />
               {t('plan')}
             </>
           )}

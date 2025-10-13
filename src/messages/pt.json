@@ -188,10 +188,10 @@
     "title": "Planejador de rotas",
     "backButton": "início",
     "cancelButton": "cancelar",
-    "originPlaceholder": "localização atual",
-    "destinationPlaceholder": "escolher destino",
+    "originPlaceholder": "Localização atual",
+    "destinationPlaceholder": "Escolher destino",
     "save": "salvar",
-    "plan": "planejar",
+    "plan": "Planejar",
     "planning": "calculando rota..."
   },
   "calculate": {
