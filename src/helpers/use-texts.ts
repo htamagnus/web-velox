@@ -1,10 +1,11 @@
 import rawMessages from '../messages/pt.json'
+import { useCallback } from 'react'
 
 type NestedMessages = Record<string, unknown>
 const messages = rawMessages as unknown as NestedMessages
 
 export function useTexts(basePath?: string) {
-    function t(path: string): string {
+    const t = useCallback((path: string): string => {
       const fullPath = basePath ? `${basePath}.${path}` : path
       const keys = fullPath.split('.')
       let result: unknown = messages
@@ -23,7 +24,7 @@ export function useTexts(basePath?: string) {
       }
 
       return typeof result === 'string' ? result : fullPath
-    }
+    }, [basePath])
 
     return { t }
   }
