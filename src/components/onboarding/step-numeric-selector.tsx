@@ -100,7 +100,7 @@ export default function StepNumericSelector({
               {range.map((v) => (
                 <div
                   key={v}
-                  className={`h-6 flex items-center justify-center bg-primary-content text-primary ${
+                  className={`h-6 flex items-center justify-center bg-primary-content ${
                     v === value ? 'text-xl font-extrabold' : 'text-sm opacity-50'
                   }`}
                 >
