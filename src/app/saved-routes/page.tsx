@@ -25,6 +25,7 @@ import ApiVeloxService from '@/providers/api-velox.provider';
 import Loader from '@/components/ui/loader/loader';
 import GoogleMiniMap from '@/components/mini-map/google-mini-map';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
+import Button from '@/components/ui/button/button';
 
 export default function SavedRoutesPage() {
   useProtectedRoute()
@@ -91,15 +92,15 @@ export default function SavedRoutesPage() {
           </p>
         </motion.div>
 
-        <motion.button
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          onClick={() => router.push('/calculate')}
-          className="group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
         >
-          {t('ctaCreate')}
-        </motion.button>
+          <Button onClick={() => router.push('/calculate')} variant="confirm">
+            {t('ctaCreate')}
+          </Button>
+        </motion.div>
       </div>
     );
   }

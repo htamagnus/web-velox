@@ -14,6 +14,7 @@ import {
   ClockAlert,
 } from 'lucide-react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import Button from '@/components/ui/button/button';
 
 export default function LandingPage() {
   const [isPageReady, setIsPageReady] = useState(false);
@@ -124,24 +125,25 @@ export default function LandingPage() {
               genérica.
             </motion.p>
 
-            <motion.button
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleStart}
-              disabled={loading}
               transition={{ duration: 0.2 }}
-              className="mt-4 bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
             >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-t-transparent border-primary-content rounded-full  animate-spin" />
-              ) : (
-                <>
+              <Button
+                onClick={handleStart}
+                disabled={loading}
+                loading={loading}
+                variant="confirm"
+                className="mt-4"
+              >
+                <span className="flex items-center justify-center gap-3">
                   Começar <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </motion.button>
+                </span>
+              </Button>
+            </motion.div>
           </div>
         </section>
 
@@ -313,15 +315,17 @@ export default function LandingPage() {
               Seu treino merece mais do que um palpite. Ganhe controle sobre cada percurso.
             </motion.p>
 
-            <motion.button
+            <motion.div
               whileHover={{ scale: 1.07 }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              onClick={handleStart}
-              className="mt-4 bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
             >
-              Criar Conta Agora <ArrowRight className="w-5 h-5" />
-            </motion.button>
+              <Button onClick={handleStart} variant="confirm" className="mt-4">
+                <span className="flex items-center justify-center gap-3">
+                  Criar Conta Agora <ArrowRight className="w-5 h-5" />
+                </span>
+              </Button>
+            </motion.div>
             <LogoVelox className="mt-10" size="md" />
           </div>
         </section>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain, Loader2 } from 'lucide-react';
+import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import ApiVeloxService from '@/providers/api-velox.provider';
@@ -11,6 +11,7 @@ import { Athlete, UpdateAthleteDto } from '@/interfaces/athlete.interface';
 import { useTexts } from '@/helpers/use-texts';
 
 import Loader from '@/components/ui/loader/loader';
+import Button from '@/components/ui/button/button';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 
 export default function ProfilePage() {
@@ -342,24 +343,15 @@ export default function ProfilePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <button
+          <Button
             onClick={handleSave}
             disabled={isSaving || !hasChanges}
-            className="w-full group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            loading={isSaving}
+            variant="confirm"
+            className="w-full"
           >
-            <span className="relative z-10 flex items-center justify-center gap-2 text-base">
-              {isSaving ? (
-                <>
-                  <Loader2 size={20} className="animate-spin" />
-                  {t('button.saving')}
-                </>
-              ) : (
-                <>
-                  {t('button.save')}
-                </>
-              )}
-            </span>
-          </button>
+            {t('button.save')}
+          </Button>
         </motion.div>
       </div>
     </div>

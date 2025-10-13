@@ -24,6 +24,8 @@ export default function RegisterForm() {
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string }>({})
   const [loading, setLoading] = useState(false)
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -81,6 +83,17 @@ export default function RegisterForm() {
     specialChar: /[^A-Za-z0-9]/.test(password),
   }
 
+  const isRegisterDisabled = (
+    loading ||
+    name.trim() === '' ||
+    email.trim() === '' ||
+    password.trim() === '' ||
+    !passwordChecks.length ||
+    !passwordChecks.uppercase ||
+    !passwordChecks.number ||
+    !passwordChecks.specialChar
+  )
+
   return (
     <FormWrapper onSubmit={handleSubmit}>
       <div className="text-center space-y-2">
@@ -97,6 +110,11 @@ export default function RegisterForm() {
         label={t('name.label')}
         name="name"
         placeholder={t('name.placeholder')}
+        value={name}
+        onChange={(e) => {
+          setName(e.target.value)
+          if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }))
+        }}
         error={fieldErrors.name}
         required
       />
@@ -105,6 +123,11 @@ export default function RegisterForm() {
         name="email"
         type="email"
         placeholder={t('email.placeholder')}
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value)
+          if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }))
+        }}
         error={fieldErrors.email}
         required
       />
@@ -135,6 +158,7 @@ export default function RegisterForm() {
         type="submit"
         loading={loading}
         variant="confirm"
+        disabled={isRegisterDisabled}
         className="transition-transform active:scale-95 hover:brightness-110 mt-2 w-full"
       >
         {loading ? tForm('sendingButton') : tForm('registerButton')}

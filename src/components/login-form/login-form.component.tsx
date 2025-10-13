@@ -19,6 +19,8 @@ export default function LoginForm() {
 
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
   const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const { login } = useAuth()
   const { t } = useTexts('login')
   const tForm = useTexts('loginForm').t
@@ -79,6 +81,11 @@ export default function LoginForm() {
       name="email"
       type="email"
       placeholder={tForm('emailPlaceholder')}
+      value={email}
+      onChange={(e) => {
+        setEmail(e.target.value)
+        if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }))
+      }}
       error={fieldErrors.email}
       required
     />
@@ -87,10 +94,15 @@ export default function LoginForm() {
       name="password"
       type="password"
       placeholder={tForm('passwordPlaceholder')}
+      value={password}
+      onChange={(e) => {
+        setPassword(e.target.value)
+        if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: undefined }))
+      }}
       error={fieldErrors.password}
       required
     />
-    <Button type="submit" variant="confirm" className='w-full mt-4 mb-4' loading={loading}>
+    <Button type="submit" variant="confirm" className='w-full mt-4 mb-4' loading={loading} disabled={loading || email.trim() === '' || password.trim() === ''}>
       {loading ? tForm('enteringButton') : tForm('enterButton')}
     </Button>
   </FormWrapper>

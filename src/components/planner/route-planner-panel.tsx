@@ -1,11 +1,12 @@
 'use client';
 
-import { ArrowLeft, LocateFixed, Plus, Route, Loader2, Clock } from 'lucide-react';
+import { ArrowLeft, LocateFixed, Plus, Route } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTexts } from '@/helpers/use-texts';
 import SpeedOptions from '../speed-modal/speed-options';
 import AutocompleteInput from '../route-input/route-input';
 import { useEffect, useState } from 'react';
+import Button from '@/components/ui/button/button';
 
 type Props = {
   originLabel: string | null;
@@ -96,24 +97,15 @@ export default function RoutePlannerPanel({
         speeds={speeds}
       />
 
-      <button
+      <Button
+        variant="confirm"
         onClick={onStart}
         disabled={!canCalculate || isCalculatingRoute}
-        className="w-full group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+        loading={isCalculatingRoute}
+        className="w-full"
       >
-        <span className="relative z-10 flex items-center justify-center gap-2 text-base">
-          {isCalculatingRoute ? (
-            <>
-              <Loader2 size={20} className="animate-spin" />
-              {t('planning')}
-            </>
-          ) : (
-            <>
-              {t('plan')}
-            </>
-          )}
-        </span>
-      </button>
+        {t('plan')}
+      </Button>
     </div>
   );
 }

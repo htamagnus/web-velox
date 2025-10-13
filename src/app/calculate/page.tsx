@@ -7,6 +7,7 @@ import GoogleRouteMap from '@/components/map/google-route-map';
 import RouteSelector from '@/components/map/route-selector';
 import ElevationProfile from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
+import Button from '@/components/ui/button/button';
 import { Athlete } from '@/interfaces/athlete.interface';
 import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -312,25 +313,18 @@ export default function CalculateRoutePage() {
               )}
 
               <div className="flex flex-col sm:flex-row gap-3 w-full pt-2">
-                <button
+                <Button
                   onClick={handleSaveRoute}
                   disabled={isSaving}
-                  className="flex-1 group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  loading={isSaving}
+                  variant="confirm"
+                  className="flex-1"
                 >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    {isSaving ? (
-                      <>
-                        <Loader2 size={20} className="animate-spin" />
-                        {t('buttons.saving')}
-                      </>
-                    ) : (
-                      <>
-                        <Save size={20} />
-                        {t('buttons.save')}
-                      </>
-                    )}
+                  <span className="flex items-center justify-center gap-2">
+                    <Save size={20} />
+                    {t('buttons.save')}
                   </span>
-                </button>
+                </Button>
                 <button
                   onClick={handleReset}
                   className="flex-1 bg-copy hover:bg-copy border border-copy hover:border-copy text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
