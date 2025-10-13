@@ -156,7 +156,7 @@ export default function SpeedOptions({ onSelect, speeds }: Props) {
                     >
                       {option.speed?.toFixed(1)}
                     </div>
-                    <div className="text-xs text-copy/60">{t('speedUnit')}</div>
+                    <div className="text-xs text-copy">{t('speedUnit')}</div>
                   </div>
                 )}
               </div>
