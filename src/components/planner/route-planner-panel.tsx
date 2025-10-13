@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTexts } from '@/helpers/use-texts';
 import SpeedOptions from '../speed-modal/speed-options';
 import AutocompleteInput from '../route-input/route-input';
+import { useEffect, useState } from 'react';
 
 type Props = {
   originLabel: string | null;
@@ -34,7 +35,16 @@ export default function RoutePlannerPanel({
   const { t } = useTexts('plannerPanel');
   const router = useRouter();
 
-  const canCalculate = originLabel && destinationLabel
+  const [modalitySelected, setModalitySelected] = useState(false);
+
+  const canCalculate = Boolean(originLabel && destinationLabel && modalitySelected);
+
+  useEffect(() => {
+    if (!modalitySelected && speeds.general && speeds.general > 0) {
+      setModalitySelected(true);
+      onSelectModality('general', speeds.general);
+    }
+  }, [modalitySelected, speeds.general]);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0e1a] via-[#111827] to-[#111827] px-4 pt-6 pb-6 rounded-t-3xl z-[9999] shadow-2xl border-t border-copy/10 space-y-5">
@@ -73,7 +83,10 @@ export default function RoutePlannerPanel({
       </div>
 
       <SpeedOptions
-        onSelect={onSelectModality}
+        onSelect={(modality, speed) => {
+          setModalitySelected(true);
+          onSelectModality(modality, speed);
+        }}
         speeds={speeds}
       />
 
