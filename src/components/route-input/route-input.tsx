@@ -12,6 +12,7 @@ type Props = {
   placeholder: string;
   initialValue?: string;
   onSelect: (coords: [number, number], label: string) => void;
+  onClear?: () => void;
 };
 
 export default function AutocompleteInput({
@@ -19,6 +20,7 @@ export default function AutocompleteInput({
   placeholder,
   initialValue,
   onSelect,
+  onClear,
 }: Props) {
   const [userLocation, setUserLocation] = useState<google.maps.LatLng | null>(null);
 
@@ -87,14 +89,25 @@ export default function AutocompleteInput({
         </div>
         <input
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            setValue(newValue);
+            if (newValue.trim() === '') {
+              clearSuggestions();
+              if (onClear) onClear();
+            }
+          }}
           placeholder={placeholder}
           disabled={!ready}
           className="bg-transparent outline-none w-full text-white placeholder:text-gray-400 font-medium"
         />
         {value && (
           <button
-            onClick={() => setValue('', false)}
+            onClick={() => {
+              setValue('', false);
+              clearSuggestions();
+              if (onClear) onClear();
+            }}
             className="flex-shrink-0 text-copy/40 hover:text-copy transition-colors"
           >
             <X size={16} />

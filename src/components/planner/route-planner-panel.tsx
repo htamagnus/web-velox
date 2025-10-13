@@ -12,6 +12,8 @@ type Props = {
   destinationLabel: string | null;
   onSetOrigin: (coords: [number, number], label: string) => void;
   onSetDestination: (coords: [number, number], label: string) => void;
+  onClearOrigin?: () => void;
+  onClearDestination?: () => void;
   onStart: () => void;
   onSelectModality: (modality: Modality, speed: number) => void;
   speeds: {
@@ -27,6 +29,8 @@ export default function RoutePlannerPanel({
   destinationLabel,
   onSetOrigin,
   onSetDestination,
+  onClearOrigin,
+  onClearDestination,
   onStart,
   onSelectModality,
   speeds,
@@ -72,6 +76,7 @@ export default function RoutePlannerPanel({
           placeholder={t('originPlaceholder')}
           initialValue={originLabel ?? undefined}
           onSelect={onSetOrigin}
+          onClear={onClearOrigin}
         />
 
         <AutocompleteInput
@@ -79,6 +84,7 @@ export default function RoutePlannerPanel({
           placeholder={t('destinationPlaceholder')}
           initialValue={destinationLabel ?? undefined}
           onSelect={onSetDestination}
+          onClear={onClearDestination}
         />
       </div>
 

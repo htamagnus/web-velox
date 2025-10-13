@@ -357,6 +357,20 @@ export default function CalculateRoutePage() {
                 setDestination(coords);
                 setDestinationLabel(label);
               }}
+            onClearOrigin={() => {
+              setOrigin(null);
+              setOriginLabel(null);
+              setRouteData(null);
+              setRouteOptions([]);
+              setSelectedRouteIndex(0);
+            }}
+            onClearDestination={() => {
+              setDestination(null);
+              setDestinationLabel(null);
+              setRouteData(null);
+              setRouteOptions([]);
+              setSelectedRouteIndex(0);
+            }}
               onStart={() => handleCalculate()}
               onSelectModality={(modality, speed) => {
                 setSelectedModality(modality);
