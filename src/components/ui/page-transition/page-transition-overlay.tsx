@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import LogoVelox from '@/components/ui/logo-velox/logo-velox';
-import Loader from '@/components/ui/loader/loader'; // seu loader real
+import Loader from '@/components/ui/loader/loader';
 
 export default function PageTransitionOverlay({ visible, message }: { visible: boolean; message?: string }) {
   return (

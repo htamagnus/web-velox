@@ -1,6 +1,6 @@
-type Modality = 'general' | 'road' | 'mtb'
+export type Modality = 'general' | 'road' | 'mtb'
 
-type GetPlannedRouteInputDto = {
+export type GetPlannedRouteInputDto = {
   origin: string
   destination: string
   modality: Modality
@@ -24,7 +24,7 @@ type RouteAlternative = {
   warnings?: string[]
 }
   
-type GetPlannedRouteResponseDto = {
+export type GetPlannedRouteResponseDto = {
   distanceKm: number
   estimatedTimeMinutes: number
   estimatedCalories: number
@@ -35,7 +35,7 @@ type GetPlannedRouteResponseDto = {
   alternatives?: RouteAlternative[]
 }
 
-type SaveRouteDto = {
+export type SaveRouteDto = {
   origin: string
   destination: string
   modality: Modality

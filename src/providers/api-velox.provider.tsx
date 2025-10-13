@@ -1,6 +1,7 @@
-import { ApiError } from "@/errors/api-errors"
+import { ApiError, ApiErrorResponse } from "@/errors/api-errors"
 import { Athlete, CreateAthleteDto, UpdateAthleteDto } from "@/interfaces/athlete.interface"
 import { AuthData } from "@/interfaces/auth-data.interface"
+import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, SaveRouteDto } from "@/interfaces/routes.interface"
 
 type RegisterData = {
   name: string
@@ -13,10 +14,9 @@ type LoginData = {
   password: string
 }
 
-type ApiErrorResponse = {
-  code?: string
-  message?: string
-  [key: string]: any
+// utilitário para checar formato de erro retornado pela api
+function isApiErrorResponse(value: unknown): value is ApiErrorResponse {
+  return typeof value === 'object' && value !== null && ('message' in value || 'code' in value)
 }
 
 export default class ApiVeloxService {
@@ -37,15 +37,17 @@ export default class ApiVeloxService {
     })
 
     const text = await response.text()
-    const json: ApiErrorResponse = text ? JSON.parse(text) : {}
+    const json: unknown = text ? JSON.parse(text) : {}
 
     if (!response.ok) {
-      throw new ApiError(json.message || 'Erro na requisição', response.status, json.code, json)
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro na requisição' }
+      throw new ApiError(err.message || 'Erro na requisição', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
 
-    localStorage.setItem('velox_token', json.token)
+    const data = json as AuthData
+    localStorage.setItem('velox_token', data.token)
 
-    return json as AuthData
+    return data
   }
 
   async login(loginData: LoginData): Promise<AuthData> {
@@ -59,15 +61,17 @@ export default class ApiVeloxService {
     })
 
     const text = await response.text()
-    const json: AuthData | ApiErrorResponse = text ? JSON.parse(text) : {}
+    const json: unknown = text ? JSON.parse(text) : {}
 
     if (!response.ok) {
-      throw new ApiError((json as ApiErrorResponse).message || 'Erro no login', response.status, (json as ApiErrorResponse).code, json)
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro no login' }
+      throw new ApiError(err.message || 'Erro no login', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
 
-    localStorage.setItem('velox_token', json.token)
+    const data = json as AuthData
+    localStorage.setItem('velox_token', data.token)
 
-    return json as AuthData
+    return data
   }
 
   async completeProfile(data: CreateAthleteDto): Promise<Athlete> {
@@ -83,12 +87,13 @@ export default class ApiVeloxService {
     })
   
     const text = await response.text()
-    const json: Athlete | ApiErrorResponse = text ? JSON.parse(text) : {}
-  
+    const json: unknown = text ? JSON.parse(text) : {}
+
     if (!response.ok) {
-      throw new ApiError((json as ApiErrorResponse).message || 'Erro no login', response.status, (json as ApiErrorResponse).code, json)
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro no login' }
+      throw new ApiError(err.message || 'Erro no login', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
-  
+
     return json as Athlete
   }
 
@@ -103,18 +108,14 @@ export default class ApiVeloxService {
     })
   
     const text = await response.text()
-    const json = text ? JSON.parse(text) : {}
-  
+    const json: unknown = text ? JSON.parse(text) : {}
+
     if (!response.ok) {
-      throw new ApiError(
-        json.message || 'Erro ao buscar dados do Strava',
-        response.status,
-        json.code,
-        json
-      )
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao buscar dados do Strava' }
+      throw new ApiError(err.message || 'Erro ao buscar dados do Strava', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
   
-    return json
+    return json as { averageSpeedGeneral: number }
   }
 
   async planRoute(data: GetPlannedRouteInputDto): Promise<GetPlannedRouteResponseDto> {
@@ -130,10 +131,11 @@ export default class ApiVeloxService {
     })
   
     const text = await response.text()
-    const json: ApiErrorResponse = text ? JSON.parse(text) : {}
-  
+    const json: unknown = text ? JSON.parse(text) : {}
+
     if (!response.ok) {
-      throw new ApiError(json.message || 'Erro ao planejar rota', response.status, json.code, json)
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao planejar rota' }
+      throw new ApiError(err.message || 'Erro ao planejar rota', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
   
     return json as GetPlannedRouteResponseDto
@@ -153,8 +155,9 @@ export default class ApiVeloxService {
   
     if (!response.ok) {
       const text = await response.text()
-      const json: ApiErrorResponse = text ? JSON.parse(text) : {}
-      throw new ApiError(json.message || 'Erro ao salvar a rota', response.status, json.code, json)
+      const json: unknown = text ? JSON.parse(text) : {}
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao salvar a rota' }
+      throw new ApiError(err.message || 'Erro ao salvar a rota', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
   }
 
@@ -170,13 +173,14 @@ export default class ApiVeloxService {
     })
   
     const text = await response.text()
-    const json = text ? JSON.parse(text) : {}
-  
+    const json: unknown = text ? JSON.parse(text) : {}
+
     if (!response.ok) {
-      throw new ApiError(json.message || 'Erro ao buscar perfil', response.status, json.code, json)
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao buscar perfil' }
+      throw new ApiError(err.message || 'Erro ao buscar perfil', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
   
-    return json
+    return json as Athlete
   }  
 
   async updateProfile(data: Partial<UpdateAthleteDto>): Promise<UpdateAthleteDto> {
@@ -192,13 +196,14 @@ export default class ApiVeloxService {
     })
   
     const text = await response.text()
-    const json = text ? JSON.parse(text) : {}
-  
+    const json: unknown = text ? JSON.parse(text) : {}
+
     if (!response.ok) {
-      throw new ApiError(json.message || 'Erro ao atualizar perfil', response.status, json.code, json)
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao atualizar perfil' }
+      throw new ApiError(err.message || 'Erro ao atualizar perfil', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
     }
   
-    return json
+    return json as UpdateAthleteDto
   }
 
   async getSavedRoutes(): Promise<SaveRouteDto[]> {
@@ -212,10 +217,11 @@ export default class ApiVeloxService {
     })
   
     const text = await response.text()
-    const json = text ? JSON.parse(text) : {}
-  
+    const json: unknown = text ? JSON.parse(text) : {}
+
     if (!response.ok) {
-      throw new Error(json.message || 'Erro ao buscar rotas salvas')
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao buscar rotas salvas' }
+      throw new Error((err as ApiErrorResponse).message || 'Erro ao buscar rotas salvas')
     }
   
     return json as SaveRouteDto[]

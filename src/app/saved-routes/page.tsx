@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import polyline from '@mapbox/polyline';
 import { toast } from 'sonner';
@@ -26,10 +26,11 @@ import Loader from '@/components/ui/loader/loader';
 import GoogleMiniMap from '@/components/mini-map/google-mini-map';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 import Button from '@/components/ui/button/button';
+import { SaveRouteDto } from '@/interfaces/routes.interface';
 
 export default function SavedRoutesPage() {
   useProtectedRoute()
-  const api = new ApiVeloxService();
+  const api = useMemo(() => new ApiVeloxService(), []);
   const [routes, setRoutes] = useState<SaveRouteDto[]>([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTexts('savedRoutes');
@@ -40,7 +41,7 @@ export default function SavedRoutesPage() {
       try {
         const data = await api.getSavedRoutes();
         setRoutes(data);
-      } catch (error) {
+      } catch {
         toast.error(t('error'));
       } finally {
         setLoading(false);
@@ -48,7 +49,7 @@ export default function SavedRoutesPage() {
     }
 
     fetchRoutes();
-  }, []);
+  }, [api, t]);
 
   if (loading) {
     return (

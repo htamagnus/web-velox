@@ -1,7 +1,7 @@
 'use client';
 
 import LogoVelox from '@/components/ui/logo-velox/logo-velox';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import {
@@ -13,7 +13,7 @@ import {
   CheckCheck,
   ClockAlert,
 } from 'lucide-react';
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import Button from '@/components/ui/button/button';
 
 export default function LandingPage() {
@@ -32,16 +32,17 @@ export default function LandingPage() {
     return () => clearTimeout(timeout);
   }, []);
 
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    const offsetX = (e.clientX / window.innerWidth - 0.5) * 20;
+    const offsetY = (e.clientY / window.innerHeight - 0.5) * 20;
+    x.set(offsetX);
+    y.set(offsetY);
+  }, [x, y]);
+
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const offsetX = (e.clientX / window.innerWidth - 0.5) * 20;
-      const offsetY = (e.clientY / window.innerHeight - 0.5) * 20;
-      x.set(offsetX);
-      y.set(offsetY);
-    };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [handleMouseMove]);
 
   const springX = useSpring(x, { stiffness: 50, damping: 10 });
   const springY = useSpring(y, { stiffness: 50, damping: 10 });
@@ -191,7 +192,7 @@ export default function LandingPage() {
                     title: 'Não é qualquer bike',
                     desc: 'MTB, Speed ou urbana? Cada uma tem seu ritmo. Mas os apps usam a mesma base pra todas.',
                   },
-                ].map((feature, index) => (
+                ].map((feature) => (
                   <motion.div
                     key={feature.title}
                     initial={{ opacity: 0, y: 30 }}
@@ -255,7 +256,7 @@ export default function LandingPage() {
               title: 'Calorias e Altimetria',
               desc: 'Veja calorias gastas e ganho de elevação em cada trajeto.',
             },
-          ].map((feature, index) => (
+          ].map((feature) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 30 }}

@@ -1,7 +1,7 @@
 export type ApiErrorResponse = {
     code?: string
     message?: string
-    [key: string]: any
+    [key: string]: unknown
   }
   
   export class ApiError extends Error {

@@ -1,3 +1,5 @@
+import { Modality } from "@/interfaces/routes.interface"
+
 export function getModalityLabel(modality: Modality): string {
     switch (modality) {
       case 'road':

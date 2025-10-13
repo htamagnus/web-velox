@@ -7,6 +7,7 @@ import SpeedOptions from '../speed-modal/speed-options';
 import AutocompleteInput from '../route-input/route-input';
 import { useEffect, useState } from 'react';
 import Button from '@/components/ui/button/button';
+import { Modality } from '@/interfaces/routes.interface';
 
 type Props = {
   originLabel: string | null;
@@ -16,7 +17,7 @@ type Props = {
   onClearOrigin?: () => void;
   onClearDestination?: () => void;
   onStart: () => void;
-  onSelectModality: (modality: Modality, speed: number) => void;
+  onSelectModality: (modality: Modality, speed?: number) => void;
   speeds: {
     general: number;
     road: number;

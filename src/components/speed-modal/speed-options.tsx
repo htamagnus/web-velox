@@ -7,6 +7,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 import { Bike, Mountain, Zap, Info, Settings, ArrowRight } from 'lucide-react'
 import clsx from 'clsx'
 import { useTexts } from '@/helpers/use-texts'
+import { Modality } from '@/interfaces/routes.interface'
 
 type Props = {
   onSelect: (choice: Modality, speed: number) => void

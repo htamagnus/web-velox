@@ -28,7 +28,6 @@ export default function AutocompleteInput({
 }: Props) {
   const [value, setValue] = useState('');
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -73,7 +72,7 @@ export default function AutocompleteInput({
       return;
     }
 
-    setIsLoading(true);
+    // inicia busca
 
     try {
       const { AutocompleteSuggestion } = await google.maps.importLibrary('places') as google.maps.PlacesLibrary;
@@ -112,7 +111,7 @@ export default function AutocompleteInput({
       console.error('erro ao buscar sugestões:', error);
       setSuggestions([]);
     } finally {
-      setIsLoading(false);
+      // fim da busca
     }
   }, [ready, userLocation]);
 

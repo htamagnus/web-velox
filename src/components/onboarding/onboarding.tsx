@@ -9,7 +9,6 @@ import { StepContainer } from './step-container';
 export default function OnboardingForm() {
   const {
     ready,
-    loading,
     step,
     formData,
     nextStep,

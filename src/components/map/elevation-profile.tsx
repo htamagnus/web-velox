@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 
-type ElevationPoint = {
+export type ElevationPoint = {
   distance: number;
   elevation: number;
 };

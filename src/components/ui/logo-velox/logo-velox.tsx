@@ -29,7 +29,7 @@ export default function LogoVelox({
       className={`flex justify-center ${className}`}
     >
       <Image 
-        src="/velox-logo.svg" 
+        src="/svg/velox-logo.svg" 
         alt="Velox Logo"
         width={width}
         height={height}

@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import polyline from '@mapbox/polyline';
 import ApiVeloxService from '@/providers/api-velox.provider';
 import GoogleRouteMap from '@/components/map/google-route-map';
 import RouteSelector from '@/components/map/route-selector';
-import ElevationProfile from '@/components/map/elevation-profile';
+import ElevationProfile, { ElevationPoint } from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
 import Button from '@/components/ui/button/button';
 import { Athlete } from '@/interfaces/athlete.interface';
@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 import { User, Gauge, Loader2, Save, RotateCcw } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
+import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality } from '@/interfaces/routes.interface';
 
 type RouteOption = {
   polyline: [number, number][];
@@ -35,7 +36,7 @@ type RouteData = GetPlannedRouteResponseDto & {
 
 export default function CalculateRoutePage() {
   useProtectedRoute();
-  const api = new ApiVeloxService();
+  const api = useMemo(() => new ApiVeloxService(), []);
   const { t } = useTexts('calculate');
 
   const [origin, setOrigin] = useState<[number, number] | null>(null);
@@ -47,31 +48,20 @@ export default function CalculateRoutePage() {
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [selectedModality, setSelectedModality] = useState<Modality>('general');
-  const [averageSpeed, setAverageSpeed] = useState<number | null>(null);
   const [userData, setUserData] = useState<Athlete | null>(null);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([-28.678, -49.369]);
   const [isCalculatingRoute, setIsCalculatingRoute] = useState(false);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const coords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
-        setMapCenter(coords);
-      }
-    );
-  }, []);
 
   useEffect(() => {
     async function fetchProfile() {
       try {
         const profile = await api.getProfile();
         setUserData(profile);
-      } catch (err) {
+      } catch {
         toast.error(t('profileError'));
       }
     }
     fetchProfile();
-  }, []);
+  }, [api, t]);
 
   // limpa qualquer rota desenhada quando um dos inputs é limpo
   useEffect(() => {
@@ -167,7 +157,7 @@ export default function CalculateRoutePage() {
       setRouteOptions([mainRoute, ...alternatives]);
       setSelectedRouteIndex(0);
       
-    } catch (error) {
+    } catch {
       toast.error(t('routeError'));
     } finally {
       setIsCalculatingRoute(false);
@@ -371,9 +361,8 @@ export default function CalculateRoutePage() {
               setSelectedRouteIndex(0);
             }}
               onStart={() => handleCalculate()}
-              onSelectModality={(modality, speed) => {
+              onSelectModality={(modality) => {
                 setSelectedModality(modality);
-                setAverageSpeed(speed);
               }}
               speeds={{
                 general: userData.averageSpeedGeneral,

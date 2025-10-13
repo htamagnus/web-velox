@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -16,7 +16,7 @@ import { useProtectedRoute } from '@/hooks/use-protected-route';
 
 export default function ProfilePage() {
   useProtectedRoute()
-  const api = new ApiVeloxService();
+  const api = useMemo(() => new ApiVeloxService(), []);
   const { t } = useTexts('profile');
   const router = useRouter();
 
@@ -70,7 +70,7 @@ export default function ProfilePage() {
     }
 
     fetchProfile();
-  }, []);
+  }, [api, t]);
 
   const handleInputChange = (field: keyof FormState, value: string | number) => {
     setForm((prev) => ({ ...prev, [field]: value }));
