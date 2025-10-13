@@ -57,10 +57,7 @@ export default function CalculateRoutePage() {
       (pos) => {
         const coords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
         setMapCenter(coords);
-      },
-      (err) => {
-        toast.info(t('geolocationError'));
-      },
+      }
     );
   }, []);
 
