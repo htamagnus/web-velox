@@ -32,7 +32,7 @@ export default function HomePage() {
               >
                 <div className="flex-1">
                   <h1 className="text-3xl font-bold text-white">{t('title')}</h1>
-                  <p className="text-copy-light text-sm mt-1">{t('subtitle') || 'planeje suas rotas de bike com precisão'}</p>
+                  <p className="text-copy-light text-sm mt-1">{t('subtitle')}</p>
                 </div>
               </motion.div>
 
@@ -51,8 +51,8 @@ export default function HomePage() {
                       <PlusCircle size={32} className="text-primary-light" strokeWidth={2.5} />
                     </div>
                     <div>
-                      <h3 className="text-white font-bold text-base">{t('newRoute') || 'nova rota'}</h3>
-                      <p className="text-copy-light text-xs mt-1">{t('newRouteDesc') || 'planeje seu percurso'}</p>
+                      <h3 className="text-white font-bold text-base">{t('newRoute')}</h3>
+                      <p className="text-copy-light text-xs mt-1">{t('newRouteDesc')}</p>
                     </div>
                   </div>
                 </button>
@@ -66,8 +66,8 @@ export default function HomePage() {
                       <Map size={32} className="text-blue-400" strokeWidth={2.5} />
                     </div>
                     <div>
-                      <h3 className="text-white font-bold text-base">{t('myRoutes') || 'minhas rotas'}</h3>
-                      <p className="text-copy-light text-xs mt-1">{t('myRoutesDesc') || 'veja rotas salvas'}</p>
+                      <h3 className="text-white font-bold text-base">{t('myRoutes')}</h3>
+                      <p className="text-copy-light text-xs mt-1">{t('myRoutesDesc')}</p>
                     </div>
                   </div>
                 </button>
@@ -81,17 +81,17 @@ export default function HomePage() {
                       <User size={32} className="text-purple-400" strokeWidth={2.5} />
                     </div>
                     <div>
-                      <h3 className="text-white font-bold text-base">{t('profile') || 'perfil'}</h3>
-                      <p className="text-copy-light text-xs mt-1">{t('profileDesc') || 'edite suas informações'}</p>
+                      <h3 className="text-white font-bold text-base">{t('profile')}</h3>
+                      <p className="text-copy-light text-xs mt-1">{t('profileDesc')}</p>
                     </div>
                   </div>
                 </button>
 
                 <div className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-2">
                   <div className="text-3xl font-bold text-primary-light">
-                    {t('comingSoon') || 'em breve'}
+                    {t('comingSoon')}
                   </div>
-                  <p className="text-copy-light text-xs">{t('comingSoonDesc') || 'novidades chegando'}</p>
+                  <p className="text-copy-light text-xs">{t('comingSoonDesc')}</p>
                 </div>
               </motion.section>
             </div>
@@ -112,7 +112,7 @@ export default function HomePage() {
                 className="flex flex-col items-center gap-1.5 cursor-pointer -mt-10 transition-all duration-300 ease-out hover:scale-110 active:scale-95 group relative"
               >
                 <div className="absolute inset-0 bg-primary-light/30 blur-3xl rounded-full group-hover:bg-primary-light/50 transition-all animate-pulse"></div>
-                <div className="relative bg-gradient-to-br from-primary-light via-primary to-primary-dark p-5 rounded-[20px] shadow-2xl shadow-primary/50 group-hover:shadow-[0_0_40px_rgba(191,213,114,0.6)] transition-all border-primary-light/30 group-hover:border-primary-light/60">
+                <div className="relative bg-gradient-to-br from-primary-light via-primary to-primary-dark p-1 rounded-[40px] shadow-2xl shadow-primary/50 group-hover:shadow-[0_0_40px_rgba(191,213,114,0.6)] transition-all border-primary-light/30 group-hover:border-primary-light/60">
                   <PlusCircle size={56} className="text-primary-content " strokeWidth={2.5} />
                 </div>
                 <span className="text-s font-bold text-white mt-1 drop-shadow-sm">{t('footer.createRoute')}</span>

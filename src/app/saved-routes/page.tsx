@@ -53,14 +53,20 @@ export default function SavedRoutesPage() {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-background">
         <Loader size={48} />
-        <p className="text-copy mt-4">{t('loading') || 'carregando suas rotas...'}</p>
+        <p className="text-copy mt-4">{t('loading')}</p>
       </div>
     );
   }
 
   if (routes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-background text-center px-6 space-y-6">
+      <div className="relative flex flex-col items-center justify-center h-screen bg-background text-center px-6 space-y-6">
+        <button
+          onClick={() => router.back()}
+          className="absolute top-4 left-4 text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
+        >
+          <ArrowLeft size={20} />
+        </button>
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -78,10 +84,10 @@ export default function SavedRoutesPage() {
           className="space-y-3"
         >
           <h2 className="text-2xl font-bold text-white">
-            {t('emptyTitle') || 'você ainda não criou nenhuma rota'}
+            {t('emptyTitle')}
           </h2>
           <p className="text-copy-light max-w-md">
-            {t('emptyDescription') || 'que tal começar agora e planejar seu próximo percurso?'}
+            {t('emptyDescription')}
           </p>
         </motion.div>
 
@@ -90,9 +96,9 @@ export default function SavedRoutesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           onClick={() => router.push('/calculate')}
-          className="bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3.5 px-8 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105"
+          className="group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
         >
-          {t('ctaCreate') || 'criar rota'}
+          {t('ctaCreate')}
         </motion.button>
       </div>
     );

@@ -7,7 +7,6 @@ import GoogleRouteMap from '@/components/map/google-route-map';
 import RouteSelector from '@/components/map/route-selector';
 import ElevationProfile from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
-import Button from '@/components/ui/button/button';
 import { Athlete } from '@/interfaces/athlete.interface';
 import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -72,6 +71,15 @@ export default function CalculateRoutePage() {
     }
     fetchProfile();
   }, []);
+
+  // limpa qualquer rota desenhada quando um dos inputs é limpo
+  useEffect(() => {
+    if (!originLabel || !destinationLabel) {
+      setRouteData(null);
+      setRouteOptions([]);
+      setSelectedRouteIndex(0);
+    }
+  }, [originLabel, destinationLabel]);
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (!e.latLng) return;
@@ -307,7 +315,7 @@ export default function CalculateRoutePage() {
                 <button
                   onClick={handleSaveRoute}
                   disabled={isSaving}
-                  className="flex-1 group relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-content font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 ease-out shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="flex-1 group relative overflow-hidden bg-gradient-to-r from-[#92a848] to-[#a8b87a] hover:from-[#a8b87a] hover:to-[#92a848] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {isSaving ? (
@@ -325,7 +333,7 @@ export default function CalculateRoutePage() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="flex-1 bg-copy/10 hover:bg-copy/20 border border-copy/20 hover:border-copy/30 text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+                  className="flex-1 bg-copy hover:bg-copy border border-copy hover:border-copy text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
                 >
                   <span className="flex items-center justify-center gap-2">
                     <RotateCcw size={20} />
