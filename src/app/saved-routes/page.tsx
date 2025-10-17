@@ -14,6 +14,7 @@ import {
   RouteIcon,
   GaugeIcon,
   ArrowLeft,
+  ArrowDown,
   Flame,
   MapPin,
 } from 'lucide-react';
@@ -147,17 +148,18 @@ export default function SavedRoutesPage() {
 
               <div className="p-5 space-y-4">
                 <div className="flex items-start gap-3">
-                  <MapPin size={20} className="text-primary-light flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-semibold text-base leading-tight">
+                    <p className="text-white font-semibold text-base leading-tight flex items-center gap-2">
+                      <MapPin size={20} className="text-primary-light flex-shrink-0 mt-0.5" />
                       {route.origin}
                     </p>
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center justify-center gap-2 mt-1">
                       <div className="h-px flex-1 bg-gradient-to-r from-primary-light/50 to-transparent"></div>
-                      <span className="text-xs text-copy/60">para</span>
+                      <ArrowDown size={20} className="text-copy" />
                       <div className="h-px flex-1 bg-gradient-to-l from-primary-light/50 to-transparent"></div>
                     </div>
-                    <p className="text-gray-300 font-medium text-base leading-tight mt-1">
+                    <p className="text-white font-semibold text-base leading-tight mt-1 flex items-center gap-2">
+                      <MapPin size={20} className="text-primary-light flex-shrink-0 mt-0.5" />
                       {route.destination}
                     </p>
                   </div>
