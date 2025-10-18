@@ -204,7 +204,7 @@ export default function CalculateRoutePage() {
   };
 
   return (
-    <div className="relative w-full h-screen pb-48">
+    <div className="relative w-full h-screen pb-40 sm:pb-48">
       <GoogleRouteMap
         origin={origin}
         destination={destination}

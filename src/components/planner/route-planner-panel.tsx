@@ -53,8 +53,8 @@ export default function RoutePlannerPanel({
   }, [modalitySelected, speeds.general]);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0e1a] via-[#111827] to-[#111827] px-4 pt-6 pb-6 rounded-t-3xl z-[9999] shadow-2xl border-t border-copy/10 space-y-5">
-      <div className="flex justify-between items-center mb-3">
+    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0e1a] via-[#111827] to-[#111827] px-3 pt-3 pb-3 sm:px-4 sm:pt-6 sm:pb-6 rounded-t-2xl sm:rounded-t-3xl z-[9999] shadow-2xl border-t border-copy/10 space-y-3 sm:space-y-5 max-h-[42vh] sm:max-h-none overflow-y-auto">
+      <div className="flex justify-between items-center mb-2 sm:mb-3">
         <button
           onClick={() => router.push('/home')}
           className="text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
@@ -62,9 +62,9 @@ export default function RoutePlannerPanel({
           <ArrowLeft size={20} />
         </button>
 
-        <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
+        <div className="flex items-center gap-2.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
           <Route size={20} className="text-primary-light" />
-          <h2 className="font-bold text-gray-100 text-xl tracking-tight">
+          <h2 className="font-bold text-gray-100 text-lg sm:text-xl tracking-tight">
             {t('title')}
           </h2>
         </div>
@@ -72,7 +72,7 @@ export default function RoutePlannerPanel({
         <div className="w-20"></div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <AutocompleteInput
           icon={<LocateFixed size={20} stroke="#92a848"/>}
           placeholder={t('originPlaceholder')}
