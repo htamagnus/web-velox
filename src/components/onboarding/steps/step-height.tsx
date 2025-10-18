@@ -13,7 +13,7 @@ export default function StepHeight(props: StepProps) {
       subtitle={t('subtitle')}
       unit={t('unit')}
       min={140}
-      max={200}
+      max={300}
       displayMode="scroll"
       iconUp={<Plus className="w-5 h-5" />}
       iconDown={<Minus className="w-5 h-5" />}

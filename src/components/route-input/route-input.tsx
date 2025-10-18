@@ -189,6 +189,7 @@ export default function AutocompleteInput({
           onChange={(e) => handleInputChange(e.target.value)}
           placeholder={placeholder}
           disabled={!ready}
+          maxLength={500}
           className="bg-transparent outline-none w-full text-white placeholder:text-gray-400 font-medium"
         />
         {value && (

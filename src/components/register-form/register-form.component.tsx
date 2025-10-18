@@ -119,6 +119,7 @@ export default function RegisterForm() {
         }}
         error={fieldErrors.name}
         required
+        maxLength={255}
       />
       <InputField 
         label={t('email.label')}
@@ -132,6 +133,7 @@ export default function RegisterForm() {
         }}
         error={fieldErrors.email}
         required
+        maxLength={255}
       />
       <InputField
         label={t('password.label')}
@@ -147,6 +149,7 @@ export default function RegisterForm() {
         }}
         error={fieldErrors.password}
         required
+        maxLength={255}
       />
 
       <div className="mt-4 space-y-1 text-sm text-copy-lighter">

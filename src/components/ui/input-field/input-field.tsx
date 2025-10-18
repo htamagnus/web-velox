@@ -7,6 +7,7 @@ type InputFieldProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   error?: string
   required?: boolean
+  maxLength?: number
 }
 
 export default function InputField({
@@ -18,6 +19,7 @@ export default function InputField({
   onChange,
   error,
   required = false,
+  maxLength,
 }: InputFieldProps) {
   return (
     <div className="w-full">
@@ -32,6 +34,7 @@ export default function InputField({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
+        maxLength={maxLength}
         className={`mt-1 block w-full px-4 py-3 rounded-xl text-white bg-white/5 border ${
           error ? 'border-red-500' : 'border-white/10 hover:border-white/20 focus:border-primary-light/50'
         } outline-none transition-all`}

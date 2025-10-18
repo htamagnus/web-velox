@@ -15,7 +15,7 @@ export default function StepSpeedMtb({ value, onChange, onNext, onBack }: StepPr
       iconTitle={<MountainSnow />}
       value={value}
       min={0}
-      max={50}
+      max={200}
       unit="km/h"
       onChange={onChange}
       onNext={onNext}

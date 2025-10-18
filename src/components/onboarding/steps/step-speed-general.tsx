@@ -29,7 +29,7 @@ export default function StepSpeedGeneral({
       iconTitle={<Gauge />}
       value={value}
       min={0}
-      max={50}
+      max={200}
       unit={t('unit')}
       onChange={onChange}
       onNext={onNext}

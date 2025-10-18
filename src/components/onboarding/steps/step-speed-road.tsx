@@ -15,7 +15,7 @@ export default function StepSpeedRoad({ value, onChange, onNext, onBack }: StepP
       iconTitle={<Zap />}
       value={value}
       min={0}
-      max={50}
+      max={200}
       unit="km/h"
       onChange={onChange}
       onNext={onNext}
