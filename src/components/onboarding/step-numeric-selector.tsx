@@ -137,7 +137,7 @@ export default function StepNumericSelector({
             </div>
           </div>
         ) : (
-          <div className="relative h-[264px] w-20 mx-auto rounded-xl bg-primary">
+          <div className="relative h-[264px] w-20 mx-auto rounded-xl bg-primary overflow-hidden">
             <div
               className="absolute w-full transition-transform duration-200"
               style={{ transform: `translateY(-${offset}px)` }}
