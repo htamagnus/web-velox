@@ -263,6 +263,10 @@
     "profileDesc": "edite suas informações",
     "comingSoon": "Em breve",
     "comingSoonDesc": "novidades chegando",
+    "stravaImport": {
+      "title": "Strava",
+      "description": "importar velocidade média"
+    },
     "footer": {
       "routes": "Rotas",
       "createRoute": "Criar rota",

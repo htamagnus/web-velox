@@ -5,6 +5,7 @@ import Button from '@/components/ui/button/button';
 import StepNumericSelector from '../step-numeric-selector';
 import { useTexts } from '@/helpers/use-texts';
 import { Flame, Gauge } from 'lucide-react';
+import { useStravaAuth } from '@/hooks/use-strava-auth';
 
 interface StepSpeedGeneralProps {
   value: number;
@@ -19,20 +20,8 @@ export default function StepSpeedGeneral({
   onNext,
   onBack,
 }: StepSpeedGeneralProps) {
-  const [loadingStrava, setLoadingStrava] = useState(false);
   const { t } = useTexts('onboarding.speedGeneral');
-
-  const redirectToStrava = () => {
-    setLoadingStrava(true);
-    sessionStorage.setItem('velox_current_step', '3');
-    const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
-    const redirectUri = process.env.NEXT_PUBLIC_STRAVA_REDIRECT_URI;
-    const scope = 'read,activity:read_all';
-
-    const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&approval_prompt=auto&scope=${scope}`;
-
-    window.location.href = stravaAuthUrl;
-  };
+  const { redirectToStrava, loading: loadingStrava } = useStravaAuth();
 
   return (
     <StepNumericSelector
