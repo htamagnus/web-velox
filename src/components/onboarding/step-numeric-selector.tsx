@@ -71,7 +71,7 @@ export default function StepNumericSelector({
         </p>
 
         {displayMode === 'list' ? (
-          <div className="relative h-40 flex flex-col items-center justify-center">
+          <div className="relative max-h-96 flex flex-col items-center justify-center overflow-y-auto">
             <div className="absolute top-[calc(50%+1.5rem)] w-20 h-[1px] bg-gray-400 opacity-60 z-10" />
             <div className="space-y-2 z-20">
               {getDisplayValues().map((v) => (

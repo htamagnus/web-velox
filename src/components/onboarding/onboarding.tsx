@@ -33,7 +33,7 @@ export default function OnboardingForm() {
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-background">
+    <div className="w-full min-h-screen flex items-center justify-center bg-background overflow-y-auto">
       <ProgressBar currentStep={step} totalSteps={onboardingSteps.length} />
       
       {StepComponent && (

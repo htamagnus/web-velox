@@ -7,6 +7,8 @@ import { useTexts } from '@/helpers/use-texts';
 import { Flame, Gauge } from 'lucide-react';
 import { useStravaAuth } from '@/hooks/use-strava-auth';
 
+const STRAVA_IMPORT_ENABLED = false;
+
 interface StepSpeedGeneralProps {
   value: number;
   onChange: (value: number) => void;
