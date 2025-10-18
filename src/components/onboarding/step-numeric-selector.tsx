@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowUp, ArrowLeft } from 'lucide-react';
 import Button from '../ui/button/button';
+import { useState } from 'react';
 
 interface StepNumericSelectorProps {
   title: string;
@@ -36,6 +37,10 @@ export default function StepNumericSelector({
   extraActions,
   iconTitle,
 }: StepNumericSelectorProps) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartY, setDragStartY] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+
   const getDisplayValues = () => {
     return [value - 2, value - 1, value, value + 1, value + 2].filter((v) => v >= min && v <= max);
   };
@@ -49,6 +54,40 @@ export default function StepNumericSelector({
   const isSkippable = (value === 0 || value === min) && unit === 'km/h';
   const showSkipLabel = isSkippable && (displayMode === 'list' || displayMode === 'scroll');
   const primaryButtonLabel = showSkipLabel ? 'Pular' : 'Continuar';
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setDragStartY(e.touches[0].clientY);
+    setDragOffset(0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+
+    const currentY = e.touches[0].clientY;
+    const diff = dragStartY - currentY;
+    setDragOffset(diff);
+
+    const threshold = 30;
+    const draggedSteps = Math.floor(Math.abs(diff) / threshold);
+
+    if (draggedSteps > 0) {
+      let newValue = value;
+      if (diff > 0) {
+        newValue = Math.min(value + draggedSteps, max);
+      } else {
+        newValue = Math.max(value - draggedSteps, min);
+      }
+      onChange(newValue);
+      setDragStartY(currentY);
+      setDragOffset(0);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    setDragOffset(0);
+  };
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center relative px-4 py-10 lg:py-20">
@@ -71,7 +110,13 @@ export default function StepNumericSelector({
         </p>
 
         {displayMode === 'list' ? (
-          <div className="relative max-h-96 flex flex-col items-center justify-center overflow-y-auto">
+          <div
+            className="relative max-h-96 flex flex-col items-center justify-center overflow-y-auto"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+          >
             <div className="absolute top-[calc(50%+1.5rem)] w-20 h-[1px] bg-gray-400 opacity-60 z-10" />
             <div className="space-y-2 z-20">
               {getDisplayValues().map((v) => (
@@ -92,10 +137,14 @@ export default function StepNumericSelector({
             </div>
           </div>
         ) : (
-          <div className="relative h-[264px] w-20 mx-auto rounded-xl bg-primary overflow-hidden">
+          <div className="relative h-[264px] w-20 mx-auto rounded-xl bg-primary">
             <div
               className="absolute w-full transition-transform duration-200"
               style={{ transform: `translateY(-${offset}px)` }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchEnd}
             >
               {range.map((v) => (
                 <div
