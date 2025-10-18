@@ -26,7 +26,7 @@ export default function StepSpeedGeneral({
     setLoadingStrava(true);
     sessionStorage.setItem('velox_current_step', '3');
     const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
-    const redirectUri = `${process.env.NEXT_PUBLIC_VELOX_API}/strava/callback`;
+    const redirectUri = `${process.env.NEXT_PUBLIC_STRAVA_REDIRECT_URI}/strava/callback`;
     const scope = 'read,activity:read_all';
 
     const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&approval_prompt=auto&scope=${scope}`;
