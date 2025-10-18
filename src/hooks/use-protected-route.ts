@@ -23,5 +23,5 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     } else if (requireOnboarding && !user?.hasCompletedOnboarding) {
       router.replace('/onboarding');
     }
-  }, [isAuthenticated, user, requireOnboarding]);
+  }, [isAuthenticated, user, requireOnboarding, router]);
 }

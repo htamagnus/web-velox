@@ -50,7 +50,7 @@ export default function RoutePlannerPanel({
       setModalitySelected(true);
       onSelectModality('general', speeds.general);
     }
-  }, [modalitySelected, speeds.general]);
+  }, [modalitySelected, speeds.general, onSelectModality]);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0e1a] via-[#111827] to-[#111827] px-3 pt-3 pb-3 sm:px-4 sm:pt-6 sm:pb-6 rounded-t-2xl sm:rounded-t-3xl z-[9999] shadow-2xl border-t border-copy/10 space-y-3 sm:space-y-5 max-h-[42vh] sm:max-h-none overflow-y-auto">

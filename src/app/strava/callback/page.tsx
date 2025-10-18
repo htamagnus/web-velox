@@ -51,7 +51,7 @@ export default function StravaCallbackPage() {
     };
 
     fetchSpeed();
-  }, []);
+  }, [router]);
 
   return (
     <PageTransitionOverlay

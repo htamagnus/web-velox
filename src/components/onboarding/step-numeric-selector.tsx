@@ -39,7 +39,6 @@ export default function StepNumericSelector({
 }: StepNumericSelectorProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartY, setDragStartY] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
 
   const getDisplayValues = () => {
     return [value - 2, value - 1, value, value + 1, value + 2].filter((v) => v >= min && v <= max);
@@ -58,7 +57,6 @@ export default function StepNumericSelector({
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true);
     setDragStartY(e.touches[0].clientY);
-    setDragOffset(0);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -66,7 +64,6 @@ export default function StepNumericSelector({
 
     const currentY = e.touches[0].clientY;
     const diff = dragStartY - currentY;
-    setDragOffset(diff);
 
     const threshold = 30;
     const draggedSteps = Math.floor(Math.abs(diff) / threshold);
@@ -80,13 +77,11 @@ export default function StepNumericSelector({
       }
       onChange(newValue);
       setDragStartY(currentY);
-      setDragOffset(0);
     }
   };
 
   const handleTouchEnd = () => {
     setIsDragging(false);
-    setDragOffset(0);
   };
 
   return (

@@ -1,13 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import Button from '@/components/ui/button/button';
 import StepNumericSelector from '../step-numeric-selector';
 import { useTexts } from '@/helpers/use-texts';
 import { Flame, Gauge } from 'lucide-react';
 import { useStravaAuth } from '@/hooks/use-strava-auth';
-
-const STRAVA_IMPORT_ENABLED = false;
 
 interface StepSpeedGeneralProps {
   value: number;

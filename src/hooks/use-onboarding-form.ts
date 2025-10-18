@@ -27,7 +27,7 @@ export function useOnboardingForm() {
     if (user?.hasCompletedOnboarding) {
       router.replace('/home');
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     const savedSpeed = sessionStorage.getItem('velox_avg_speed');
