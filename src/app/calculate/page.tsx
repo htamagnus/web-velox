@@ -13,9 +13,10 @@ import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
-import { User, Gauge, Loader2, Save, RotateCcw } from 'lucide-react';
+import { User, Gauge, Save, RotateCcw } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality } from '@/interfaces/routes.interface';
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 
 type RouteOption = {
   polyline: [number, number][];
@@ -214,48 +215,12 @@ export default function CalculateRoutePage() {
       />
 
       {isCalculatingRoute && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-black/40 backdrop-blur-sm z-[9998] flex items-center justify-center"
-        >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] p-8 rounded-2xl shadow-2xl border border-primary-light/20"
-          >
-            <div className="flex flex-col items-center gap-4">
-              <div className="relative">
-                <Loader2 size={48} className="animate-spin text-primary-light" />
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                  className="absolute inset-0 rounded-full bg-primary-light/20 blur-xl"
-                />
-              </div>
-              <div className="text-center">
-                <div className="text-white font-bold text-lg mb-1">{t('calculating.title')}</div>
-                <div className="text-copy/60 text-sm">{t('calculating.subtitle')}</div>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
+        <PageTransitionOverlay visible={true} message={t('calculating.title')} />
       )}
 
       <AnimatePresence mode="wait">
         {!userData ? (
-          <motion.div
-            key="loading-profile"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute bottom-4 left-4 right-4 text-center p-4"
-          >
-            <div className="absolute bottom-4 left-4 right-4 text-center p-4">
-              {t('loadingProfile')}
-            </div>
-          </motion.div>
+          <PageTransitionOverlay visible={true} message={t('loadingProfile')} />
         ) : routeOptions.length > 0 ? (
           <motion.div
             key="route-result"

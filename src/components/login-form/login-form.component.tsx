@@ -12,6 +12,7 @@ import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
 import LogoVelox from '../ui/logo-velox/logo-velox'
 import { useTexts } from '@/helpers/use-texts'
 import { toast } from 'sonner'
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay'
 
 export default function LoginForm() {
   const apiVelox = new ApiVeloxService()
@@ -71,6 +72,7 @@ export default function LoginForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
+      {loading && <PageTransitionOverlay visible={true} message={tForm('enteringButton')} />}
       <LogoVelox className="mb-8" size="md" /> 
     <div className="text-center space-y-2">
       <h2 className="text-2xl font-bold text-primary-light">{t('title')}</h2>

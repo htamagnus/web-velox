@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import LogoVelox from '../ui/logo-velox/logo-velox'
 import Link from 'next/link'
 import { useTexts } from '@/helpers/use-texts'
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay'
 
 export default function RegisterForm() {
   const apiVelox = new ApiVeloxService()
@@ -96,6 +97,7 @@ export default function RegisterForm() {
 
   return (
     <FormWrapper onSubmit={handleSubmit}>
+      {loading && <PageTransitionOverlay visible={true} message={tForm('sendingButton')} />}
       <div className="text-center space-y-2">
       <LogoVelox size="md" /> 
       {/* <div className="relative w-full flex items-center justify-center">

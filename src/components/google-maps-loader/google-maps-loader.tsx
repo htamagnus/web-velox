@@ -1,7 +1,7 @@
 'use client';
 
 import { useLoadScript } from '@react-google-maps/api';
-import Loader from '@/components/ui/loader/loader';
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 
 const libraries: ("places" | "routes" | "marker" | "elevation")[] = ['places', 'routes', 'marker', 'elevation'];
 
@@ -12,11 +12,7 @@ export default function GoogleMapsLoader({ children }: { children: React.ReactNo
   });
 
   if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader size={32} />
-      </div>
-    );
+    return <PageTransitionOverlay visible={true} />;
   }
 
   return <>{children}</>;

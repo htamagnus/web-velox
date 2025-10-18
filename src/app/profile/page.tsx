@@ -10,7 +10,7 @@ import ApiVeloxService from '@/providers/api-velox.provider';
 import { Athlete, UpdateAthleteDto } from '@/interfaces/athlete.interface';
 import { useTexts } from '@/helpers/use-texts';
 
-import Loader from '@/components/ui/loader/loader';
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import Button from '@/components/ui/button/button';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 
@@ -121,14 +121,7 @@ export default function ProfilePage() {
   const hasChanges = Object.keys(getPayload()).length > 0;
 
   if (!userData) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-background">
-        <div className="text-center">
-          <Loader size={48} />
-          <p className="text-copy mt-4">{t('loadingMessage')}</p>
-        </div>
-      </div>
-    );
+    return <PageTransitionOverlay visible={true} message={t('loadingMessage')} />;
   }
 
   return (

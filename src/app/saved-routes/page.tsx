@@ -23,7 +23,7 @@ import { useTexts } from '@/helpers/use-texts';
 import { getModalityLabel } from '@/helpers/modality.helper';
 import ApiVeloxService from '@/providers/api-velox.provider';
 
-import Loader from '@/components/ui/loader/loader';
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import GoogleMiniMap from '@/components/mini-map/google-mini-map';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 import Button from '@/components/ui/button/button';
@@ -53,12 +53,7 @@ export default function SavedRoutesPage() {
   }, [api, t]);
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-background">
-        <Loader size={48} />
-        <p className="text-copy mt-4">{t('loading')}</p>
-      </div>
-    );
+    return <PageTransitionOverlay visible={true} message={t('loading')} />;
   }
 
   if (routes.length === 0) {

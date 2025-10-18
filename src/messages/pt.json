@@ -170,6 +170,7 @@
   },
   "savedRoutes": {
     "title": "Minhas Rotas",
+    "loading": "Carregando rotas...",
     "empty": "Nenhuma rota salva ainda.",
     "emptyTitle": "Você ainda não criou nenhuma rota",
     "emptyDescription": "Crie sua primeira rota e tenha controle sobre seus percursos.",
