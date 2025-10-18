@@ -9,25 +9,8 @@ import { useEffect, useMemo, useState } from 'react';
 import ApiVeloxService from '@/providers/api-velox.provider';
 import { Athlete } from '@/interfaces/athlete.interface';
 import { useStravaAuth } from '@/hooks/use-strava-auth';
-
-type CardConfig = {
-  id: string;
-  icon: React.ReactNode;
-  titleKey: string;
-  descKey: string;
-  colorClass: string;
-  action: () => void;
-  show?: boolean;
-};
-
-type FooterButtonConfig = {
-  id: string;
-  icon: React.ReactNode;
-  labelKey: string;
-  action: () => void;
-  isCenter?: boolean;
-  showGlow?: boolean;
-};
+import HomeCards, { CardConfig } from '@/components/home/home-cards';
+import HomeFooter, { FooterButtonConfig } from '@/components/home/home-footer';
 
 export default function HomePage() {
   useProtectedRoute()
@@ -99,8 +82,6 @@ export default function HomePage() {
     },
   ];
 
-  const visibleCards = cards.filter(card => card.show);
-
   const footerButtons: FooterButtonConfig[] = [
     {
       id: 'footer-routes',
@@ -151,82 +132,11 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="grid grid-cols-2 gap-4"
-              >
-                {visibleCards.map((card, index) => (
-                  card.id === 'coming-soon' ? (
-                    <div key={card.id} className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-2">
-                      <div className="text-3xl font-bold text-primary-light">
-                        {t(card.titleKey)}
-                      </div>
-                      <p className="text-copy-light text-xs">{t(card.descKey)}</p>
-                    </div>
-                  ) : (
-                    <button
-                      key={card.id}
-                      onClick={card.action}
-                      disabled={card.id === 'strava' && loadingStrava}
-                      className={`group bg-gradient-to-br ${card.colorClass} p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed border`}
-                    >
-                      <div className="flex flex-col items-center text-center gap-3">
-                        <div className={`p-3 rounded-xl group-hover:scale-110 transition-transform ${
-                          card.id === 'new-route' ? 'bg-primary-light/20' :
-                          card.id === 'saved-routes' ? 'bg-blue-400/20' :
-                          card.id === 'profile' ? 'bg-purple-400/20' :
-                          'bg-orange-500/20'
-                        }`}>
-                          {card.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-white font-bold text-base">{t(card.titleKey)}</h3>
-                          <p className="text-copy-light text-xs mt-1">{t(card.descKey)}</p>
-                        </div>
-                      </div>
-                    </button>
-                  )
-                ))}
-              </motion.section>
+              <HomeCards cards={cards} loadingStrava={loadingStrava} />
             </div>
           </main>
 
-          <footer className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0e1a] via-[#111827] to-[#111827]/95 backdrop-blur-xl border-t border-white/10 shadow-2xl">
-            <div className="flex justify-around items-end px-6 py-3 pb-4 max-w-2xl mx-auto relative">
-              {footerButtons.map((btn) => (
-                btn.isCenter ? (
-                  <button
-                    key={btn.id}
-                    onClick={btn.action}
-                    className="flex flex-col items-center gap-1.5 cursor-pointer -mt-10 transition-all duration-300 ease-out hover:scale-110 active:scale-95 group relative"
-                  >
-                    {btn.showGlow && (
-                      <>
-                        <div className="absolute inset-0 bg-primary-light/30 blur-3xl rounded-full group-hover:bg-primary-light/50 transition-all animate-pulse"></div>
-                        <div className="relative bg-gradient-to-br from-primary-light via-primary to-primary-dark p-1 rounded-[40px] shadow-2xl shadow-primary/50 group-hover:shadow-[0_0_40px_rgba(191,213,114,0.6)] transition-all border-primary-light/30 group-hover:border-primary-light/60">
-                          {btn.icon}
-                        </div>
-                      </>
-                    )}
-                    <span className="text-s font-bold text-white mt-1 drop-shadow-sm">{t(btn.labelKey)}</span>
-                  </button>
-                ) : (
-                  <button
-                    key={btn.id}
-                    onClick={btn.action}
-                    className="flex flex-col items-center gap-1.5 cursor-pointer text-gray-400 transition-all duration-300 ease-out hover:text-primary-light active:scale-95 rounded-xl p-3 hover:bg-primary-light/10 group"
-                  >
-                    <span className="group-hover:scale-110 transition-transform flex items-center">
-                      {btn.icon}
-                    </span>
-                    <span className="text-xs font-semibold">{t(btn.labelKey)}</span>
-                  </button>
-                )
-              ))}
-            </div>
-          </footer>
+          <HomeFooter buttons={footerButtons} />
         </div>
       </motion.div>
     </AnimatePresence>
