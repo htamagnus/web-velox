@@ -107,7 +107,7 @@ export default function StepNumericSelector({
 
         {displayMode === 'list' ? (
           <div
-            className="relative max-h-96 flex flex-col items-center justify-center overflow-y-auto"
+            className="relative max-h-96 flex flex-col items-center justify-center overflow-y-auto touch-none select-none"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -133,7 +133,7 @@ export default function StepNumericSelector({
             </div>
           </div>
         ) : (
-          <div className="relative h-[264px] w-20 mx-auto rounded-xl bg-primary overflow-hidden">
+          <div className="relative h-[264px] w-20 mx-auto rounded-xl bg-primary overflow-hidden touch-none select-none">
             <div
               className="absolute w-full transition-transform duration-200"
               style={{ transform: `translateY(-${offset}px)` }}
