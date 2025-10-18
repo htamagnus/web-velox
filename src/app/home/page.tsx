@@ -18,6 +18,7 @@ export default function HomePage() {
   const { t } = useTexts('home');
   const api = useMemo(() => new ApiVeloxService(), []);
   const [userData, setUserData] = useState<Athlete | null>(null);
+  const [isReady, setIsReady] = useState(false);
   const { redirectToStrava, loading: loadingStrava } = useStravaAuth();
 
   useEffect(() => {
@@ -27,6 +28,8 @@ export default function HomePage() {
         setUserData(profile);
       } catch {
         // ignora erro silenciosamente
+      } finally {
+        setIsReady(true);
       }
     }
     fetchProfile();
@@ -132,7 +135,7 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              <HomeCards cards={cards} loadingStrava={loadingStrava} />
+              {isReady && <HomeCards cards={cards} loadingStrava={loadingStrava} />}
             </div>
           </main>
 
