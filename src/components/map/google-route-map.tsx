@@ -60,6 +60,7 @@ export default function GoogleRouteMap({
   const mapRef = useRef<google.maps.Map | null>(null);
   const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: -28.678, lng: -49.369 });
   const [previewDirections, setPreviewDirections] = useState<google.maps.DirectionsResult | null>(null);
+  const routesLengthRef = useRef(routes.length);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
@@ -74,6 +75,18 @@ export default function GoogleRouteMap({
       setCenter({ lat: origin[0], lng: origin[1] });
     }
   }, [origin]);
+
+  // limpar preview quando origin ou destination forem removidos
+  useEffect(() => {
+    if (!origin || !destination) {
+      setPreviewDirections(null);
+    }
+  }, [origin, destination]);
+
+  // atualizar ref quando routes mudar
+  useEffect(() => {
+    routesLengthRef.current = routes.length;
+  }, [routes.length]);
 
   // gerar preview da rota quando origem e destino estiverem definidos
   useEffect(() => {
@@ -147,6 +160,7 @@ export default function GoogleRouteMap({
   return (
     <div className={className}>
       <GoogleMap
+        key={`map-${routes.length}-${origin?.[0]}-${origin?.[1]}`}
         mapContainerStyle={mapContainerStyle}
         center={center}
         zoom={13}
@@ -171,10 +185,11 @@ export default function GoogleRouteMap({
 
         {routes.map((route, index) => {
           const isSelected = index === selectedRouteIndex;
+          const routeKey = `route-${index}-${route.polyline[0]?.[0]}-${route.polyline[0]?.[1]}-${route.polyline[route.polyline.length - 1]?.[0]}-${route.polyline[route.polyline.length - 1]?.[1]}`;
           
           return (
             <Polyline
-              key={`route-${index}`}
+              key={routeKey}
               path={route.polyline.map(([lat, lng]) => ({ lat, lng }))}
               options={{
                 strokeColor: getRouteColor(index, isSelected),
