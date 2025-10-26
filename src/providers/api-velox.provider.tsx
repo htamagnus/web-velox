@@ -1,7 +1,7 @@
 import { ApiError, ApiErrorResponse } from "@/errors/api-errors"
 import { Athlete, CreateAthleteDto, UpdateAthleteDto } from "@/interfaces/athlete.interface"
 import { AuthData } from "@/interfaces/auth-data.interface"
-import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, SaveRouteDto, GetTrafficOutputDto } from "@/interfaces/routes.interface"
+import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, SaveRouteDto, GetTrafficOutputDto, GetWeatherOutputDto } from "@/interfaces/routes.interface"
 
 type RegisterData = {
   name: string
@@ -252,5 +252,31 @@ export default class ApiVeloxService {
     }
   
     return json as GetTrafficOutputDto
+  }
+
+  async getWeather(athleteId: string, latitude: number, longitude: number): Promise<GetWeatherOutputDto> {
+    const token = localStorage.getItem('velox_token')
+  
+    const response = await fetch(`${this.url}/athlete/${athleteId}/weather/forecast`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        latitude,
+        longitude,
+      }),
+    })
+  
+    const text = await response.text()
+    const json: unknown = text ? JSON.parse(text) : {}
+
+    if (!response.ok) {
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao buscar dados do clima' }
+      throw new ApiError(err.message || 'Erro ao buscar dados do clima', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
+    }
+  
+    return json as GetWeatherOutputDto
   }
 }

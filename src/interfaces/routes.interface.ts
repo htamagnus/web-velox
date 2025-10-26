@@ -6,6 +6,34 @@ export enum TrafficSeverity {
   CONGESTED = 'congested',
 }
 
+export enum WeatherCondition {
+  SUNNY = 'sunny',
+  CLOUDY = 'cloudy',
+  RAINY = 'rainy',
+  STORMY = 'stormy',
+  SNOWY = 'snowy',
+}
+
+export type WeatherAlert = {
+  type: 'high_rain' | 'extreme_temp' | 'strong_wind'
+  severity: 'low' | 'medium' | 'high'
+  message: string
+  time?: Date
+}
+
+export type WeatherData = {
+  condition: WeatherCondition
+  temperature: number
+  rainProbability: number
+  windSpeed: number
+  alerts: WeatherAlert[]
+  timestamp: Date
+}
+
+export type GetWeatherOutputDto = {
+  weather: WeatherData
+}
+
 export type TrafficSegment = {
   startPoint: [number, number]
   endPoint: [number, number]

@@ -8,6 +8,7 @@ import RouteSelector from '@/components/map/route-selector';
 import ElevationProfile, { ElevationPoint } from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
 import TrafficDisplay from '@/components/traffic/traffic-display';
+import WeatherDisplay from '@/components/weather/weather-display';
 import Button from '@/components/ui/button/button';
 import { Athlete } from '@/interfaces/athlete.interface';
 import { getModalityLabel } from '@/helpers/modality.helper';
@@ -16,7 +17,7 @@ import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 import { User, Gauge, Save, RotateCcw } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
-import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality, GetTrafficOutputDto } from '@/interfaces/routes.interface';
+import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality, GetTrafficOutputDto, GetWeatherOutputDto } from '@/interfaces/routes.interface';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 
 type RouteOption = {
@@ -54,6 +55,8 @@ export default function CalculateRoutePage() {
   const [isCalculatingRoute, setIsCalculatingRoute] = useState(false);
   const [trafficData, setTrafficData] = useState<GetTrafficOutputDto | null>(null);
   const [isLoadingTraffic, setIsLoadingTraffic] = useState(false);
+  const [weatherData, setWeatherData] = useState<GetWeatherOutputDto | null>(null);
+  const [isLoadingWeather, setIsLoadingWeather] = useState(false);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -74,17 +77,19 @@ export default function CalculateRoutePage() {
       setRouteOptions([]);
       setSelectedRouteIndex(0);
       setTrafficData(null);
+      setWeatherData(null);
     }
   }, [originLabel, destinationLabel]);
 
   useEffect(() => {
-    const loadTrafficData = async () => {
+    const loadTrafficAndWeatherData = async () => {
       if (!routeOptions.length || !userData || !routeData) {
         return;
       }
 
       try {
         setIsLoadingTraffic(true);
+        setIsLoadingWeather(true);
         const selectedRoute = routeOptions[selectedRouteIndex];
         const encodedPolyline = polyline.encode(selectedRoute.polyline);
         
@@ -95,13 +100,20 @@ export default function CalculateRoutePage() {
           destinationLabel!,
         );
         setTrafficData(traffic);
-      } catch (error) {
+
+        const midpoint = Math.floor(selectedRoute.polyline.length / 2);
+        const [latitude, longitude] = selectedRoute.polyline[midpoint];
+        
+        const weather = await api.getWeather(userData.id, latitude, longitude);
+        setWeatherData(weather);
+      } catch {
       } finally {
         setIsLoadingTraffic(false);
+        setIsLoadingWeather(false);
       }
     };
 
-    loadTrafficData();
+    loadTrafficAndWeatherData();
   }, [routeOptions, userData, routeData, selectedRouteIndex, originLabel, destinationLabel, api]);
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
@@ -267,6 +279,11 @@ export default function CalculateRoutePage() {
                 selectedIndex={selectedRouteIndex}
                 onSelect={setSelectedRouteIndex}
               />
+              
+                {weatherData && weatherData.weather && !isLoadingWeather && (
+                <WeatherDisplay weatherData={weatherData.weather} />
+              )}
+
 
               {trafficData && trafficData.traffic && !isLoadingTraffic && (
                 <TrafficDisplay trafficData={trafficData.traffic} />

@@ -234,6 +234,42 @@
         "intense": "Tráfego intenso na sua rota. considere sair em outro horário.",
         "congested": "Rota congestionada. Recomendamos adiar a pedalada."
       }
+    },
+    "weather": {
+      "title": "Previsão de clima",
+      "temperature": "Temperatura",
+      "humidity": "Chuva",
+      "wind": "Vento",
+      "condition": {
+        "sunny": "Ensolarado",
+        "cloudy": "Nublado",
+        "rainy": "Chuvoso",
+        "stormy": "Tempestuoso",
+        "snowy": "Nevado"
+      },
+      "messages": {
+        "sunny": "Clima perfeito para pedalar! Use protetor solar.",
+        "cloudy": "Dia nublado. Ótimo para evitar calor excessivo.",
+        "rainy": "Chuva prevista. Leve capa de chuva ou adie.",
+        "stormy": "Tempestade à vista. Não recomendamos sair.",
+        "snowy": "Neve prevista. Condições muito perigosas."
+      },
+      "alerts": {
+        "high_rain": {
+          "title": "Alta probabilidade de chuva",
+          "message": "{{probability}}% de chance. leve equipamento de proteção."
+        },
+        "extreme_temp": {
+          "title": "Temperatura extrema",
+          "cold": "Muito frio ({{temp}}°c). use roupas apropriadas.",
+          "hot": "Muito calor ({{temp}}°c). hidrate-se frequentemente."
+        },
+        "strong_wind": {
+          "title": "Vento forte",
+          "message": "{{speed}}km/h. tenha cuidado em descidas."
+        }
+      },
+      "criticalWarning": "Condições adversas! tenha cuidado."
     }
   },
   "speedModal": {
