@@ -131,21 +131,29 @@ export default function RouteSelector({
           }}
           className="p-4 rounded-lg border-2"
         >
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: getRouteColor(selectedIndex) }} />
-            <span 
-              className="text-xs font-semibold uppercase tracking-wider"
-              style={{ color: getRouteColor(selectedIndex) }}
-            >
-              {getRouteLabel(selectedIndex, t)}
-            </span>
-          </div>
-
-          {selectedRoute.summary && (
-            <div className="text-sm text-copy/70 mb-3">
-              {selectedRoute.summary}
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: getRouteColor(selectedIndex) }} />
+              <span 
+                className="text-xs font-semibold uppercase tracking-wider"
+                style={{ color: getRouteColor(selectedIndex) }}
+              >
+                {getRouteLabel(selectedIndex, t)}
+              </span>
             </div>
-          )}
+            {selectedRoute.summary && (
+              <div 
+                className="inline-flex items-center gap-0.375 px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider border"
+                style={{
+                  backgroundColor: `${getRouteColor(selectedIndex)}20`,
+                  borderColor: getRouteColor(selectedIndex),
+                  color: getRouteColor(selectedIndex),
+                }}
+              >
+                {selectedRoute.summary}
+              </div>
+            )}
+          </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-sm">
             <div className="flex items-center gap-1.5">

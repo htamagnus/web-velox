@@ -200,7 +200,7 @@
     "profileError": "erro ao buscar perfil",
     "loadingProfile": "carregando perfil...",
     "requireOriginDestination": "defina origem e destino antes de calcular a rota.",
-    "fastestRoute": "Rota mais rápida",
+    "fastestRoute": "Mais rápida",
     "routeError": "erro ao calcular rota",
     "routeSaved": "rota salva com sucesso!",
     "routeSaveError": "erro ao salvar rota",
@@ -221,8 +221,8 @@
     "traffic": {
       "title": "Tráfego atual",
       "severity": {
-        "normal": "Tráfego normal",
-        "intense": "Tráfego intenso",
+        "normal": "Normal",
+        "intense": "Intenso",
         "congested": "Congestionado"
       },
       "delay": "Atraso estimado:",
@@ -230,8 +230,8 @@
       "minutes": "min",
       "alert": "Atenção: tráfego intenso na sua rota. considere adiar.",
       "messages": {
-        "normal": "Tráfego normal na sua rota. é um bom momento para sair.",
-        "intense": "Tráfego intenso na sua rota. considere sair em outro horário.",
+        "normal": "Tráfego normal na sua rota. É um bom momento para sair.",
+        "intense": "Tráfego intenso na sua rota. Considere sair em outro horário.",
         "congested": "Rota congestionada. Recomendamos adiar a pedalada."
       }
     },

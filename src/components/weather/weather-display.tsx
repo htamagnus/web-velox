@@ -117,9 +117,11 @@ export default function WeatherDisplay({ weatherData }: Props) {
 
   return (
     <div className={styles.weatherContainer}>
-      <div className={styles.header}>
-        <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-        <span className={styles.title}>{t('title')}</span>
+      <div className={`${styles.header} justify-between`}>
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+          <span className={styles.title}>{t('title')}</span>
+        </div>
         <div className={`${styles.conditionBadge} ${getConditionClassName()}`}>
           {getConditionIcon()}
           {getConditionLabel()}

@@ -61,9 +61,11 @@ export default function TrafficDisplay({ trafficData }: Props) {
 
   return (
     <div className={styles.trafficContainer}>
-      <div className={styles.header}>
-        <div className="w-1.5 h-1.5 rounded-full bg-[#92a848] animate-pulse" />
-        <span className={styles.title}>{t('title')}</span>
+      <div className={`${styles.header} justify-between`}>
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-[#92a848] animate-pulse" />
+          <span className={styles.title}>{t('title')}</span>
+        </div>
         <div className={`${styles.severityBadge} ${getSeverityClassName()}`}>
           {getSeverityIcon()}
           {getSeverityLabel()}
