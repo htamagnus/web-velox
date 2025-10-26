@@ -289,7 +289,7 @@ export default function LandingPage() {
                 repeat: Infinity,
                 repeatType: 'mirror',
               }}
-              className="w-full h-full object-cover object-[50%_30%] opacity-40 grayscale"
+              className="w-full h-full object-cover object-[50%_30%] opacity-20 grayscale"
             />
             <div className="absolute inset-0 bg-background/80" />
           </div>
