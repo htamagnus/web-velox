@@ -71,10 +71,10 @@ export default function SavedRoutesPage() {
           transition={{ delay: 0.2 }}
           className="space-y-3"
         >
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-xl font-bold text-white">
             {t('emptyTitle')}
           </h2>
-          <p className="text-copy-light max-w-md">
+          <p className="text-copy-light text-sm">
             {t('emptyDescription')}
           </p>
         </motion.div>

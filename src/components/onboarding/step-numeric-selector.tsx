@@ -96,12 +96,12 @@ export default function StepNumericSelector({
       )}
 
       <div className="w-full max-w-xl mx-auto text-center">
-        <h2 className="step-heading flex items-center gap-2 justify-center text-2xl md:text-2xl lg:text-3xl">
+        <h2 className="step-heading flex items-center gap-2 justify-center text-2xl md:text-2xl lg:text-2xl whitespace-nowrap">
           <span>{iconTitle}</span>
           {title}
         </h2>
 
-        <p className="step-paragraph mt-4 mb-8 max-w-md mx-auto text-sm md:text-base lg:text-lg px-8">
+        <p className="step-paragraph mt-4 mb-8 max-w-lg mx-auto text-sm md:text-base lg:text-lg px-4 md:px-8">
           {subtitle}
         </p>
 
@@ -191,7 +191,7 @@ export default function StepNumericSelector({
         )}
 
         {note && (
-          <div className="w-full flex justify-center mt-8 px-8">
+          <div className="w-full flex justify-center mt-8 px-2">
             <p className="text-sm text-copy-lighter text-center max-w-md italic">{note}</p>
           </div>
         )}
