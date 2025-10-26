@@ -1,5 +1,31 @@
 export type Modality = 'general' | 'road' | 'mtb'
 
+export enum TrafficSeverity {
+  NORMAL = 'normal',
+  INTENSE = 'intense',
+  CONGESTED = 'congested',
+}
+
+export type TrafficSegment = {
+  startPoint: [number, number]
+  endPoint: [number, number]
+  severity: TrafficSeverity
+  speedKmh: number
+  speedLimit: number
+  duration: number
+}
+
+export type TrafficData = {
+  overallSeverity: TrafficSeverity
+  segments: TrafficSegment[]
+  updatedAt: Date
+  delayMinutes: number
+}
+
+export type GetTrafficOutputDto = {
+  traffic: TrafficData
+}
+
 export type GetPlannedRouteInputDto = {
   origin: string
   destination: string

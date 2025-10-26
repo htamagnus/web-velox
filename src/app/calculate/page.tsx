@@ -7,6 +7,7 @@ import GoogleRouteMap from '@/components/map/google-route-map';
 import RouteSelector from '@/components/map/route-selector';
 import ElevationProfile, { ElevationPoint } from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
+import TrafficDisplay from '@/components/traffic/traffic-display';
 import Button from '@/components/ui/button/button';
 import { Athlete } from '@/interfaces/athlete.interface';
 import { getModalityLabel } from '@/helpers/modality.helper';
@@ -15,7 +16,7 @@ import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 import { User, Gauge, Save, RotateCcw } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
-import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality } from '@/interfaces/routes.interface';
+import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality, GetTrafficOutputDto } from '@/interfaces/routes.interface';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 
 type RouteOption = {
@@ -51,6 +52,8 @@ export default function CalculateRoutePage() {
   const [selectedModality, setSelectedModality] = useState<Modality>('general');
   const [userData, setUserData] = useState<Athlete | null>(null);
   const [isCalculatingRoute, setIsCalculatingRoute] = useState(false);
+  const [trafficData, setTrafficData] = useState<GetTrafficOutputDto | null>(null);
+  const [isLoadingTraffic, setIsLoadingTraffic] = useState(false);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -70,8 +73,36 @@ export default function CalculateRoutePage() {
       setRouteData(null);
       setRouteOptions([]);
       setSelectedRouteIndex(0);
+      setTrafficData(null);
     }
   }, [originLabel, destinationLabel]);
+
+  useEffect(() => {
+    const loadTrafficData = async () => {
+      if (!routeOptions.length || !userData || !routeData) {
+        return;
+      }
+
+      try {
+        setIsLoadingTraffic(true);
+        const selectedRoute = routeOptions[selectedRouteIndex];
+        const encodedPolyline = polyline.encode(selectedRoute.polyline);
+        
+        const traffic = await api.getTraffic(
+          userData.id,
+          encodedPolyline,
+          originLabel!,
+          destinationLabel!,
+        );
+        setTrafficData(traffic);
+      } catch (error) {
+      } finally {
+        setIsLoadingTraffic(false);
+      }
+    };
+
+    loadTrafficData();
+  }, [routeOptions, userData, routeData, selectedRouteIndex, originLabel, destinationLabel, api]);
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (!e.latLng) return;
@@ -201,6 +232,7 @@ export default function CalculateRoutePage() {
     setRouteData(null);
     setRouteOptions([]);
     setSelectedRouteIndex(0);
+    setTrafficData(null);
   };
 
   return (
@@ -235,6 +267,10 @@ export default function CalculateRoutePage() {
                 selectedIndex={selectedRouteIndex}
                 onSelect={setSelectedRouteIndex}
               />
+
+              {trafficData && trafficData.traffic && !isLoadingTraffic && (
+                <TrafficDisplay trafficData={trafficData.traffic} />
+              )}
 
               <div className="relative bg-gradient-to-r from-[#92a848]/20 to-[#92a848]/10 border-l-4 border-[#92a848] rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">

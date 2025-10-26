@@ -217,6 +217,23 @@
       "save": "Salvar rota",
       "saving": "salvando...",
       "newSearch": "Nova busca"
+    },
+    "traffic": {
+      "title": "Tráfego atual",
+      "severity": {
+        "normal": "Tráfego normal",
+        "intense": "Tráfego intenso",
+        "congested": "Congestionado"
+      },
+      "delay": "Atraso estimado:",
+      "duration": "Duração:",
+      "minutes": "min",
+      "alert": "Atenção: tráfego intenso na sua rota. considere adiar.",
+      "messages": {
+        "normal": "Tráfego normal na sua rota. é um bom momento para sair.",
+        "intense": "Tráfego intenso na sua rota. considere sair em outro horário.",
+        "congested": "Rota congestionada. Recomendamos adiar a pedalada."
+      }
     }
   },
   "speedModal": {
