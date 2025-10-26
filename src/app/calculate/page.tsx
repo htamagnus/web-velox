@@ -15,10 +15,11 @@ import { getModalityLabel } from '@/helpers/modality.helper';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
-import { User, Gauge, Save, RotateCcw } from 'lucide-react';
+import { User, Gauge, Save, RotateCcw, ArrowLeft } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality, GetTrafficOutputDto, GetWeatherOutputDto } from '@/interfaces/routes.interface';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
+import { useRouter } from 'next/navigation';
 
 type RouteOption = {
   polyline: [number, number][];
@@ -41,6 +42,7 @@ export default function CalculateRoutePage() {
   useProtectedRoute();
   const api = useMemo(() => new ApiVeloxService(), []);
   const { t } = useTexts('calculate');
+  const router = useRouter();
 
   const [origin, setOrigin] = useState<[number, number] | null>(null);
   const [destination, setDestination] = useState<[number, number] | null>(null);
@@ -274,6 +276,14 @@ export default function CalculateRoutePage() {
             className="absolute bottom-4 left-4 right-4 bg-background p-4 rounded-xl shadow-lg z-[999] text-copy max-h-[60vh] overflow-y-auto"
           >
             <div className="space-y-4">
+              <button
+                onClick={() => router.back()}
+                className="flex items-center gap-2 text-copy hover:text-primary-light transition-colors"
+              >
+                <ArrowLeft size={20} />
+                <span className="text-sm font-semibold"></span>
+              </button>
+
               <RouteSelector
                 routes={routeOptions}
                 selectedIndex={selectedRouteIndex}
@@ -335,7 +345,7 @@ export default function CalculateRoutePage() {
                 </Button>
                 <button
                   onClick={handleReset}
-                  className="flex-1 bg-copy hover:bg-copy border border-copy hover:border-copy text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+                  className="flex-1 bg-[#92a848]/10 border border-[#92a848] hover:bg-[#92a848] text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
                 >
                   <span className="flex items-center justify-center gap-2">
                     <RotateCcw size={20} />
