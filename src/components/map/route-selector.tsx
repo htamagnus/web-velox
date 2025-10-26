@@ -70,7 +70,9 @@ export default function RouteSelector({
   return (
     <div className={clsx('space-y-3', className)}>
       {routes.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide sm:grid sm:grid-cols-3 sm:gap-3 sm:overflow-visible">
+        <div className={clsx(
+          routes.length === 2 ? 'grid grid-cols-2 gap-2 pb-1 sm:gap-3' : 'flex gap-2 overflow-x-auto pb-1 scrollbar-hide'
+        )}>
           {routes.map((route, index) => {
             const isSelected = index === selectedIndex;
             const timeDiff = route.estimatedTimeMinutes - routes[0].estimatedTimeMinutes;
