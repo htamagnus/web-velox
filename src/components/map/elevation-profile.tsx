@@ -136,18 +136,22 @@ export default function ElevationProfile({
   if (elevationData.length === 0) return null;
 
   return (
-    <div className={`bg-gradient-to-br from-[#1a2234] to-[#0f1419] p-4 rounded-lg border border-copy/10 shadow-lg ${className}`}>
+    <div className={`bg-gradient-to-br from-[#1a2234] to-[#0f1419] p-4 rounded-lg border border-[#92a848] shadow-lg ${className}`}>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-copy">{t('title')}</h3>
-        <div className="flex items-center gap-4 text-xs text-copy">
-          <div className="flex items-center gap-1.5 bg-[#92a848]/10 px-2 py-1 rounded-md">
-            <TrendingUp size={14} className="text-[#92a848]" />
-            <span className="font-medium">{elevationGain}m</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-[#92a848]/10 px-2 py-1 rounded-md">
-            <TrendingDown size={14} className="text-[#92a848]" />
-            <span className="font-medium">{elevationLoss}m</span>
-          </div>
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-[#92a848] animate-pulse" />
+          <h3 className="text-xs font-semibold text-[#92a848] uppercase tracking-wide">{t('title')}</h3>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 text-xs text-copy mt-3">
+        <div className="flex items-center gap-1.5 bg-[#92a848]/10 px-2 py-1 rounded-md">
+          <TrendingUp size={14} className="text-[#92a848]" />
+          <span className="font-medium">{elevationGain}m</span>
+        </div>
+        <div className="flex items-center gap-1.5 bg-[#92a848]/10 px-2 py-1 rounded-md">
+          <TrendingDown size={14} className="text-[#92a848]" />
+          <span className="font-medium">{elevationLoss}m</span>
         </div>
       </div>
       

@@ -132,6 +132,7 @@ export default function RouteSelector({
           className="p-4 rounded-lg border-2"
         >
           <div className="flex items-center gap-2 mb-3">
+            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: getRouteColor(selectedIndex) }} />
             <span 
               className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: getRouteColor(selectedIndex) }}

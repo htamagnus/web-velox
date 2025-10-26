@@ -83,6 +83,35 @@ export default function WeatherDisplay({ weatherData }: Props) {
     }
   }
 
+  const getDefaultMessage = () => {
+    switch (weatherData.condition) {
+      case WeatherCondition.SUNNY:
+        return t('messages.sunny')
+      case WeatherCondition.CLOUDY:
+        return t('messages.cloudy')
+      case WeatherCondition.RAINY:
+        return t('messages.rainy')
+      case WeatherCondition.STORMY:
+        return t('messages.stormy')
+      case WeatherCondition.SNOWY:
+        return t('messages.snowy')
+    }
+  }
+
+  const getDefaultMessageClassName = () => {
+    switch (weatherData.condition) {
+      case WeatherCondition.SUNNY:
+        return styles.alertLow
+      case WeatherCondition.CLOUDY:
+        return styles.alertLow
+      case WeatherCondition.RAINY:
+        return styles.alertMedium
+      case WeatherCondition.STORMY:
+        return styles.alertHigh
+      case WeatherCondition.SNOWY:
+        return styles.alertMedium
+    }
+  }
 
   const hasAlerts = weatherData.alerts.length > 0
 
@@ -134,6 +163,15 @@ export default function WeatherDisplay({ weatherData }: Props) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {!hasAlerts && (
+        <div className={`${styles.alert} ${getDefaultMessageClassName()}`}>
+          <AlertCircle size={14} />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs">{getDefaultMessage()}</span>
+          </div>
         </div>
       )}
     </div>

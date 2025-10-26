@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertCircle, AlertTriangle, CheckCircle, Zap } from 'lucide-react'
+import { AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react'
 import { useTexts } from '@/helpers/use-texts'
 import { TrafficData, TrafficSeverity } from '@/interfaces/routes.interface'
 import styles from './traffic-display.module.css'
@@ -48,7 +48,16 @@ export default function TrafficDisplay({ trafficData }: Props) {
     }
   }
 
-  const shouldShowAlert = trafficData.overallSeverity !== TrafficSeverity.NORMAL
+  const getSeverityAlertClassName = () => {
+    switch (trafficData.overallSeverity) {
+      case TrafficSeverity.NORMAL:
+        return styles.alertNormal
+      case TrafficSeverity.INTENSE:
+        return styles.alertIntense
+      case TrafficSeverity.CONGESTED:
+        return styles.alertCongested
+    }
+  }
 
   return (
     <div className={styles.trafficContainer}>
@@ -68,16 +77,12 @@ export default function TrafficDisplay({ trafficData }: Props) {
         </div>
       </div>
 
-      <div className={styles.message}>
-        {getSeverityMessage()}
-      </div>
-
-      {shouldShowAlert && (
-        <div className={styles.alert}>
-          <Zap size={14} />
-          <span>{t('alert')}</span>
+      <div className={`${styles.alert} ${getSeverityAlertClassName()}`}>
+        <AlertCircle size={14} />
+        <div className="flex flex-col gap-1">
+          <span className="text-xs">{getSeverityMessage()}</span>
         </div>
-      )}
+      </div>
     </div>
   )
 }
