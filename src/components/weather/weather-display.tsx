@@ -36,15 +36,6 @@ export default function WeatherDisplay({ weatherData }: Props) {
     return t('condition.snowy')
   }
 
-  const getConditionMessage = () => {
-    const conditionKey = weatherData.condition
-    if (conditionKey === WeatherCondition.SUNNY) return t('messages.sunny')
-    if (conditionKey === WeatherCondition.CLOUDY) return t('messages.cloudy')
-    if (conditionKey === WeatherCondition.RAINY) return t('messages.rainy')
-    if (conditionKey === WeatherCondition.STORMY) return t('messages.stormy')
-    return t('messages.snowy')
-  }
-
   const getConditionClassName = () => {
     switch (weatherData.condition) {
       case WeatherCondition.SUNNY:
@@ -60,9 +51,40 @@ export default function WeatherDisplay({ weatherData }: Props) {
     }
   }
 
+  const getAlertMessage = (alert: typeof weatherData.alerts[0]) => {
+    switch (alert.type) {
+      case 'high_rain': {
+        const probability = weatherData.rainProbability
+        return t('alerts.high_rain.message').replace('{{probability}}', probability.toString())
+      }
+      case 'extreme_temp': {
+        const isHot = weatherData.temperature > 30
+        const tempMessage = isHot ? t('alerts.extreme_temp.hot') : t('alerts.extreme_temp.cold')
+        return tempMessage.replace('{{temp}}', weatherData.temperature.toString())
+      }
+      case 'strong_wind': {
+        return t('alerts.strong_wind.message').replace('{{speed}}', weatherData.windSpeed.toString())
+      }
+      default:
+        return alert.message
+    }
+  }
+
+  const getAlertTitle = (alert: typeof weatherData.alerts[0]) => {
+    switch (alert.type) {
+      case 'high_rain':
+        return t('alerts.high_rain.title')
+      case 'extreme_temp':
+        return t('alerts.extreme_temp.title')
+      case 'strong_wind':
+        return t('alerts.strong_wind.title')
+      default:
+        return ''
+    }
+  }
+
 
   const hasAlerts = weatherData.alerts.length > 0
-  const highSeverityAlerts = weatherData.alerts.filter(a => a.severity === 'high')
 
   return (
     <div className={styles.weatherContainer}>
@@ -96,10 +118,6 @@ export default function WeatherDisplay({ weatherData }: Props) {
         </div>
       </div>
 
-      <div className={styles.message}>
-        {getConditionMessage()}
-      </div>
-
       {hasAlerts && (
         <div className={styles.alertsContainer}>
           {weatherData.alerts.map((alert, index) => (
@@ -110,16 +128,12 @@ export default function WeatherDisplay({ weatherData }: Props) {
               }`}
             >
               <AlertCircle size={14} />
-              <span>{alert.message}</span>
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-xs">{getAlertTitle(alert)}</span>
+                <span className="text-xs">{getAlertMessage(alert)}</span>
+              </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {highSeverityAlerts.length > 0 && (
-        <div className={styles.criticalAlert}>
-          <Zap size={16} />
-          <span>{t('criticalWarning')}</span>
         </div>
       )}
     </div>

@@ -257,19 +257,18 @@
       "alerts": {
         "high_rain": {
           "title": "Alta probabilidade de chuva",
-          "message": "{{probability}}% de chance. leve equipamento de proteção."
+          "message": "{{probability}}% de chance. Leve equipamento de proteção."
         },
         "extreme_temp": {
           "title": "Temperatura extrema",
-          "cold": "Muito frio ({{temp}}°c). use roupas apropriadas.",
-          "hot": "Muito calor ({{temp}}°c). hidrate-se frequentemente."
+          "cold": "Muito frio ({{temp}}°c). Use roupas apropriadas.",
+          "hot": "Muito calor ({{temp}}°c). Hidrate-se frequentemente."
         },
         "strong_wind": {
           "title": "Vento forte",
-          "message": "{{speed}}km/h. tenha cuidado em descidas."
+          "message": "{{speed}}km/h. Tenha cuidado em descidas."
         }
-      },
-      "criticalWarning": "Condições adversas! tenha cuidado."
+      }
     }
   },
   "speedModal": {
