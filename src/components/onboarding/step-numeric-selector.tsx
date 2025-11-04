@@ -9,6 +9,7 @@ interface StepNumericSelectorProps {
   unit?: string;
   min: number;
   max: number;
+  step?: number;
   onChange: (value: number) => void;
   onNext: () => void;
   onBack?: () => void;
@@ -27,6 +28,7 @@ export default function StepNumericSelector({
   unit,
   min,
   max,
+  step = 1,
   onChange,
   onNext,
   onBack,
@@ -41,11 +43,19 @@ export default function StepNumericSelector({
   const [dragStartY, setDragStartY] = useState(0);
   const [dragStartValue, setDragStartValue] = useState(value);
 
+  const normalizeValue = (val: number) => Number(val.toFixed(step < 1 ? 2 : 0));
+
   const getDisplayValues = () => {
-    return [value - 2, value - 1, value, value + 1, value + 2].filter((v) => v >= min && v <= max);
+    return [
+      normalizeValue(value - 2 * step),
+      normalizeValue(value - step),
+      value,
+      normalizeValue(value + step),
+      normalizeValue(value + 2 * step)
+    ].filter((v) => v >= min && v <= max);
   };
 
-  const range = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+  const range = Array.from({ length: Math.floor((max - min) / step) + 1 }, (_, i) => normalizeValue(min + i * step));
   const visibleTicks = 11;
   const itemHeight = 24;
   const centerIndex = range.findIndex((v) => v === value);
@@ -74,9 +84,9 @@ export default function StepNumericSelector({
 
     let newValue = dragStartValue;
     if (totalDiff > 0) {
-      newValue = Math.min(dragStartValue + draggedSteps, max);
+      newValue = Math.min(normalizeValue(dragStartValue + draggedSteps * step), max);
     } else {
-      newValue = Math.max(dragStartValue - draggedSteps, min);
+      newValue = Math.max(normalizeValue(dragStartValue - draggedSteps * step), min);
     }
     onChange(newValue);
   };
@@ -172,10 +182,10 @@ export default function StepNumericSelector({
         )}
 
         <div className="flex justify-center gap-6 my-6">
-          <Button variant="round" onClick={() => onChange(Math.max(value - 1, min))}>
+          <Button variant="round" onClick={() => onChange(Math.max(normalizeValue(value - step), min))}>
             {iconDown ?? <ArrowDown className="w-5 h-5" color="black" />}
           </Button>
-          <Button variant="round" onClick={() => onChange(Math.min(value + 1, max))}>
+          <Button variant="round" onClick={() => onChange(Math.min(normalizeValue(value + step), max))}>
             {iconUp ?? <ArrowUp className="w-5 h-5" color="black" />}
           </Button>
         </div>
