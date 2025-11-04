@@ -11,6 +11,7 @@ interface StepSpeedGeneralProps {
   onChange: (value: number) => void;
   onNext: () => void;
   onBack?: () => void;
+  isFromStrava?: boolean;
 }
 
 export default function StepSpeedGeneral({
@@ -18,6 +19,7 @@ export default function StepSpeedGeneral({
   onChange,
   onNext,
   onBack,
+  isFromStrava = false,
 }: StepSpeedGeneralProps) {
   const { t } = useTexts('onboarding.speedGeneral');
   const { redirectToStrava, loading: loadingStrava } = useStravaAuth();
@@ -34,10 +36,11 @@ export default function StepSpeedGeneral({
       onChange={onChange}
       onNext={onNext}
       onBack={onBack}
+      disabled={isFromStrava}
       extraActions={
         <Button
           onClick={redirectToStrava}
-          disabled={loadingStrava}
+          disabled={loadingStrava || isFromStrava}
           variant="strava"
           className="mt-4"
         >

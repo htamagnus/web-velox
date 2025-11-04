@@ -19,6 +19,7 @@ interface StepNumericSelectorProps {
   note?: string;
   extraActions?: React.ReactNode;
   iconTitle?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export default function StepNumericSelector({
@@ -38,6 +39,7 @@ export default function StepNumericSelector({
   note,
   extraActions,
   iconTitle,
+  disabled = false,
 }: StepNumericSelectorProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartY, setDragStartY] = useState(0);
@@ -66,13 +68,14 @@ export default function StepNumericSelector({
   const primaryButtonLabel = showSkipLabel ? 'Pular' : 'Continuar';
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (disabled) return;
     setIsDragging(true);
     setDragStartY(e.touches[0].clientY);
     setDragStartValue(value);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
+    if (!isDragging || disabled) return;
 
     e.preventDefault();
 
@@ -182,10 +185,18 @@ export default function StepNumericSelector({
         )}
 
         <div className="flex justify-center gap-6 my-6">
-          <Button variant="round" onClick={() => onChange(Math.max(normalizeValue(value - step), min))}>
+          <Button 
+            variant="round" 
+            onClick={() => onChange(Math.max(normalizeValue(value - step), min))}
+            disabled={disabled}
+          >
             {iconDown ?? <ArrowDown className="w-5 h-5" color="black" />}
           </Button>
-          <Button variant="round" onClick={() => onChange(Math.min(normalizeValue(value + step), max))}>
+          <Button 
+            variant="round" 
+            onClick={() => onChange(Math.min(normalizeValue(value + step), max))}
+            disabled={disabled}
+          >
             {iconUp ?? <ArrowUp className="w-5 h-5" color="black" />}
           </Button>
         </div>

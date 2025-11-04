@@ -14,6 +14,7 @@ export function useOnboardingForm() {
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(0);
+  const [isFromStrava, setIsFromStrava] = useState(false);
   const [formData, setFormData] = useState<OnboardingAthleteData>({
     age: 22,
     weight: 65,
@@ -32,6 +33,7 @@ export function useOnboardingForm() {
   useEffect(() => {
     const savedSpeed = sessionStorage.getItem('velox_avg_speed');
     const savedStep = sessionStorage.getItem('velox_current_step');
+    const isStravaImport = sessionStorage.getItem('velox_is_from_strava');
 
     if (savedSpeed) {
       const parsed = Number(savedSpeed);
@@ -40,6 +42,11 @@ export function useOnboardingForm() {
         averageSpeedGeneral: parsed,
       }));
       sessionStorage.removeItem('velox_avg_speed');
+    }
+
+    if (isStravaImport === 'true') {
+      setIsFromStrava(true);
+      sessionStorage.removeItem('velox_is_from_strava');
     }
 
     if (savedStep) {
@@ -84,6 +91,7 @@ export function useOnboardingForm() {
     loading,
     step,
     formData,
+    isFromStrava,
     nextStep,
     prevStep,
     updateFormData,

@@ -30,6 +30,7 @@ export default function StravaCallbackPage() {
 
         // salva no sessionStorage para manter o dado mesmo com SPA routing
         sessionStorage.setItem('velox_avg_speed', avg.toString());
+        sessionStorage.setItem('velox_is_from_strava', 'true');
 
         // garantir que voltará pro step certo (índice 3)
         sessionStorage.setItem('velox_current_step', '3');

@@ -11,6 +11,7 @@ export default function OnboardingForm() {
     ready,
     step,
     formData,
+    isFromStrava,
     nextStep,
     prevStep,
     updateFormData,
@@ -23,6 +24,7 @@ export default function OnboardingForm() {
   const StepComponent = stepConfig?.Component;
   const stepProp = stepConfig?.prop;
   const isLastStep = step === onboardingSteps.length - 1;
+  const isSpeedGeneralStep = stepConfig?.key === 'averageSpeedGeneral';
 
   const handleNext = () => {
     if (isLastStep) {
@@ -43,6 +45,7 @@ export default function OnboardingForm() {
             onChange={(value) => updateFormData(stepProp, value)}
             onNext={handleNext}
             onBack={step > 0 ? prevStep : undefined}
+            {...(isSpeedGeneralStep && { isFromStrava })}
           />
         </StepContainer>
       )}
