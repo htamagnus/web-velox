@@ -26,7 +26,7 @@ export default function StravaCallbackPage() {
         const api = new ApiVeloxService();
         const result = await api.getStravaAverageSpeed(code);
 
-        const avg = Number(result.averageSpeedGeneral.toFixed(2));
+        const avg = result.averageSpeedGeneral; // já vem arredondado do backend
 
         // salva no sessionStorage para manter o dado mesmo com SPA routing
         sessionStorage.setItem('velox_avg_speed', avg.toString());
