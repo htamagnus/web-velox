@@ -26,20 +26,23 @@ function detectBrowserLocale(): Locale {
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('pt')
-  const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
     const stored = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null
     
     if (stored && (stored === 'pt' || stored === 'en')) {
       setLocaleState(stored)
+      if (typeof window !== 'undefined') {
+        document.documentElement.lang = stored === 'pt' ? 'pt-BR' : 'en'
+      }
     } else {
       const detected = detectBrowserLocale()
       setLocaleState(detected)
       localStorage.setItem(LOCALE_STORAGE_KEY, detected)
+      if (typeof window !== 'undefined') {
+        document.documentElement.lang = detected === 'pt' ? 'pt-BR' : 'en'
+      }
     }
-    
-    setIsInitialized(true)
   }, [])
 
   const setLocale = (newLocale: Locale) => {
@@ -49,10 +52,6 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       document.documentElement.lang = newLocale === 'pt' ? 'pt-BR' : 'en'
     }
-  }
-
-  if (!isInitialized) {
-    return null
   }
 
   return (
