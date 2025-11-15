@@ -64,8 +64,8 @@
     },
     "speedGeneral": {
       "label": "Geral (urbano)",
-      "description": "velocidade média geral do strava",
-      "stravaSync": "✓ sincronizado com strava",
+      "description": "velocidade média geral",
+      "stravaSync": "✓ importada da api oficial do strava",
       "unit": "km/h"
     },
     "speedRoad": {
