@@ -339,5 +339,65 @@
     "createAccountSubtitle": "Preencha os dados abaixo para começar a usar o Velox",
     "sendingButton": "Enviando...",
     "registerButton": "Registrar"
+  },
+  "landing": {
+    "hero": {
+      "title1": "Pedale no seu ritmo.",
+      "title2": "Planeje com precisão.",
+      "subtitle": "O Velox calcula a previsão de percurso com base na sua velocidade real, no seu terreno e no seu esforço — não numa média genérica.",
+      "cta": "Começar"
+    },
+    "problem": {
+      "title": "A previsão te",
+      "titleHighlight": "deixou na mão?",
+      "timeExample": "2h10",
+      "timeReal": "1h20",
+      "description1": "O Google estimou mais de 2 horas para pedalar 30km.",
+      "description2": "Na prática?",
+      "description3": "1h20 — sem erro de cálculo.",
+      "cards": {
+        "prediction": {
+          "title": "Previsão furada",
+          "desc": "O app disse 2h. Você chegou em 1h20. Parece bom, mas atrasa ou antecipa tudo que vem depois."
+        },
+        "time": {
+          "title": "Sem tempo pra erro",
+          "desc": "Quando você precisa encaixar o treino na rotina, não dá pra confiar em chute de velocidade média genérica."
+        },
+        "bike": {
+          "title": "Não é qualquer bike",
+          "desc": "MTB, Speed ou urbana? Cada uma tem seu ritmo. Mas os apps usam a mesma base pra todas."
+        }
+      }
+    },
+    "solution": {
+      "title": "Com o Velox, a previsão é",
+      "titleHighlight": "a sua realidade.",
+      "subtitle": "Integre seu Strava, selecione sua modalidade (MTB, Speed) e receba estimativas baseadas nos seus dados reais de treino.",
+      "validation": "Precisão validada em treinos reais"
+    },
+    "features": {
+      "prediction": {
+        "title": "Previsão Real",
+        "desc": "Calcule o tempo com base na sua velocidade média, não em médias genéricas."
+      },
+      "modality": {
+        "title": "Modalidade Adaptada",
+        "desc": "Escolha entre MTB, Speed ou urbano para previsões ainda mais precisas."
+      },
+      "strava": {
+        "title": "Integração Strava",
+        "desc": "Importe automaticamente sua velocidade real do Strava."
+      },
+      "elevation": {
+        "title": "Calorias e Altimetria",
+        "desc": "Veja calorias gastas e ganho de elevação em cada trajeto."
+      }
+    },
+    "cta": {
+      "title": "Chegou a hora de pedalar com inteligência",
+      "subtitle": "Seu treino merece mais do que um palpite. Ganhe controle sobre cada percurso.",
+      "button": "Criar Conta Agora"
+    }
   }
 }

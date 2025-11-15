@@ -11,6 +11,7 @@ import { Athlete } from '@/interfaces/athlete.interface';
 import { useStravaAuth } from '@/hooks/use-strava-auth';
 import HomeCards, { CardConfig } from '@/components/home/home-cards';
 import HomeFooter, { FooterButtonConfig } from '@/components/home/home-footer';
+import LanguageSelector from '@/components/language-selector/language-selector';
 
 export default function HomePage() {
   useProtectedRoute()
@@ -127,12 +128,13 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="flex items-center gap-3 pt-4"
+                className="flex items-start gap-3 pt-4"
               >
                 <div className="flex-1">
                   <h1 className="text-3xl font-bold text-white">{t('title')}</h1>
                   <p className="text-copy-light text-sm mt-1">{t('subtitle')}</p>
                 </div>
+                <LanguageSelector />
               </motion.div>
 
               {isReady && <HomeCards cards={cards} loadingStrava={loadingStrava} />}

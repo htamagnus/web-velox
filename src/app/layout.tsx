@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/auth-context';
+import { LocaleProvider } from '@/contexts/locale-context';
 import { Toaster } from 'sonner';
 import GoogleMapsLoader from '@/components/google-maps-loader/google-maps-loader';
 
@@ -55,10 +56,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="bg-background font-sans">
-        <AuthProvider>
-          <GoogleMapsLoader>{children}</GoogleMapsLoader>
-        </AuthProvider>
-        <Toaster richColors />
+        <LocaleProvider>
+          <AuthProvider>
+            <GoogleMapsLoader>{children}</GoogleMapsLoader>
+          </AuthProvider>
+          <Toaster richColors />
+        </LocaleProvider>
       </body>
     </html>
   );

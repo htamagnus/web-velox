@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.icon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.active {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.active:hover {
+  opacity: 0.8;
+}
+
+.inactive {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.inactive:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.separator {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.875rem;
+}
+

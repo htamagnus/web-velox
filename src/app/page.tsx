@@ -15,8 +15,11 @@ import {
 } from 'lucide-react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import Button from '@/components/ui/button/button';
+import LanguageSelector from '@/components/language-selector/language-selector';
+import { useTexts } from '@/helpers/use-texts';
 
 export default function LandingPage() {
+  const { t } = useTexts('landing');
   const [isPageReady, setIsPageReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
@@ -63,6 +66,10 @@ export default function LandingPage() {
     <>
       <PageTransitionOverlay visible={showTransition} />
       <main className="min-h-screen bg-background flex flex-col items-center justify-start">
+        <div className="absolute top-4 right-4 z-50">
+          <LanguageSelector />
+        </div>
+        
         {/* HERO */}
         <section className="relative w-full min-h-[80vh] flex items-center justify-center text-center text-foreground">
           {/* BACKGROUND IMAGE */}
@@ -110,9 +117,9 @@ export default function LandingPage() {
               transition={{ duration: 0.8, ease: 'easeOut' }}
               className="text-3xl md:text-6xl font-bold leading-tight text-copy"
             >
-              Pedale no seu ritmo.
+              {t('hero.title1')}
               <br />
-              Planeje com precisão.
+              {t('hero.title2')}
             </motion.h2>
 
             <motion.p
@@ -121,9 +128,7 @@ export default function LandingPage() {
               transition={{ duration: 1, ease: 'easeOut' }}
               className="text-lg md:text-xl max-w-2xl text-copy-light"
             >
-              O Velox calcula a previsão de percurso com base na sua{' '}
-              <strong>velocidade real,</strong> no seu terreno e no seu esforço — não numa média
-              genérica.
+              {t('hero.subtitle')}
             </motion.p>
 
             <motion.div
@@ -141,7 +146,7 @@ export default function LandingPage() {
                 className="mt-4"
               >
                 <span className="flex items-center justify-center gap-3">
-                  Começar <ArrowRight className="w-5 h-5" />
+                  {t('hero.cta')} <ArrowRight className="w-5 h-5" />
                 </span>
               </Button>
             </motion.div>
@@ -154,47 +159,46 @@ export default function LandingPage() {
             <div className="w-full flex flex-col items-center space-y-6">
               <ClockAlert className="w-10 h-10 text-red-400 mx-auto" />
               <motion.h2 className="text-3xl md:text-4xl font-bold text-copy">
-                A previsão te{' '}
+                {t('problem.title')}{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500 animate-pulse">
                   {' '}
-                  deixou na mão?{' '}
+                  {t('problem.titleHighlight')}{' '}
                 </span>
               </motion.h2>
               <motion.div className="flex gap-6 items-center text-4xl md:text-5xl font-bold leading-none">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500 animate-pulse align-middle">
-                  2h10
+                  {t('problem.timeExample')}
                 </span>
                 <ArrowRight className="w-7 h-7 text-copy-light translate-y-[2px]" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-light)] to-[var(--primary-dark)] animate-pulse align-middle">
-                  1h20
+                  {t('problem.timeReal')}
                 </span>
               </motion.div>
               <motion.p className="text-lg text-copy-lighter">
-                O Google estimou mais de <strong>2 horas</strong> para{' '}
-                <strong>pedalar 30km.</strong>
+                {t('problem.description1')}
                 <br />
-                Na prática? <span className="text-copy">1h20 — sem erro de cálculo.</span>
+                {t('problem.description2')} <span className="text-copy">{t('problem.description3')}</span>
               </motion.p>
               <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 max-w-6xl w-full px-4 mx-auto">
                 {[
                   {
                     icon: LineChart,
-                    title: 'Previsão furada',
-                    desc: 'O app disse 2h. Você chegou em 1h20. Parece bom, mas atrasa ou antecipa tudo que vem depois.',
+                    titleKey: 'problem.cards.prediction.title',
+                    descKey: 'problem.cards.prediction.desc',
                   },
                   {
                     icon: ClockAlert,
-                    title: 'Sem tempo pra erro',
-                    desc: 'Quando você precisa encaixar o treino na rotina, não dá pra confiar em chute de velocidade média genérica.',
+                    titleKey: 'problem.cards.time.title',
+                    descKey: 'problem.cards.time.desc',
                   },
                   {
                     icon: Bike,
-                    title: 'Não é qualquer bike',
-                    desc: 'MTB, Speed ou urbana? Cada uma tem seu ritmo. Mas os apps usam a mesma base pra todas.',
+                    titleKey: 'problem.cards.bike.title',
+                    descKey: 'problem.cards.bike.desc',
                   },
                 ].map((feature) => (
                   <motion.div
-                    key={feature.title}
+                    key={feature.titleKey}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.03 }}
@@ -204,9 +208,9 @@ export default function LandingPage() {
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <feature.icon className="w-6 h-6 text-red-400" />
-                      <h3 className="text-xl font-bold text-copy">{feature.title}</h3>
+                      <h3 className="text-xl font-bold text-copy">{t(feature.titleKey)}</h3>
                     </div>
-                    <p className="text-copy-light">{feature.desc}</p>
+                    <p className="text-copy-light">{t(feature.descKey)}</p>
                   </motion.div>
                 ))}
               </section>
@@ -216,18 +220,17 @@ export default function LandingPage() {
             <div className="w-full flex flex-col items-center space-y-6">
               <Flame className="w-10 h-10 text-primary-dark mx-auto" />
               <motion.h2 className="text-3xl md:text-4xl font-bold text-copy">
-                Com o Velox, a previsão é{' '}
+                {t('solution.title')}{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-light)] to-[var(--primary-dark)] animate-pulse">
-                  a sua realidade.
+                  {t('solution.titleHighlight')}
                 </span>
               </motion.h2>
               <motion.p className="text-muted-foreground text-lg text-copy-light">
-                Integre seu Strava, selecione sua modalidade (MTB, Speed) e receba estimativas
-                baseadas nos seus dados reais de treino.
+                {t('solution.subtitle')}
               </motion.p>
               <div className="flex items-center gap-2 text-sm text-copy-lighter">
                 <CheckCheck className="w-5 h-5 text-primary" />
-                Precisão validada em treinos reais
+                {t('solution.validation')}
               </div>
             </div>
           </div>
@@ -238,27 +241,27 @@ export default function LandingPage() {
           {[
             {
               icon: LineChart,
-              title: 'Previsão Real',
-              desc: 'Calcule o tempo com base na sua velocidade média, não em médias genéricas.',
+              titleKey: 'features.prediction.title',
+              descKey: 'features.prediction.desc',
             },
             {
               icon: Bike,
-              title: 'Modalidade Adaptada',
-              desc: 'Escolha entre MTB, Speed ou urbano para previsões ainda mais precisas.',
+              titleKey: 'features.modality.title',
+              descKey: 'features.modality.desc',
             },
             {
               icon: Flame,
-              title: 'Integração Strava',
-              desc: 'Importe automaticamente sua velocidade real do Strava.',
+              titleKey: 'features.strava.title',
+              descKey: 'features.strava.desc',
             },
             {
               icon: MountainSnow,
-              title: 'Calorias e Altimetria',
-              desc: 'Veja calorias gastas e ganho de elevação em cada trajeto.',
+              titleKey: 'features.elevation.title',
+              descKey: 'features.elevation.desc',
             },
           ].map((feature) => (
             <motion.div
-              key={feature.title}
+              key={feature.titleKey}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.03, rotate: 0.2 }}
@@ -268,9 +271,9 @@ export default function LandingPage() {
             >
               <div className="flex items-center gap-2 mb-2">
                 <feature.icon className="w-6 h-6" stroke="var(--primary)" />
-                <h3 className="text-xl font-bold text-copy">{feature.title}</h3>
+                <h3 className="text-xl font-bold text-copy">{t(feature.titleKey)}</h3>
               </div>
-              <p className="text-copy-light">{feature.desc}</p>
+              <p className="text-copy-light">{t(feature.descKey)}</p>
             </motion.div>
           ))}
         </section>
@@ -303,7 +306,7 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[var(--copy)] to-[var(--primary-dark)] text-transparent bg-clip-text"
             >
-              Chegou a hora de pedalar com inteligência
+              {t('cta.title')}
             </motion.h2>
 
             <motion.p
@@ -313,7 +316,7 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="text-lg md:text-xl text-muted-foreground text-copy-light"
             >
-              Seu treino merece mais do que um palpite. Ganhe controle sobre cada percurso.
+              {t('cta.subtitle')}
             </motion.p>
 
             <motion.div
@@ -323,7 +326,7 @@ export default function LandingPage() {
             >
               <Button onClick={handleStart} variant="confirm" className="mt-4">
                 <span className="flex items-center justify-center gap-3">
-                  Criar Conta Agora <ArrowRight className="w-5 h-5" />
+                  {t('cta.button')} <ArrowRight className="w-5 h-5" />
                 </span>
               </Button>
             </motion.div>
