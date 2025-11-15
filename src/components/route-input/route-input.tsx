@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { MapPin, Building2, Home, X } from 'lucide-react';
+import { useLocale } from '@/contexts/locale-context';
 
 type Props = {
   icon?: React.ReactNode;
@@ -26,6 +27,7 @@ export default function AutocompleteInput({
   onSelect,
   onClear,
 }: Props) {
+  const { locale } = useLocale();
   const [value, setValue] = useState('');
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [ready, setReady] = useState(false);
@@ -72,15 +74,12 @@ export default function AutocompleteInput({
       return;
     }
 
-    // inicia busca
-
     try {
       const { AutocompleteSuggestion } = await google.maps.importLibrary('places') as google.maps.PlacesLibrary;
 
       const request = {
         input,
-        includedRegionCodes: ['BR'],
-        language: 'pt-BR',
+        language: locale === 'pt' ? 'pt-BR' : 'en',
         locationBias: userLocation ? {
           center: userLocation,
           radius: 50000,
@@ -111,9 +110,8 @@ export default function AutocompleteInput({
       console.error('erro ao buscar sugestões:', error);
       setSuggestions([]);
     } finally {
-      // fim da busca
     }
-  }, [ready, userLocation]);
+  }, [ready, userLocation, locale]);
 
   const handleInputChange = (newValue: string) => {
     setValue(newValue);
@@ -143,7 +141,7 @@ export default function AutocompleteInput({
       const { Place } = await google.maps.importLibrary('places') as google.maps.PlacesLibrary;
       const place = new Place({
         id: suggestion.placeId,
-        requestedLanguage: 'pt-BR',
+        requestedLanguage: locale === 'pt' ? 'pt-BR' : 'en',
       });
 
       await place.fetchFields({
