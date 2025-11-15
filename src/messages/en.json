@@ -1,0 +1,403 @@
+{
+  "onboarding": {
+    "height": {
+      "title": "What is your height?",
+      "subtitle": "This helps us calculate your effort more accurately. It's quick!",
+      "unit": "cm",
+      "note": "* this information helps estimate calorie expenditure more accurately on your routes"
+    },
+    "weight": {
+      "title": "What is your weight?",
+      "subtitle": "Don't worry: we use this only to calculate your performance and calorie expenditure personally.",
+      "unit": "kg",
+      "note": "*the more accurate, the better the calorie and effort estimates on your rides"
+    },
+    "age": {
+      "title": "What is your age?",
+      "subtitle": "Age also matters when understanding your pace and energy expenditure. Let's personalize your experience!",
+      "unit": "years",
+      "note": "*this data helps adjust routes and predictions for your profile"
+    },
+    "speedGeneral": {
+      "title": "Average General Speed",
+      "subtitle": "You can input manually or import from Strava in a few seconds.",
+      "unit": "km/h",
+      "note": "*by connecting with Strava, we automatically import your average cycling speed from Strava"
+    },
+    "speedRoad": {
+      "title": "Average Speed - Road",
+      "subtitle": "Provide an average for your speed bikes.",
+      "note": "*this speed will be used to estimate route time when you select a Road bike"
+    },
+    "speedMtb": {
+      "title": "Average Speed - MTB",
+      "subtitle": "Provide an average for your mountain bike.",
+      "note": "*this speed will be used to estimate time on routes when you select an MTB"
+    }
+  },
+  "profile": {
+    "title": "My profile",
+    "loadingMessage": "loading profile...",
+    "sections": {
+      "personal": "Personal data",
+      "metrics": "Physical metrics",
+      "speeds": "Modality speeds",
+      "speedsDescription": "Configure your average speeds for personalized route calculations"
+    },
+    "name": {
+      "label": "name"
+    },
+    "email": {
+      "label": "email"
+    },
+    "age": {
+      "label": "age",
+      "unit": "years"
+    },
+    "weight": {
+      "label": "weight",
+      "unit": "kg"
+    },
+    "height": {
+      "label": "height",
+      "unit": "cm"
+    },
+    "speedGeneral": {
+      "label": "General (urban)",
+      "description": "general average speed from strava",
+      "stravaSync": "✓ imported from official strava api",
+      "unit": "km/h"
+    },
+    "speedRoad": {
+      "label": "Speed (road)",
+      "description": "average speed for road bike",
+      "unit": "km/h"
+    },
+    "speedMtb": {
+      "label": "MTB (trail)",
+      "description": "average speed for mountain bike",
+      "unit": "km/h"
+    },
+    "button": {
+      "save": "Save changes",
+      "saving": "saving changes..."
+    },
+    "errors": {
+      "noChanges": "no changes were made.",
+      "loadError": "error loading profile. try again later.",
+      "updateSuccess": "changes saved successfully!",
+      "updateError": "error saving changes. try again later."
+    }
+  },
+  "planner": {
+    "loadingProfile": "Loading profile...",
+    "summary": {
+      "distance": "Distance:",
+      "time": "Estimated time:",
+      "elevationGain": "Elevation gain:",
+      "elevationLoss": "Elevation loss:",
+      "calories": "Estimated calories:",
+      "modality": "Modality:",
+      "averageSpeedInfo": "Your average speed for this modality is {{speed}} km/h."
+    },
+    "buttons": {
+      "newRoute": "New Route",
+      "saveRoute": "Save Route"
+    },
+    "errors": {
+      "missingOriginOrDestination": "Set origin and destination before calculating the route.",
+      "calculateFail": "Could not calculate route. Try adjusting the names or modality.",
+      "saveFail": "Error saving route:"
+    }
+  },
+  "login": {
+    "title": "Sign in to Velox",
+    "subtitle": "Access your account to start planning routes.",
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "button": {
+      "submit": "Sign in",
+      "submitting": "Signing in..."
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password.",
+      "unexpected": "Unexpected error. Try again.",
+      "email": "Invalid email.",
+      "password": "Invalid password."
+    }
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Fill in the data below to start using Velox",
+    "name": {
+      "label": "Name",
+      "placeholder": "Enter your name"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password",
+      "requirements": {
+        "length": "• At least 8 characters",
+        "uppercase": "• One uppercase letter",
+        "number": "• One number",
+        "specialChar": "• One special character"
+      }
+    },
+    "button": {
+      "submit": "Register",
+      "submitting": "Sending..."
+    },
+    "link": {
+      "alreadyAccount": "Already have an account? ",
+      "login": "Click here to sign in"
+    },
+    "toasts": {
+      "success": "Account created successfully! Let's set up your profile ✨",
+      "emailExists": "This email is already in use.",
+      "invalidPassword": "Invalid password. Fix it and try again.",
+      "unexpected": "Unexpected error. Try again."
+    }
+  },
+  "savedRoutes": {
+    "title": "My Routes",
+    "loading": "Loading routes...",
+    "empty": "No saved routes yet.",
+    "emptyTitle": "You haven't created any routes yet",
+    "emptyDescription": "Create your first route and have control over your routes.",
+    "ctaCreate": "Plan now",
+    "error": "Error loading routes.",
+    "routeTitle": "Route from {{origin}} to {{destination}}",
+    "modalityLabel": "Modality:",
+    "averageSpeed": "Average Speed:",
+    "time": "{{hours}}h {{minutes}}min",
+    "distance": "{{distance}} km",
+    "elevationGain": "+{{gain}} m",
+    "elevationLoss": "-{{loss}} m",
+    "caloriesLabel": "Calories:"
+  },
+  "plannerPanel": {
+    "title": "Route planner",
+    "backButton": "home",
+    "cancelButton": "cancel",
+    "originPlaceholder": "Current location",
+    "destinationPlaceholder": "Choose destination",
+    "save": "save",
+    "plan": "Plan",
+    "planning": "calculating route..."
+  },
+  "calculate": {
+    "geolocationError": "could not get location",
+    "profileError": "error fetching profile",
+    "loadingProfile": "loading profile...",
+    "requireOriginDestination": "set origin and destination before calculating the route.",
+    "fastestRoute": "Fastest",
+    "routeError": "error calculating route",
+    "routeSaved": "route saved successfully!",
+    "routeSaveError": "error saving route",
+    "calculating": {
+      "title": "Calculating route",
+      "subtitle": "finding the best path for you..."
+    },
+    "personalized": {
+      "title": "Route personalized for you",
+      "modality": "Modality:",
+      "averageSpeed": "Average speed:"
+    },
+    "buttons": {
+      "save": "Save route",
+      "saving": "saving...",
+      "newSearch": "New search"
+    },
+    "traffic": {
+      "title": "Current traffic",
+      "severity": {
+        "normal": "Normal",
+        "intense": "Intense",
+        "congested": "Congested"
+      },
+      "delay": "Estimated delay:",
+      "duration": "Duration:",
+      "minutes": "min",
+      "alert": "Warning: intense traffic on your route. consider postponing.",
+      "messages": {
+        "normal": "Normal traffic on your route. It's a good time to go.",
+        "intense": "Intense traffic on your route. Consider leaving at another time.",
+        "congested": "Route congested. We recommend postponing your ride."
+      }
+    },
+    "weather": {
+      "title": "Weather forecast",
+      "temperature": "Temperature",
+      "humidity": "Rain",
+      "wind": "Wind",
+      "condition": {
+        "sunny": "Sunny",
+        "cloudy": "Cloudy",
+        "rainy": "Rainy",
+        "stormy": "Stormy",
+        "snowy": "Snowy"
+      },
+      "messages": {
+        "sunny": "Perfect weather for cycling! Use sunscreen.",
+        "cloudy": "Cloudy day. Great to avoid excessive heat.",
+        "rainy": "Rain expected. Bring rain cover or postpone.",
+        "stormy": "Storm in sight. We don't recommend going out.",
+        "snowy": "Snow expected. Very dangerous conditions."
+      },
+      "alerts": {
+        "high_rain": {
+          "title": "High chance of rain",
+          "message": "{{probability}}% chance. Bring protective equipment."
+        },
+        "extreme_temp": {
+          "title": "Extreme temperature",
+          "cold": "Very cold ({{temp}}°c). Wear appropriate clothing.",
+          "hot": "Very hot ({{temp}}°c). Hydrate frequently."
+        },
+        "strong_wind": {
+          "title": "Strong wind",
+          "message": "{{speed}}km/h. Be careful on descents."
+        }
+      }
+    }
+  },
+  "speedModal": {
+    "title": "Modality",
+    "tooltip": "choose the modality to calculate the route based on your average speed",
+    "options": {
+      "general": {
+        "label": "General (urban)",
+        "description": "general average speed from strava"
+      },
+      "road": {
+        "label": "Speed (road)",
+        "description": "average speed for road bike"
+      },
+      "mtb": {
+        "label": "MTB (trail)",
+        "description": "average speed for mountain bike"
+      }
+    },
+    "configure": "configure",
+    "configureMessage": "click to configure in your profile",
+    "speedUnit": "km/h"
+  },
+  "routeSelector": {
+    "labels": {
+      "recommended": "Recommended",
+      "alternative": "Alternative",
+      "main": "Main",
+      "alt": "Alt."
+    }
+  },
+  "elevationProfile": {
+    "title": "Elevation profile"
+  },
+  "home": {
+    "title": "Welcome to velox",
+    "subtitle": "plan your bike routes with precision",
+    "lastRoutes": "Last Routes",
+    "newRoute": "New route",
+    "newRouteDesc": "plan your route",
+    "myRoutes": "My routes",
+    "myRoutesDesc": "see saved routes",
+    "profile": "Profile",
+    "profileDesc": "edit your information",
+    "comingSoon": "Coming soon",
+    "comingSoonDesc": "new features arriving",
+    "stravaImport": {
+      "title": "Strava",
+      "description": "import average speed"
+    },
+    "footer": {
+      "routes": "Routes",
+      "createRoute": "Create route",
+      "profile": "Profile"
+    }
+  },
+  "savedRoutesPage": {
+    "routeFrom": "Route from"
+  },
+  "loginForm": {
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "enteringButton": "Signing in...",
+    "enterButton": "Sign in"
+  },
+  "registerForm": {
+    "createAccountTitle": "Create Account",
+    "createAccountSubtitle": "Fill in the data below to start using Velox",
+    "sendingButton": "Sending...",
+    "registerButton": "Register"
+  },
+  "landing": {
+    "hero": {
+      "title1": "Ride at your pace.",
+      "title2": "Plan with precision.",
+      "subtitle": "Velox calculates route predictions based on your real speed, terrain, and effort — not generic averages.",
+      "cta": "Get Started"
+    },
+    "problem": {
+      "title": "Did the prediction",
+      "titleHighlight": "let you down?",
+      "timeExample": "2h10",
+      "timeReal": "1h20",
+      "description1": "Google estimated over 2 hours to ride 30km.",
+      "description2": "In reality?",
+      "description3": "1h20 — no calculation error.",
+      "cards": {
+        "prediction": {
+          "title": "Broken Prediction",
+          "desc": "The app said 2h. You arrived in 1h20. Sounds good, but it delays or anticipates everything that comes next."
+        },
+        "time": {
+          "title": "No Time for Errors",
+          "desc": "When you need to fit training into your routine, you can't rely on generic average speed guesses."
+        },
+        "bike": {
+          "title": "Not Just Any Bike",
+          "desc": "MTB, Road, or Urban? Each has its own pace. But apps use the same baseline for all."
+        }
+      }
+    },
+    "solution": {
+      "title": "With Velox, the prediction is",
+      "titleHighlight": "your reality.",
+      "subtitle": "Connect your Strava, select your modality (MTB, Road) and receive estimates based on your real training data.",
+      "validation": "Accuracy validated in real training"
+    },
+    "features": {
+      "prediction": {
+        "title": "Real Prediction",
+        "desc": "Calculate time based on your average speed, not generic averages."
+      },
+      "modality": {
+        "title": "Adapted Modality",
+        "desc": "Choose between MTB, Road, or Urban for even more accurate predictions."
+      },
+      "strava": {
+        "title": "Strava Integration",
+        "desc": "Automatically import your real speed from Strava."
+      },
+      "elevation": {
+        "title": "Calories and Elevation",
+        "desc": "See calories burned and elevation gain on each route."
+      }
+    },
+    "cta": {
+      "title": "It's time to ride with intelligence",
+      "subtitle": "Your training deserves more than a guess. Take control of every route.",
+      "button": "Create Account Now"
+    }
+  }
+}
