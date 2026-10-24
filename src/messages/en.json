@@ -391,11 +391,38 @@
       },
       "elevation": {
         "title": "The route profile",
-        "desc": "See how much you'll climb and how many calories you'll burn on each route."
+        "desc": "How much you'll climb, and calories from your weight, height and age."
       }
     },
     "mock": {
       "destination": "City park"
+    },
+    "routes": {
+      "title": "Compare routes by your own time",
+      "lead": "The fastest route and the alternatives, each with your time. Save the one you pick.",
+      "colRoute": "Route",
+      "colDistance": "Distance",
+      "colClimb": "Climb",
+      "colTime": "Time",
+      "colDiff": "Difference",
+      "lessClimbing": "Less climbing",
+      "longer": "Longer",
+      "caption": "Example at a 22.5\u00a0km/h average on a road bike."
+    },
+    "conditions": {
+      "title": "Weather and traffic before you go",
+      "lead": "Velox checks the weather at the middle of the route and the traffic along it, and tells you when it's better to wait.",
+      "weatherTitle": "Weather alerts",
+      "trafficTitle": "Traffic levels",
+      "rainRule": "over 70% chance",
+      "temperatureRule": "below 10\u00a0°C or above 30\u00a0°C",
+      "windRule": "over 25\u00a0km/h",
+      "normalRule": "under 5\u00a0min of delay",
+      "intenseRule": "5 to 15\u00a0min of delay",
+      "congestedRule": "15\u00a0min or more, and the app suggests waiting"
+    },
+    "footer": {
+      "install": "Works in the browser and installs on your phone like an app."
     },
     "cta": {
       "title": "How long does it really take you?",

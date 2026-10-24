@@ -391,11 +391,38 @@
       },
       "elevation": {
         "title": "O perfil da rota",
-        "desc": "Veja quanto você sobe e quantas calorias gasta em cada trajeto."
+        "desc": "Quanto você sobe e as calorias pelo seu peso, altura e idade."
       }
     },
     "mock": {
       "destination": "Parque da cidade"
+    },
+    "routes": {
+      "title": "Compare as rotas pelo seu tempo",
+      "lead": "A mais rápida e as alternativas, cada uma com o seu tempo. Salve a que escolher.",
+      "colRoute": "Rota",
+      "colDistance": "Distância",
+      "colClimb": "Subida",
+      "colTime": "Tempo",
+      "colDiff": "Diferença",
+      "lessClimbing": "Menos subidas",
+      "longer": "Mais longa",
+      "caption": "Exemplo com média de 22,5\u00a0km/h na Speed."
+    },
+    "conditions": {
+      "title": "Clima e trânsito antes de sair",
+      "lead": "O Velox confere o clima no meio da rota e o trânsito do trajeto, e avisa quando é melhor esperar.",
+      "weatherTitle": "Alertas de clima",
+      "trafficTitle": "Níveis de trânsito",
+      "rainRule": "acima de 70% de chance",
+      "temperatureRule": "abaixo de 10\u00a0°C ou acima de 30\u00a0°C",
+      "windRule": "acima de 25\u00a0km/h",
+      "normalRule": "menos de 5\u00a0min de atraso",
+      "intenseRule": "de 5 a 15\u00a0min de atraso",
+      "congestedRule": "15\u00a0min ou mais, e o app sugere adiar"
+    },
+    "footer": {
+      "install": "Funciona no navegador e instala no celular como app."
     },
     "cta": {
       "title": "Quanto tempo você leva de verdade?",
