@@ -342,10 +342,10 @@
   },
   "landing": {
     "hero": {
-      "title1": "Pedale no seu ritmo.",
-      "title2": "Planeje com precisão.",
-      "subtitle": "O Velox calcula o tempo do percurso com a sua velocidade média real, separada por tipo de bike.",
-      "cta": "Começar"
+      "title1": "O tempo da rota",
+      "title2": "na sua velocidade.",
+      "subtitle": "O Velox usa a sua velocidade média real, separada por tipo de bike.",
+      "cta": "Criar conta"
     },
     "problem": {
       "title": "A previsão te",
@@ -358,11 +358,11 @@
       "cards": {
         "prediction": {
           "title": "Previsão furada",
-          "desc": "O app disse 2h e você chegou em 1h20. Errar pra mais ou pra menos bagunça tudo o que vem depois."
+          "desc": "Errar pra mais ou pra menos bagunça tudo o que vem depois."
         },
         "time": {
-          "title": "Sem tempo pra erro",
-          "desc": "Quando o treino precisa caber na rotina, não dá pra confiar numa velocidade média chutada."
+          "title": "Média chutada",
+          "desc": "Quando o treino precisa caber na rotina, não dá pra planejar em cima de um chute."
         },
         "bike": {
           "title": "Não é qualquer bike",
@@ -378,20 +378,20 @@
     },
     "features": {
       "prediction": {
-        "title": "Previsão real",
-        "desc": "O tempo de cada rota é calculado com a sua velocidade média."
+        "title": "Tempo estimado",
+        "desc": "Cada rota sai com o tempo calculado pela sua velocidade média."
       },
       "modality": {
-        "title": "Velocidade por modalidade",
-        "desc": "Escolha MTB, Speed ou urbano e o tempo é calculado com a velocidade daquela bike."
+        "title": "Uma média por bike",
+        "desc": "Escolha MTB, Speed ou urbano e o tempo usa a velocidade daquela bike."
       },
       "strava": {
-        "title": "Integração com o Strava",
-        "desc": "Importe sua velocidade média direto do Strava."
+        "title": "Direto do Strava",
+        "desc": "Importe sua velocidade média dos treinos que você já registrou lá."
       },
       "elevation": {
-        "title": "Calorias e altimetria",
-        "desc": "Veja as calorias gastas e o ganho de elevação de cada trajeto."
+        "title": "O perfil da rota",
+        "desc": "Veja quanto você sobe e quantas calorias gasta em cada trajeto."
       }
     },
     "mock": {

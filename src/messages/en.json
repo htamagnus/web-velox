@@ -342,10 +342,10 @@
   },
   "landing": {
     "hero": {
-      "title1": "Ride at your pace.",
-      "title2": "Plan with precision.",
-      "subtitle": "Velox calculates ride time from your real average speed, tracked separately for each bike type.",
-      "cta": "Get started"
+      "title1": "Ride time",
+      "title2": "at your own speed.",
+      "subtitle": "Velox uses your real average speed, tracked separately for each bike type.",
+      "cta": "Create account"
     },
     "problem": {
       "title": "Did the prediction",
@@ -358,11 +358,11 @@
       "cards": {
         "prediction": {
           "title": "Wrong estimate",
-          "desc": "The app said 2h and you got there in 1h20. Being off in either direction throws off everything that comes after."
+          "desc": "Being off in either direction throws off everything that comes after."
         },
         "time": {
-          "title": "No room for error",
-          "desc": "When your training has to fit into your routine, you can't rely on a guessed average speed."
+          "title": "A guessed average",
+          "desc": "When your training has to fit into your routine, you can't plan around a guess."
         },
         "bike": {
           "title": "Not just any bike",
@@ -378,20 +378,20 @@
     },
     "features": {
       "prediction": {
-        "title": "Real estimates",
-        "desc": "Each route's time is calculated from your average speed."
+        "title": "Estimated time",
+        "desc": "Every route comes with a time calculated from your average speed."
       },
       "modality": {
-        "title": "Speed per bike type",
-        "desc": "Choose MTB, road or urban and the time is calculated with that bike's speed."
+        "title": "One average per bike",
+        "desc": "Choose MTB, road or urban and the time uses that bike's speed."
       },
       "strava": {
-        "title": "Strava integration",
-        "desc": "Import your average speed straight from Strava."
+        "title": "Straight from Strava",
+        "desc": "Import your average speed from the rides you've already logged there."
       },
       "elevation": {
-        "title": "Calories and elevation",
-        "desc": "See calories burned and elevation gain for each route."
+        "title": "The route profile",
+        "desc": "See how much you'll climb and how many calories you'll burn on each route."
       }
     },
     "mock": {

@@ -7,6 +7,7 @@
 /* Hallmark · waive 84 · the planner runs only behind a login on the production API · the user asked for a mock because the planner screens get redesigned next, so a capture today would date the page */
 /* Hallmark · waive 72 · the 1h20 plate is cut to the digits like a timing board, their ink sits 30px inside it · Saira Condensed reports a 1.58em text box, so any plate that fits the time on the lime is measured as crowded */
 /* Hallmark · dismissed kept · hero-bike.jpg and cta-bike.jpg are both still on the page, now served through next/image, so the rendered src reads /_next/image instead of the file path */
+/* Hallmark · reworded "Pedale no seu ritmo. Planeje com precisão." to "O tempo da rota na sua velocidade.", "Sem tempo pra erro" to "Média chutada", "Previsão real" to "Tempo estimado", "Velocidade por modalidade" to "Uma média por bike", "Integração com o Strava" to "Direto do Strava", "Calorias e altimetria" to "O perfil da rota" · the owner asked for new copy after the finish review named these heads as ones any cycling app could print */
 /* Hallmark · answered F16 · the app hides the page scrollbar in globals.css, so there is no scrollbar left to theme on this page */
 
 .nav {
@@ -147,6 +148,7 @@
   text-transform: uppercase;
 }
 .hero__foot {
+  contain: inline-size;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
