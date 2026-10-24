@@ -2,37 +2,37 @@
   "onboarding": {
     "height": {
       "title": "Qual é a sua altura?",
-      "subtitle": "Isso ajuda a gente a calcular seu esforço de forma mais precisa. É rapidinho!",
+      "subtitle": "A gente usa sua altura pra estimar as calorias de cada rota. É rapidinho!",
       "unit": "cm",
-      "note": "* essas informações ajudam a estimar com mais precisão o gasto calórico nas suas rotas"
+      "note": "*altura, peso e idade são usados só no cálculo de calorias"
     },
     "weight": {
       "title": "E o seu peso?",
-      "subtitle": "Fica tranquilo: usamos isso só pra calcular seu desempenho e gasto calórico de forma personalizada.",
+      "subtitle": "Relaxa: o peso só serve pra calcular o seu gasto calórico.",
       "unit": "kg",
-      "note": "*quanto mais preciso, melhor a estimativa de calorias e esforço nas suas pedaladas"
+      "note": "*quanto mais preciso o peso, melhor a estimativa de calorias"
     },
     "age": {
-      "title": "Qual sua idade?",
-      "subtitle": "Idade também conta na hora de entender seu ritmo e gasto energético. Bora personalizar sua experiência!",
+      "title": "Qual é a sua idade?",
+      "subtitle": "A idade também entra no cálculo de calorias.",
       "unit": "anos",
-      "note": "*esses dados ajudam a ajustar as rotas e previsões pro seu perfil"
+      "note": "*dá pra alterar esses dados depois no seu perfil"
     },
     "speedGeneral": {
-      "title": "Velocidade Média Geral",
-      "subtitle": "Você pode informar manualmente ou importar do Strava em poucos segundos.",
+      "title": "Velocidade média geral",
+      "subtitle": "Informe manualmente ou importe do Strava em poucos segundos.",
       "unit": "km/h",
-      "note": "*conectando com o Strava, a gente importa automaticamente sua velocidade média geral de pedaladas"
+      "note": "*se você conectar o Strava, a gente importa sua velocidade média automaticamente"
     },
     "speedRoad": {
-      "title": "Velocidade Média - Road",
-      "subtitle": "Informe uma média para seus pedais de speed.",
-      "note": "*essa velocidade será usada para estimar o tempo de rota quando você selecionar a bike Speed"
+      "title": "Velocidade média na Speed",
+      "subtitle": "Informe sua média nos pedais de speed.",
+      "note": "*usada pra estimar o tempo das rotas quando você escolher Speed"
     },
     "speedMtb": {
-      "title": "Velocidade Média - MTB",
-      "subtitle": "Informe uma média para seus pedais de mountain bike.",
-      "note": "*essa velocidade será usada para estimar o tempo nas rotas quando você selecionar a bike MTB"
+      "title": "Velocidade média no MTB",
+      "subtitle": "Informe sua média nos pedais de mountain bike.",
+      "note": "*usada pra estimar o tempo das rotas quando você escolher MTB"
     }
   },
   "profile": {
@@ -42,7 +42,7 @@
       "personal": "Dados pessoais",
       "metrics": "Métricas físicas",
       "speeds": "Velocidades das modalidades",
-      "speedsDescription": "Configure suas velocidades médias para cálculos personalizados de rotas"
+      "speedsDescription": "Usadas para calcular o tempo das suas rotas em cada modalidade"
     },
     "name": {
       "label": "nome"
@@ -65,7 +65,7 @@
     "speedGeneral": {
       "label": "Geral (urbano)",
       "description": "velocidade média geral",
-      "stravaSync": "✓ importada da api oficial do strava",
+      "stravaSync": "✓ importada do strava",
       "unit": "km/h"
     },
     "speedRoad": {
@@ -101,8 +101,8 @@
       "averageSpeedInfo": "Sua média nessa modalidade é de {{speed}} km/h."
     },
     "buttons": {
-      "newRoute": "Nova Rota",
-      "saveRoute": "Salvar Rota"
+      "newRoute": "Nova rota",
+      "saveRoute": "Salvar rota"
     },
     "errors": {
       "missingOriginOrDestination": "Defina origem e destino antes de calcular a rota.",
@@ -133,7 +133,7 @@
     }
   },
   "register": {
-    "title": "Criar Conta",
+    "title": "Criar conta",
     "subtitle": "Preencha os dados abaixo para começar a usar o Velox",
     "name": {
       "label": "Nome",
@@ -162,23 +162,23 @@
       "login": "Clique aqui para entrar"
     },
     "toasts": {
-      "success": "Conta criada com sucesso! Vamos configurar seu perfil ✨",
+      "success": "Conta criada! Agora vamos configurar seu perfil.",
       "emailExists": "Este e-mail já está em uso.",
       "invalidPassword": "Senha inválida. Corrija e tente novamente.",
       "unexpected": "Erro inesperado. Tente novamente."
     }
   },
   "savedRoutes": {
-    "title": "Minhas Rotas",
+    "title": "Minhas rotas",
     "loading": "Carregando rotas...",
     "empty": "Nenhuma rota salva ainda.",
     "emptyTitle": "Você ainda não criou nenhuma rota",
-    "emptyDescription": "Crie sua primeira rota e tenha controle sobre seus percursos.",
+    "emptyDescription": "Planeje um percurso e salve para consultar depois.",
     "ctaCreate": "Planejar agora",
     "error": "Erro ao carregar rotas.",
     "routeTitle": "Percurso de {{origin}} para {{destination}}",
     "modalityLabel": "Modalidade:",
-    "averageSpeed": "Velocidade Média:",
+    "averageSpeed": "Velocidade média:",
     "time": "{{hours}}h {{minutes}}min",
     "distance": "{{distance}} km",
     "elevationGain": "+{{gain}} m",
@@ -228,7 +228,7 @@
       "delay": "Atraso estimado:",
       "duration": "Duração:",
       "minutes": "min",
-      "alert": "Atenção: tráfego intenso na sua rota. considere adiar.",
+      "alert": "Atenção: tráfego intenso na sua rota. Considere adiar.",
       "messages": {
         "normal": "Tráfego normal na sua rota. É um bom momento para sair.",
         "intense": "Tráfego intenso na sua rota. Considere sair em outro horário.",
@@ -306,7 +306,7 @@
   "home": {
     "title": "Bem-vindo ao velox",
     "subtitle": "planeje suas rotas de bike com precisão",
-    "lastRoutes": "Últimas Rotas",
+    "lastRoutes": "Últimas rotas",
     "newRoute": "Nova rota",
     "newRouteDesc": "planeje seu percurso",
     "myRoutes": "Minhas rotas",
@@ -335,7 +335,7 @@
     "enterButton": "Entrar"
   },
   "registerForm": {
-    "createAccountTitle": "Criar Conta",
+    "createAccountTitle": "Criar conta",
     "createAccountSubtitle": "Preencha os dados abaixo para começar a usar o Velox",
     "sendingButton": "Enviando...",
     "registerButton": "Registrar"
@@ -344,7 +344,7 @@
     "hero": {
       "title1": "Pedale no seu ritmo.",
       "title2": "Planeje com precisão.",
-      "subtitle": "O Velox calcula a previsão de percurso com base na sua velocidade real, no seu terreno e no seu esforço — não numa média genérica.",
+      "subtitle": "O Velox calcula o tempo do percurso com a sua velocidade média real, separada por tipo de bike.",
       "cta": "Começar"
     },
     "problem": {
@@ -352,52 +352,52 @@
       "titleHighlight": "deixou na mão?",
       "timeExample": "2h10",
       "timeReal": "1h20",
-      "description1": "O Google estimou mais de 2 horas para pedalar 30km.",
-      "description2": "Na prática?",
-      "description3": "1h20 — sem erro de cálculo.",
+      "description1": "O Google estimou mais de 2 horas para pedalar 30 km.",
+      "description2": "Na prática, foram",
+      "description3": "1h20.",
       "cards": {
         "prediction": {
           "title": "Previsão furada",
-          "desc": "O app disse 2h. Você chegou em 1h20. Parece bom, mas atrasa ou antecipa tudo que vem depois."
+          "desc": "O app disse 2h e você chegou em 1h20. Errar pra mais ou pra menos bagunça tudo o que vem depois."
         },
         "time": {
           "title": "Sem tempo pra erro",
-          "desc": "Quando você precisa encaixar o treino na rotina, não dá pra confiar em chute de velocidade média genérica."
+          "desc": "Quando o treino precisa caber na rotina, não dá pra confiar numa velocidade média chutada."
         },
         "bike": {
           "title": "Não é qualquer bike",
-          "desc": "MTB, Speed ou urbana? Cada uma tem seu ritmo. Mas os apps usam a mesma base pra todas."
+          "desc": "MTB, Speed e urbana têm ritmos diferentes, mas os apps usam a mesma base pra todas."
         }
       }
     },
     "solution": {
-      "title": "Com o Velox, a previsão é",
-      "titleHighlight": "a sua realidade.",
-      "subtitle": "Integre seu Strava, selecione sua modalidade (MTB, Speed) e receba estimativas baseadas nos seus dados reais de treino.",
+      "title": "Com o Velox, a previsão bate com",
+      "titleHighlight": "o tempo que você faz.",
+      "subtitle": "Conecte o Strava, escolha a modalidade e receba estimativas feitas com os seus dados de treino.",
       "validation": "Precisão validada em treinos reais"
     },
     "features": {
       "prediction": {
-        "title": "Previsão Real",
-        "desc": "Calcule o tempo com base na sua velocidade média, não em médias genéricas."
+        "title": "Previsão real",
+        "desc": "O tempo de cada rota é calculado com a sua velocidade média."
       },
       "modality": {
-        "title": "Modalidade Adaptada",
-        "desc": "Escolha entre MTB, Speed ou urbano para previsões ainda mais precisas."
+        "title": "Velocidade por modalidade",
+        "desc": "Escolha MTB, Speed ou urbano e o tempo é calculado com a velocidade daquela bike."
       },
       "strava": {
-        "title": "Integração Strava",
-        "desc": "Importe automaticamente sua velocidade real do Strava."
+        "title": "Integração com o Strava",
+        "desc": "Importe sua velocidade média direto do Strava."
       },
       "elevation": {
-        "title": "Calorias e Altimetria",
-        "desc": "Veja calorias gastas e ganho de elevação em cada trajeto."
+        "title": "Calorias e altimetria",
+        "desc": "Veja as calorias gastas e o ganho de elevação de cada trajeto."
       }
     },
     "cta": {
-      "title": "Chegou a hora de pedalar com inteligência",
-      "subtitle": "Seu treino merece mais do que um palpite. Ganhe controle sobre cada percurso.",
-      "button": "Criar Conta Agora"
+      "title": "Quanto tempo você leva de verdade?",
+      "subtitle": "Crie sua conta, informe sua velocidade e descubra na primeira rota.",
+      "button": "Criar conta"
     }
   }
 }
