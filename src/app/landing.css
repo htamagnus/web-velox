@@ -8,6 +8,7 @@
 /* Hallmark · waive 72 · the 1h20 plate is cut to the digits like a timing board, their ink sits 30px inside it · Saira Condensed reports a 1.58em text box, so any plate that fits the time on the lime is measured as crowded */
 /* Hallmark · dismissed kept · hero-bike.jpg and cta-bike.jpg are both still on the page, now served through next/image, so the rendered src reads /_next/image instead of the file path */
 /* Hallmark · reworded "Pedale no seu ritmo. Planeje com precisão." to "O tempo da rota na sua velocidade.", "Sem tempo pra erro" to "Média chutada", "Previsão real" to "Tempo estimado", "Velocidade por modalidade" to "Uma média por bike", "Integração com o Strava" to "Direto do Strava", "Calorias e altimetria" to "O perfil da rota" · the owner asked for new copy after the finish review named these heads as ones any cycling app could print */
+/* Hallmark · owner override · motion added at the owner's word over the theme's "nothing moves": entrance choreography, the time rolling like a stopwatch, the pill sliding between modes, the bars, the photo drifting and a pointer spotlight opening the scrim · reduced motion stills all of it */
 /* Hallmark · answered F16 · the app hides the page scrollbar in globals.css, so there is no scrollbar left to theme on this page */
 
 .nav {
@@ -72,6 +73,17 @@
   color: var(--color-paper);
 }
 
+@property --mx {
+  syntax: '<length-percentage>';
+  inherits: true;
+  initial-value: 72%;
+}
+@property --my {
+  syntax: '<length-percentage>';
+  inherits: true;
+  initial-value: 45%;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -90,6 +102,7 @@
     background-color var(--dur-short) var(--ease-out),
     color var(--dur-short) var(--ease-out),
     border-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out),
     transform var(--dur-micro) var(--ease-out);
 }
 .btn--primary {
@@ -98,6 +111,8 @@
 }
 .btn--primary:hover {
   background: var(--color-accent-hover);
+  box-shadow: 0 12px 32px -10px color-mix(in oklab, var(--color-accent) 70%, transparent);
+  transform: translateY(-1px);
 }
 .btn--line {
   border-color: var(--color-paper);
@@ -133,6 +148,9 @@
   padding-block: calc(var(--space-md) + 44px + var(--space-xl)) var(--space-2xl);
   background: var(--color-ink);
   color: var(--color-paper);
+  transition:
+    --mx var(--dur-long) var(--ease-out),
+    --my var(--dur-long) var(--ease-out);
 }
 .hero__photo {
   position: absolute;
@@ -144,16 +162,61 @@
 .hero__photo img {
   object-fit: cover;
   object-position: 50% 62%;
+  animation: hero-drift 28s var(--ease-in-out) infinite alternate;
 }
+@keyframes hero-drift {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.12) translate(-1.5%, -1%);
+  }
+}
+/* o scrim abre em volta do mouse (--mx/--my), como um farol passando pela foto */
 .hero__photo::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    color-mix(in oklab, var(--color-ink) 88%, transparent),
-    color-mix(in oklab, var(--color-ink) 52%, transparent)
-  );
+  background:
+    radial-gradient(
+      620px circle at var(--mx) var(--my),
+      transparent,
+      color-mix(in oklab, var(--color-ink) 74%, transparent) 70%
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-ink) 62%, transparent),
+      color-mix(in oklab, var(--color-ink) 38%, transparent)
+    );
+}
+@media (max-width: 60rem) {
+  /* sem mouse não há farol: o foco sai da tela e o scrim fica mais fechado atrás do texto */
+  .hero {
+    --mx: 50%;
+    --my: 130%;
+  }
+  .hero__photo::after {
+    background:
+      radial-gradient(
+        620px circle at var(--mx) var(--my),
+        transparent,
+        color-mix(in oklab, var(--color-ink) 74%, transparent) 70%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-ink) 72%, transparent),
+        color-mix(in oklab, var(--color-ink) 52%, transparent)
+      );
+  }
+}
+.hero__line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.06em;
+  margin-block: -0.06em;
+}
+.hero__line > span {
+  display: block;
 }
 .hero__grid {
   display: grid;
@@ -184,11 +247,23 @@
   display: grid;
   gap: var(--space-xl);
   padding: var(--space-xl);
+  border: var(--rule-hair) solid color-mix(in oklab, var(--color-paper) 14%, transparent);
   border-radius: var(--radius-card);
-  background: var(--color-ink-2);
+  /* vidro: a foto passa por trás, desfocada, com um fio de luz na aresta de cima */
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--color-paper) 9%, transparent),
+      transparent 45%
+    ),
+    color-mix(in oklab, var(--color-ink-2) 66%, transparent);
   color: var(--color-paper);
-  outline: var(--rule-hair) solid var(--color-rule-on-ink);
-  outline-offset: calc(-1 * var(--rule-hair));
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-paper) 22%, transparent),
+    0 40px 90px -40px color-mix(in oklab, var(--color-accent) 35%, transparent),
+    0 30px 60px -30px var(--color-ink);
 }
 .compare__head {
   display: flex;
@@ -213,6 +288,8 @@
   gap: var(--space-xs);
 }
 .compare__mode {
+  position: relative;
+  isolation: isolate;
   min-height: 44px;
   padding: 0 var(--space-md);
   border: var(--rule-hair) solid var(--color-rule-on-ink);
@@ -232,8 +309,14 @@
 }
 .compare__mode[aria-pressed='true'] {
   border-color: var(--color-paper);
-  background: var(--color-paper);
   color: var(--color-ink);
+}
+.compare__pill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-card);
+  background: var(--color-paper);
 }
 .compare__mode:active {
   transform: translateY(1px);
@@ -275,8 +358,31 @@
   color: var(--color-muted-on-ink);
 }
 .compare__row.is-on dd {
+  padding: 0;
+}
+.compare__plate {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-card);
   background: var(--color-accent);
   color: var(--color-accent-ink);
+  box-shadow: 0 0 40px color-mix(in oklab, var(--color-accent) 35%, transparent);
+}
+.compare__bar {
+  grid-column: 1 / -1;
+  height: var(--rule-bar);
+  margin-top: var(--space-md);
+  background: var(--color-rule-on-ink);
+}
+.compare__bar span {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  background: var(--color-muted-on-ink);
+}
+.is-on .compare__bar span {
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
 }
 @media (max-width: 60rem) {
   .hero {
@@ -312,33 +418,77 @@
 .pains h2 {
   text-transform: uppercase;
 }
-.pains .rows {
-  margin-top: var(--space-2xl);
-}
-.rows {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: var(--rule-hair) solid var(--color-rule);
-}
-.rows__item {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gap-columns);
-  row-gap: var(--space-xs);
-  align-items: baseline;
-  padding-block: var(--space-xl);
-  border-bottom: var(--rule-hair) solid var(--color-rule);
-}
-.rows__item h3 {
-  grid-column: 1 / span 5;
-  font-size: var(--text-2xl);
+.pains__eyebrow {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-card);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font: 500 var(--text-xs) / 1.4 var(--font-outlier);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.rows__item p {
-  grid-column: 6 / -1;
-  max-width: 60ch;
-  font-size: var(--text-lg);
+.pains__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+  margin: var(--space-2xl) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.pains__grid > li {
+  display: grid;
+}
+.pain {
+  display: grid;
+  align-content: start;
+  gap: var(--space-sm);
+  height: 100%;
+  padding: var(--space-lg);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  background: var(--color-paper-2);
+  transition:
+    transform var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out);
+}
+.pain:hover {
+  transform: translateY(-3px);
+  background: var(--color-paper);
+  box-shadow: 0 28px 50px -30px color-mix(in oklab, var(--color-ink) 45%, transparent);
+}
+.pain__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+.pain__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-card);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  box-shadow: 0 12px 24px -12px var(--color-accent-deep);
+}
+.pain__index {
+  font: 500 var(--text-sm) / 1 var(--font-outlier);
+  color: var(--color-muted);
+}
+.pain__figure {
+  font: 500 var(--text-3xl) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent-deep);
+}
+.pain h3 {
+  font-size: var(--text-xl);
+  text-transform: uppercase;
+}
+.pain p:not(.pain__figure) {
   color: var(--color-ink-2);
 }
 
@@ -727,11 +877,8 @@
 }
 
 @media (max-width: 60rem) {
-  .rows__item {
+  .pains__grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-  .rows__item :is(h3, p) {
-    grid-column: 1 / -1;
   }
   .product__head {
     grid-template-columns: minmax(0, 1fr);

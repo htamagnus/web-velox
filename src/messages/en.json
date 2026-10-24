@@ -355,18 +355,22 @@
       "atSpeed": "{{speed}} km/h average"
     },
     "problem": {
+      "eyebrow": "The problem",
       "title": "Did the prediction",
       "titleHighlight": "let you down?",
       "cards": {
         "prediction": {
+          "figure": "+50 min",
           "title": "Wrong estimate",
           "desc": "Being off in either direction throws off everything that comes after."
         },
         "time": {
+          "figure": "14 km/h",
           "title": "A guessed average",
           "desc": "When your training has to fit into your routine, you can't plan around a guess."
         },
         "bike": {
+          "figure": "3 paces",
           "title": "Not just any bike",
           "desc": "MTB, road and urban bikes have different paces, but apps use the same baseline for all of them."
         }
