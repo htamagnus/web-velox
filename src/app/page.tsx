@@ -8,8 +8,10 @@ import { Saira_Condensed, Albert_Sans, JetBrains_Mono } from 'next/font/google';
 import { MapPin, Navigation } from 'lucide-react';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import LanguageSelector from '@/components/language-selector/language-selector';
+import HeroTimes from '@/components/landing/hero-times';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
+import { hm } from '@/helpers/format-minutes';
 
 const saira = Saira_Condensed({ weight: '800', subsets: ['latin'], variable: '--font-saira' });
 const albert = Albert_Sans({ subsets: ['latin'], variable: '--font-albert' });
@@ -61,9 +63,6 @@ const WEATHER_RULES = [
 ];
 const TRAFFIC_LEVELS = ['normal', 'intense', 'congested'];
 
-const hm = (minutes: number) =>
-  `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}`;
-
 export default function LandingPage() {
   const { t } = useTexts('landing');
   const { t: tApp } = useTexts();
@@ -88,48 +87,35 @@ export default function LandingPage() {
       <PageTransitionOverlay visible={showTransition} />
       <div className={`landing ${saira.variable} ${albert.variable} ${jetbrains.variable}`}>
         <header className="nav">
-          <div className="container">
-            <div className="nav__bar">
-              <Link href="/" className="nav__home">
-                <Image src="/svg/velox-logo.svg" alt="Velox" width={64} height={44} priority />
-              </Link>
-              <div className="nav__end">
-                <div className="lang nav__lang">
-                  <LanguageSelector />
-                </div>
-                <button
-                  type="button"
-                  className="btn btn--line"
-                  onClick={handleStart}
-                  disabled={loading}
-                >
-                  {t('cta.button')}
-                </button>
+          <div className="container nav__bar">
+            <Link href="/" className="nav__home">
+              <Image src="/svg/velox-logo.svg" alt="Velox" width={48} height={33} priority />
+            </Link>
+            <div className="nav__end">
+              <div className="lang nav__lang">
+                <LanguageSelector />
               </div>
+              <button type="button" className="nav__link" onClick={handleStart} disabled={loading}>
+                {t('cta.button')}
+              </button>
             </div>
           </div>
         </header>
 
         <main>
           <section className="hero">
-            <figure className="hero__field">
-              <Image
-                src="/images/hero-bike.jpg"
-                alt="Ciclista em movimento"
-                fill
-                priority
-                sizes="100vw"
-              />
+            <figure className="hero__photo">
+              <Image src="/images/hero-bike.jpg" alt="" fill priority sizes="100vw" />
             </figure>
-            <div className="container hero__base">
+            <div className="container hero__grid">
               <div className="hero__type">
                 <h1>
                   {t('hero.title1')}
                   <br />
                   {t('hero.title2')}
                 </h1>
-                <div className="hero__foot">
-                  <p className="lead">{t('hero.subtitle')}</p>
+                <p className="lead">{t('hero.subtitle')}</p>
+                <div className="hero__actions">
                   <button
                     type="button"
                     className="btn btn--primary"
@@ -139,35 +125,20 @@ export default function LandingPage() {
                   >
                     {t('hero.cta')}
                   </button>
+                  <a href="#produto" className="btn btn--line">
+                    {t('hero.secondary')}
+                  </a>
                 </div>
               </div>
-            </div>
-          </section>
-
-          <section className="times">
-            <div className="container">
-              <h2>
-                {t('problem.title')} {t('problem.titleHighlight')}
-              </h2>
-              <div className="times__sheet">
-                <div className="times__cell">
-                  <p className="times__figure figure">{t('problem.timeExample')}</p>
-                  <p className="times__caption">{t('problem.description1')}</p>
-                </div>
-                <div className="times__cell">
-                  <p className="times__figure figure">
-                    <span className="times__plate">{t('problem.timeReal')}</span>
-                  </p>
-                  <p className="times__caption">
-                    {t('problem.description2')} {t('problem.description3')}
-                  </p>
-                </div>
-              </div>
+              <HeroTimes />
             </div>
           </section>
 
           <section className="pains">
             <div className="container">
+              <h2>
+                {t('problem.title')} {t('problem.titleHighlight')}
+              </h2>
               <ul className="rows">
                 {PAINS.map((key) => (
                   <li key={key} className="rows__item">
@@ -179,7 +150,7 @@ export default function LandingPage() {
             </div>
           </section>
 
-          <section className="product">
+          <section className="product" id="produto">
             <div className="container">
               <div className="product__head">
                 <h2>

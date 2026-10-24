@@ -345,16 +345,18 @@
       "title1": "Ride time",
       "title2": "at your own speed.",
       "subtitle": "Velox uses your real average speed, tracked separately for each bike type.",
-      "cta": "Create account"
+      "cta": "Create account",
+      "secondary": "See how it works",
+      "sample": "Sample route",
+      "route": "{{km}} km · {{climb}} m of climbing",
+      "genericLabel": "Generic estimate",
+      "genericNote": "The same math for every rider",
+      "veloxLabel": "Velox, at your average",
+      "atSpeed": "{{speed}} km/h average"
     },
     "problem": {
       "title": "Did the prediction",
       "titleHighlight": "let you down?",
-      "timeExample": "2h10",
-      "timeReal": "1h20",
-      "description1": "Google estimated over 2 hours to ride 30 km.",
-      "description2": "In practice, it took",
-      "description3": "1h20.",
       "cards": {
         "prediction": {
           "title": "Wrong estimate",

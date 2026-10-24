@@ -345,16 +345,18 @@
       "title1": "O tempo da rota",
       "title2": "na sua velocidade.",
       "subtitle": "O Velox usa a sua velocidade média real, separada por tipo de bike.",
-      "cta": "Criar conta"
+      "cta": "Criar conta",
+      "secondary": "Ver como funciona",
+      "sample": "Rota de exemplo",
+      "route": "{{km}} km · {{climb}} m de subida",
+      "genericLabel": "Previsão genérica",
+      "genericNote": "A mesma conta pra qualquer ciclista",
+      "veloxLabel": "Velox, na sua média",
+      "atSpeed": "Média de {{speed}} km/h"
     },
     "problem": {
       "title": "A previsão te",
       "titleHighlight": "deixou na mão?",
-      "timeExample": "2h10",
-      "timeReal": "1h20",
-      "description1": "O Google estimou mais de 2 horas para pedalar 30 km.",
-      "description2": "Na prática, foram",
-      "description3": "1h20.",
       "cards": {
         "prediction": {
           "title": "Previsão furada",
