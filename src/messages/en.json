@@ -394,6 +394,9 @@
         "desc": "See calories burned and elevation gain for each route."
       }
     },
+    "mock": {
+      "destination": "City park"
+    },
     "cta": {
       "title": "How long does it really take you?",
       "subtitle": "Create your account, enter your speed and find out on your first route.",

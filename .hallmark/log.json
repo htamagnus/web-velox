@@ -1,0 +1,34 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "page",
+  "shape": "race sheet",
+  "theme": "sport",
+  "axes": "light/display-condensed/chromatic-volt",
+  "hero": "ledge",
+  "nav": "floating bar",
+  "footer": "mast",
+  "imagery": "photographs 2, the user own (hero in colour, close in the ink duotone) · product sample in produto",
+  "photos": [],
+  "entry": "figures",
+  "fingerprint": "Bottom-aligned|Asymmetric spans|Hairline|Solid|Full-bleed|None",
+  "sections": [
+   "hero:ledge",
+   "figures",
+   "rows",
+   "band:showcase+grid",
+   "band:photo close",
+   "footer:mast"
+  ],
+  "signature": "the night panning shot left clean, the condensed head resting under it",
+  "waived": [
+   "72",
+   "84"
+  ],
+  "prompt": "bike route planner for cyclists: ride time predicted from the rider real average speed per bike type",
+  "draw": "df5961",
+  "route": "/",
+  "date": "2026-10-24"
+ }
+]

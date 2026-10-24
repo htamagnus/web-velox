@@ -1,54 +1,40 @@
 'use client';
 
-import LogoVelox from '@/components/ui/logo-velox/logo-velox';
-import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Saira_Condensed, Albert_Sans, JetBrains_Mono } from 'next/font/google';
+import { MapPin, Navigation } from 'lucide-react';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
-import {
-  Bike,
-  LineChart,
-  Flame,
-  MountainSnow,
-  ArrowRight,
-  CheckCheck,
-  ClockAlert,
-} from 'lucide-react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
-import Button from '@/components/ui/button/button';
 import LanguageSelector from '@/components/language-selector/language-selector';
 import { useTexts } from '@/helpers/use-texts';
+import { useLocale } from '@/contexts/locale-context';
+
+const saira = Saira_Condensed({ weight: '800', subsets: ['latin'], variable: '--font-saira' });
+const albert = Albert_Sans({ subsets: ['latin'], variable: '--font-albert' });
+const jetbrains = JetBrains_Mono({
+  weight: '500',
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
+});
+
+const PAINS = ['prediction', 'time', 'bike'];
+const FEATURES = ['prediction', 'modality', 'strava', 'elevation'];
+const MODES = ['road', 'mtb', 'general'];
+
+// valores de exemplo do mock; o print do planner redesenhado substitui o slot inteiro
+const SAMPLE = { time: '1h20', distanceKm: 30, speedKmh: 22.5, gain: 200, loss: 180, kcal: 640 };
+const SAMPLE_PROFILE =
+  '0,90 10,86.5 20,80.8 30,74.2 40,77.3 50,71.5 60,63.2 70,53.5 80,45.2 90,48.3 100,39.9 110,32.5 120,25 130,28.5 140,20.2 150,14 160,18 170,24.1 180,29.4 190,25.9 200,33.3 210,40.8 220,46.9 230,52.2 240,57.1 250,63.2 260,68 270,73.7 280,77.7 290,80.3 300,81.2';
 
 export default function LandingPage() {
   const { t } = useTexts('landing');
-  const [isPageReady, setIsPageReady] = useState(false);
+  const { t: tApp } = useTexts();
+  const { locale } = useLocale();
   const [loading, setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
   const router = useRouter();
-
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsPageReady(true);
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    const offsetX = (e.clientX / window.innerWidth - 0.5) * 20;
-    const offsetY = (e.clientY / window.innerHeight - 0.5) * 20;
-    x.set(offsetX);
-    y.set(offsetY);
-  }, [x, y]);
-
-  useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [handleMouseMove]);
-
-  const springX = useSpring(x, { stiffness: 50, damping: 10 });
-  const springY = useSpring(y, { stiffness: 50, damping: 10 });
 
   const handleStart = () => {
     setShowTransition(true);
@@ -58,282 +44,241 @@ export default function LandingPage() {
     }, 600);
   };
 
-  if (!isPageReady) {
-    return <PageTransitionOverlay visible={true} />;
-  }
+  const label = (key: string) => tApp(key).replace(/:$/, '');
+  const speed = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en').format(SAMPLE.speedKmh);
 
   return (
     <>
       <PageTransitionOverlay visible={showTransition} />
-      <main className="min-h-screen bg-background flex flex-col items-center justify-start">
-        <div className="absolute top-4 right-4 z-50">
-          <LanguageSelector />
-        </div>
-        
-        {/* HERO */}
-        <section className="relative w-full min-h-[80vh] flex items-center justify-center text-center text-foreground">
-          {/* BACKGROUND IMAGE */}
-          {/* <div className="absolute inset-0 z-0">
-      <motion.img
-      src="/images/hero-bike.jpg"
-      alt="Ciclista em movimento"
-      initial={{ scale: 1 }}
-      animate={{ scale: 1.00 }}
-      transition={{ duration: 5, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' }}
-      className="w-full h-full object-cover opacity-60"
-    />
-
-        <div className="absolute inset-0 bg-background/80" />
-      </div> */}
-          <div className="absolute inset-0 z-0 overflow-hidden">
-            <motion.img
-              src="/images/hero-bike.jpg"
-              alt="Ciclista em movimento"
-              style={{
-                x: springX,
-                y: springY,
-                scale: 1.05,
-              }}
-              initial={{ scale: 1 }}
-              animate={{ scale: 1.05 }}
-              transition={{
-                duration: 20,
-                ease: 'easeInOut',
-                repeat: Infinity,
-                repeatType: 'mirror',
-              }}
-              className="w-full h-full object-cover opacity-60"
-            />
-            <div className="absolute inset-0 bg-background/80" />
+      <div className={`landing ${saira.variable} ${albert.variable} ${jetbrains.variable}`}>
+        <header className="nav">
+          <div className="container">
+            <div className="nav__bar">
+              <Link href="/" className="nav__home">
+                <Image src="/svg/velox-logo.svg" alt="Velox" width={64} height={44} priority />
+              </Link>
+              <div className="nav__end">
+                <div className="lang nav__lang">
+                  <LanguageSelector />
+                </div>
+                <button
+                  type="button"
+                  className="btn btn--line"
+                  onClick={handleStart}
+                  disabled={loading}
+                >
+                  {t('cta.button')}
+                </button>
+              </div>
+            </div>
           </div>
+        </header>
 
-          {/* HERO CONTENT */}
-          <div className="relative z-10 flex flex-col items-center space-y-6 max-w-3xl px-4">
-            <LogoVelox className="mb-6" size="lg" />
-
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="text-3xl md:text-6xl font-bold leading-tight text-copy"
-            >
-              {t('hero.title1')}
-              <br />
-              {t('hero.title2')}
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: 'easeOut' }}
-              className="text-lg md:text-xl max-w-2xl text-copy-light"
-            >
-              {t('hero.subtitle')}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Button
-                onClick={handleStart}
-                disabled={loading}
-                loading={loading}
-                variant="confirm"
-                className="mt-4"
-              >
-                <span className="flex items-center justify-center gap-3">
-                  {t('hero.cta')} <ArrowRight className="w-5 h-5" />
-                </span>
-              </Button>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="w-full py-16 px-6 bg-gradient-to-b from-red-900/20 via-background via-emerald-900/10 to-background backdrop-blur-md">
-          <div className="mx-auto flex flex-col items-center text-center space-y-24">
-            {/* BLOCO PROBLEMA */}
-            <div className="w-full flex flex-col items-center space-y-6">
-              <ClockAlert className="w-10 h-10 text-red-400 mx-auto" />
-              <motion.h2 className="text-3xl md:text-4xl font-bold text-copy">
-                {t('problem.title')}{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500 animate-pulse">
-                  {' '}
-                  {t('problem.titleHighlight')}{' '}
-                </span>
-              </motion.h2>
-              <motion.div className="flex gap-6 items-center text-4xl md:text-5xl font-bold leading-none">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500 animate-pulse align-middle">
-                  {t('problem.timeExample')}
-                </span>
-                <ArrowRight className="w-7 h-7 text-copy-light translate-y-[2px]" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-light)] to-[var(--primary-dark)] animate-pulse align-middle">
-                  {t('problem.timeReal')}
-                </span>
-              </motion.div>
-              <motion.p className="text-lg text-copy-lighter">
-                {t('problem.description1')}
-                <br />
-                {t('problem.description2')} <span className="text-copy">{t('problem.description3')}</span>
-              </motion.p>
-              <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 max-w-6xl w-full px-4 mx-auto">
-                {[
-                  {
-                    icon: LineChart,
-                    titleKey: 'problem.cards.prediction.title',
-                    descKey: 'problem.cards.prediction.desc',
-                  },
-                  {
-                    icon: ClockAlert,
-                    titleKey: 'problem.cards.time.title',
-                    descKey: 'problem.cards.time.desc',
-                  },
-                  {
-                    icon: Bike,
-                    titleKey: 'problem.cards.bike.title',
-                    descKey: 'problem.cards.bike.desc',
-                  },
-                ].map((feature) => (
-                  <motion.div
-                    key={feature.titleKey}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.03 }}
-                    transition={{ type: 'spring', stiffness: 120 }}
-                    viewport={{ once: true }}
-                    className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_4px_20px_rgba(0,255,150,0.05)] transition-all flex flex-col gap-2 text-left"
+        <main>
+          <section className="hero">
+            <figure className="hero__field">
+              <Image
+                src="/images/hero-bike.jpg"
+                alt="Ciclista em movimento"
+                fill
+                priority
+                sizes="100vw"
+              />
+            </figure>
+            <div className="container hero__base">
+              <div className="hero__type">
+                <h1>
+                  {t('hero.title1')}
+                  <br />
+                  {t('hero.title2')}
+                </h1>
+                <div className="hero__foot">
+                  <p className="lead">{t('hero.subtitle')}</p>
+                  <button
+                    type="button"
+                    className="btn btn--primary"
+                    onClick={handleStart}
+                    disabled={loading}
+                    aria-busy={loading}
                   >
-                    <div className="flex items-center gap-2 mb-2">
-                      <feature.icon className="w-6 h-6 text-red-400" />
-                      <h3 className="text-xl font-bold text-copy">{t(feature.titleKey)}</h3>
-                    </div>
-                    <p className="text-copy-light">{t(feature.descKey)}</p>
-                  </motion.div>
+                    {t('hero.cta')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="times">
+            <div className="container">
+              <h2>
+                {t('problem.title')} {t('problem.titleHighlight')}
+              </h2>
+              <div className="times__sheet">
+                <div className="times__cell">
+                  <p className="times__figure figure">{t('problem.timeExample')}</p>
+                  <p className="times__caption">{t('problem.description1')}</p>
+                </div>
+                <div className="times__cell">
+                  <p className="times__figure figure">
+                    <span className="times__plate">{t('problem.timeReal')}</span>
+                  </p>
+                  <p className="times__caption">
+                    {t('problem.description2')} {t('problem.description3')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="pains">
+            <div className="container">
+              <ul className="rows">
+                {PAINS.map((key) => (
+                  <li key={key} className="rows__item">
+                    <h3>{t(`problem.cards.${key}.title`)}</h3>
+                    <p>{t(`problem.cards.${key}.desc`)}</p>
+                  </li>
                 ))}
-              </section>
+              </ul>
             </div>
+          </section>
 
-            {/* BLOCO SOLUÇÃO */}
-            <div className="w-full flex flex-col items-center space-y-6">
-              <Flame className="w-10 h-10 text-primary-dark mx-auto" />
-              <motion.h2 className="text-3xl md:text-4xl font-bold text-copy">
-                {t('solution.title')}{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-light)] to-[var(--primary-dark)] animate-pulse">
-                  {t('solution.titleHighlight')}
-                </span>
-              </motion.h2>
-              <motion.p className="text-muted-foreground text-lg text-copy-light">
-                {t('solution.subtitle')}
-              </motion.p>
-              <div className="flex items-center gap-2 text-sm text-copy-lighter">
-                <CheckCheck className="w-5 h-5 text-primary" />
-                {t('solution.validation')}
+          <section className="product">
+            <div className="container">
+              <div className="product__head">
+                <h2>
+                  {t('solution.title')} {t('solution.titleHighlight')}
+                </h2>
+                <div className="product__aside">
+                  <p className="lead">{t('solution.subtitle')}</p>
+                  <p className="product__note">{t('solution.validation')}</p>
+                </div>
+              </div>
+
+              <figure
+                className="result"
+                data-slot="produto"
+                data-kind="product"
+                data-alt="Tela de resultado do planner redesenhado: modalidade, rota, tempo estimado, distância, altimetria e calorias"
+              >
+                <div className="result__modes">
+                  {MODES.map((mode, i) => (
+                    <span key={mode} className={i === 0 ? 'result__mode is-on' : 'result__mode'}>
+                      {tApp(`speedModal.options.${mode}.label`)}
+                    </span>
+                  ))}
+                </div>
+                <div className="result__route">
+                  <ul className="result__places">
+                    <li>
+                      <Navigation size={16} aria-hidden="true" />
+                      {tApp('plannerPanel.originPlaceholder')}
+                    </li>
+                    <li>
+                      <MapPin size={16} aria-hidden="true" />
+                      {t('mock.destination')}
+                    </li>
+                  </ul>
+                  <div className="result__profile">
+                    <p className="result__label">{tApp('elevationProfile.title')}</p>
+                    <svg
+                      viewBox="0 0 300 100"
+                      preserveAspectRatio="none"
+                      role="img"
+                      aria-label={tApp('elevationProfile.title')}
+                    >
+                      <polygon points={`0,100 ${SAMPLE_PROFILE} 300,100`} />
+                      <polyline points={SAMPLE_PROFILE} />
+                    </svg>
+                    <p className="result__axis">
+                      <span>0 km</span>
+                      <span>{SAMPLE.distanceKm} km</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="result__read">
+                  <div>
+                    <p className="result__label">{label('planner.summary.time')}</p>
+                    <p className="result__time">
+                      <span>{SAMPLE.time}</span>
+                    </p>
+                    <p className="result__speed">
+                      {tApp('planner.summary.averageSpeedInfo').replace('{{speed}}', speed)}
+                    </p>
+                  </div>
+                  <dl className="result__facts">
+                    <div>
+                      <dt>{label('planner.summary.distance')}</dt>
+                      <dd>{SAMPLE.distanceKm} km</dd>
+                    </div>
+                    <div>
+                      <dt>{label('planner.summary.elevationGain')}</dt>
+                      <dd>{SAMPLE.gain} m</dd>
+                    </div>
+                    <div>
+                      <dt>{label('planner.summary.elevationLoss')}</dt>
+                      <dd>{SAMPLE.loss} m</dd>
+                    </div>
+                    <div>
+                      <dt>{label('planner.summary.calories')}</dt>
+                      <dd>{SAMPLE.kcal} kcal</dd>
+                    </div>
+                  </dl>
+                  <div className="result__actions">
+                    <span>{tApp('planner.buttons.saveRoute')}</span>
+                    <span>{tApp('planner.buttons.newRoute')}</span>
+                  </div>
+                </div>
+              </figure>
+
+              <ul className="features__grid">
+                {FEATURES.map((key) => (
+                  <li key={key} className="features__cell">
+                    <h3>{t(`features.${key}.title`)}</h3>
+                    <p>{t(`features.${key}.desc`)}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section className="close">
+            <div
+              className="close__photo"
+              data-slot="fechamento"
+              data-alt="Ciclista de estrada em velocidade, de dia"
+            >
+              <Image src="/images/cta-bike.jpg" alt="Ciclista em movimento" fill sizes="100vw" />
+            </div>
+            <div className="close__over">
+              <div className="container">
+                <h2>{t('cta.title')}</h2>
+                <p className="lead">{t('cta.subtitle')}</p>
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  onClick={handleStart}
+                  disabled={loading}
+                >
+                  {t('cta.button')}
+                </button>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </main>
 
-        {/* FEATURES */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4 max-w-4xl px-6 mx-auto">
-          {[
-            {
-              icon: LineChart,
-              titleKey: 'features.prediction.title',
-              descKey: 'features.prediction.desc',
-            },
-            {
-              icon: Bike,
-              titleKey: 'features.modality.title',
-              descKey: 'features.modality.desc',
-            },
-            {
-              icon: Flame,
-              titleKey: 'features.strava.title',
-              descKey: 'features.strava.desc',
-            },
-            {
-              icon: MountainSnow,
-              titleKey: 'features.elevation.title',
-              descKey: 'features.elevation.desc',
-            },
-          ].map((feature) => (
-            <motion.div
-              key={feature.titleKey}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.03, rotate: 0.2 }}
-              transition={{ type: 'spring', stiffness: 120 }}
-              viewport={{ once: true }}
-              className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_4px_20px_rgba(0,255,150,0.05)] transition-all"
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <feature.icon className="w-6 h-6" stroke="var(--primary)" />
-                <h3 className="text-xl font-bold text-copy">{t(feature.titleKey)}</h3>
+        <footer className="foot">
+          <div className="container foot__inner">
+            <Image src="/svg/velox-logo.svg" alt="Velox" width={176} height={120} />
+            <div className="foot__end">
+              <div className="lang">
+                <LanguageSelector />
               </div>
-              <p className="text-copy-light">{t(feature.descKey)}</p>
-            </motion.div>
-          ))}
-        </section>
-
-        <section className="relative w-full min-h-[80vh] flex flex-col items-center justify-center text-center text-foreground overflow-hidden pt-23">
-          {/* BACKGROUND IMAGE */}
-          <div className="absolute inset-0 z-0 overflow-hidden pt-20">
-            <motion.img
-              src="/images/cta-bike.jpg"
-              alt="Ciclista em movimento"
-              initial={{ scale: 1 }}
-              animate={{ scale: 1.05 }}
-              transition={{
-                duration: 20,
-                ease: 'easeInOut',
-                repeat: Infinity,
-                repeatType: 'mirror',
-              }}
-              className="w-full h-full object-cover object-[50%_30%] opacity-20 grayscale"
-            />
-            <div className="absolute inset-0 bg-background/80" />
+              <p className="foot__legal">© 2026 Velox</p>
+            </div>
           </div>
-
-          {/* CTA CONTENT */}
-          <div className="relative z-10 flex flex-col items-center space-y-6 max-w-2xl px-6">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[var(--copy)] to-[var(--primary-dark)] text-transparent bg-clip-text"
-            >
-              {t('cta.title')}
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-lg md:text-xl text-muted-foreground text-copy-light"
-            >
-              {t('cta.subtitle')}
-            </motion.p>
-
-            <motion.div
-              whileHover={{ scale: 1.07 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Button onClick={handleStart} variant="confirm" className="mt-4">
-                <span className="flex items-center justify-center gap-3">
-                  {t('cta.button')} <ArrowRight className="w-5 h-5" />
-                </span>
-              </Button>
-            </motion.div>
-            <LogoVelox className="mt-10" size="md" />
-          </div>
-        </section>
-      </main>
+        </footer>
+      </div>
     </>
   );
 }

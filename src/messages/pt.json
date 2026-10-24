@@ -394,6 +394,9 @@
         "desc": "Veja as calorias gastas e o ganho de elevação de cada trajeto."
       }
     },
+    "mock": {
+      "destination": "Parque da cidade"
+    },
     "cta": {
       "title": "Quanto tempo você leva de verdade?",
       "subtitle": "Crie sua conta, informe sua velocidade e descubra na primeira rota.",
