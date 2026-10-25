@@ -445,11 +445,11 @@
       "button": "Create account"
     },
     "index": {
-      "pains": "01 · The problem",
-      "race": "02 · The race",
-      "product": "03 · The app",
-      "routes": "04 · The routes",
-      "conditions": "05 · Before you go"
+      "pains": "The problem",
+      "race": "The race",
+      "product": "The app",
+      "routes": "The routes",
+      "conditions": "Before you go"
     },
     "product": {
       "strava": "via Strava"

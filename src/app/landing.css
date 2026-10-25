@@ -411,11 +411,9 @@
 }
 
 /* ---- compartilhado entre as seções ---- */
-/* o índice de cada seção: legenda expandida com um quadrado de volt, como placa de telemetria */
+/* a legenda de cada seção, expandida como placa de telemetria */
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
+  display: block;
   margin: 0 0 var(--space-lg);
   font: 700 var(--text-xs) / 1 var(--font-outlier);
   font-stretch: var(--stretch-wide);
@@ -424,18 +422,8 @@
   text-transform: uppercase;
   color: var(--color-muted);
 }
-.eyebrow::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  background: var(--color-accent-deep);
-}
 .eyebrow--ink {
   color: var(--color-muted-on-ink);
-}
-.eyebrow--ink::before {
-  background: var(--color-accent);
-  box-shadow: 0 0 10px var(--color-accent);
 }
 .label {
   font-size: var(--text-sm);
@@ -600,14 +588,11 @@
   font-stretch: var(--stretch-display);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--tracking-display);
-  color: var(--color-amber-deep);
+  color: var(--color-ink);
 }
 .pains__figure span:last-child {
   font: 500 var(--text-md) / 1 var(--font-body);
   color: var(--color-muted);
-}
-.pains__list li:last-child .pains__figure {
-  color: var(--color-accent-deep);
 }
 .pains__item h3 {
   font-size: var(--text-xl);

@@ -445,11 +445,11 @@
       "button": "Criar conta"
     },
     "index": {
-      "pains": "01 · O problema",
-      "race": "02 · A corrida",
-      "product": "03 · O app",
-      "routes": "04 · As rotas",
-      "conditions": "05 · Antes de sair"
+      "pains": "O problema",
+      "race": "A corrida",
+      "product": "O app",
+      "routes": "As rotas",
+      "conditions": "Antes de sair"
     },
     "product": {
       "strava": "via Strava"
