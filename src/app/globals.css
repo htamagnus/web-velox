@@ -3,6 +3,7 @@
 @import "./base.css";
 @import "./landing.css";
 @import "./auth.css";
+@import "./onboarding.css";
 
 :root {
   /* primary brand colors */
@@ -151,16 +152,6 @@ body::-webkit-scrollbar {
 }
 
 @layer components {
-  .step-heading {
-    @apply text-2xl text-center font-semibold;
-    color: var(--primary);
-  }
-
-  .step-paragraph {
-    @apply text-base text-center mt-2;
-    color: var(--copy-light);
-  }
-
   .title-primary {
     @apply text-2xl text-center;
     color: var(--primary);

@@ -1,0 +1,317 @@
+/* Onboarding: o pôster do hero sem foto; o número gigante é o valor escolhido e a fita embaixo é a régua. */
+
+.onb {
+  color-scheme: dark;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 70% at 78% 42%, var(--color-ink-3), transparent 70%),
+    var(--color-ink);
+  color: var(--color-paper);
+}
+.onb__nav,
+.onb__top,
+.onb__main {
+  position: relative;
+  z-index: 2;
+}
+.onb__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-block: var(--space-md);
+}
+.onb__nav img {
+  width: 56px;
+  height: auto;
+}
+
+/* a faixa de passos, igual à escolha de bike do hero */
+.onb__progress {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.onb__progress li {
+  display: grid;
+  gap: var(--space-xs);
+  color: var(--color-muted-on-ink);
+  transition: color var(--dur-short) var(--ease-out);
+}
+.onb__progress li[data-done],
+.onb__progress li[aria-current='step'] {
+  color: var(--color-paper);
+}
+.onb__progress-bar {
+  position: relative;
+  height: var(--rule-bar);
+  overflow: hidden;
+  background: var(--color-rule-on-ink);
+}
+.onb__progress-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: var(--color-accent);
+}
+.onb__progress li[aria-current='step'] .onb__progress-fill {
+  box-shadow: 0 0 12px var(--color-accent);
+}
+.onb__progress-name {
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.onb__main {
+  display: grid;
+  padding-block: var(--space-2xl) var(--space-xl);
+}
+.onb__stage {
+  display: grid;
+}
+.onb__step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    'copy figure'
+    'dial dial'
+    'note actions';
+  align-items: end;
+  gap: var(--space-2xl) var(--space-xl);
+}
+.onb__copy {
+  grid-area: copy;
+  display: grid;
+  gap: var(--space-md);
+  align-self: center;
+}
+.onb h1 {
+  max-width: 14ch;
+  font-size: var(--text-display-s);
+  line-height: 0.95;
+  word-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.onb .lead {
+  max-width: 40ch;
+  color: var(--color-muted-on-ink);
+}
+.onb__tag {
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-strava);
+}
+
+/* o valor gigante, como o tempo do hero */
+.onb__figure {
+  grid-area: figure;
+  justify-self: end;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin: 0;
+}
+.onb__value {
+  font: var(--display-weight) clamp(6rem, 17vw, 16rem) / 0.8 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  color: var(--color-accent);
+  text-shadow: 0 0 80px color-mix(in oklab, var(--color-accent) 45%, transparent);
+}
+.onb__unit {
+  font: 700 var(--text-lg) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* a fita métrica: os traços correm sob o cursor volt fixo no meio */
+.onb__dial {
+  grid-area: dial;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-md);
+}
+.onb__nudge {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: var(--rule-bar) solid color-mix(in oklab, var(--color-paper) 35%, transparent);
+  border-radius: var(--radius-card);
+  background: transparent;
+  color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out);
+}
+.onb__nudge:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.onb__nudge:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.tape {
+  position: relative;
+  height: 80px;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+.tape[data-dragging] {
+  cursor: grabbing;
+}
+.tape[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.tape__window {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+.tape__track {
+  position: absolute;
+  left: 50%;
+  inset-block: 0;
+  background-image:
+    linear-gradient(90deg, color-mix(in oklab, var(--color-paper) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--color-paper) 28%, transparent) 1px, transparent 1px);
+  background-size:
+    calc(var(--tick) * 10) 32px,
+    var(--tick) 14px;
+  background-position:
+    var(--offset) 100%,
+    0 100%;
+  background-repeat: repeat-x;
+  transition: transform var(--dur-short) var(--ease-out);
+}
+.tape[data-dragging] .tape__track {
+  transition: none;
+}
+.tape__track span {
+  position: absolute;
+  bottom: 42px;
+  translate: -50% 0;
+  font: 600 var(--text-xs) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted-on-ink);
+}
+.tape::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 2px;
+  height: 52px;
+  translate: -1px 0;
+  background: var(--color-accent);
+  box-shadow: 0 0 14px var(--color-accent);
+  pointer-events: none;
+}
+.tape:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.onb__actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-md);
+}
+.onb__actions .btn {
+  min-height: 60px;
+}
+.onb__note {
+  grid-area: note;
+  align-self: center;
+  max-width: 44ch;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.btn--strava {
+  border-color: var(--color-strava);
+  background: transparent;
+  color: var(--color-paper);
+}
+.btn--strava:hover:not(:disabled) {
+  background: var(--color-strava);
+}
+.onb :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 60rem) {
+  .onb .hero__lines {
+    background-size: calc(100% / 3) 100%;
+    background-position: calc(100% / 3) 0;
+  }
+  .onb__main {
+    padding-block: var(--space-xl);
+  }
+  .onb__step {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      'copy'
+      'figure'
+      'dial'
+      'actions'
+      'note';
+    align-content: start;
+    gap: var(--space-xl);
+  }
+  .onb__figure {
+    justify-self: start;
+  }
+  .onb__value {
+    font-size: clamp(5.5rem, 30vw, 9rem);
+  }
+  .onb__actions {
+    justify-content: stretch;
+  }
+  .onb__actions .btn--primary {
+    flex: 1;
+    padding-inline: var(--space-lg);
+  }
+  .onb__actions .btn--strava {
+    flex-basis: 100%;
+    order: -1;
+  }
+}
+@media (max-width: 40rem) {
+  .onb__progress {
+    gap: var(--space-xs);
+  }
+  .onb__progress-name {
+    display: none;
+  }
+  .onb__nudge {
+    width: 48px;
+    height: 48px;
+  }
+}

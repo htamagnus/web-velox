@@ -33,6 +33,24 @@
       "title": "Velocidade média no MTB",
       "subtitle": "Informe sua média nos pedais de mountain bike.",
       "note": "*usada pra estimar o tempo das rotas quando você escolher MTB"
+    },
+    "progress": {
+      "height": "Altura",
+      "weight": "Peso",
+      "age": "Idade",
+      "averageSpeedGeneral": "Geral",
+      "averageSpeedRoad": "Speed",
+      "averageSpeedMtb": "MTB"
+    },
+    "actions": {
+      "continue": "Continuar",
+      "skip": "Pular",
+      "back": "Voltar",
+      "decrease": "Diminuir",
+      "increase": "Aumentar",
+      "strava": "Importar do Strava",
+      "stravaLoading": "Redirecionando...",
+      "fromStrava": "Importado do Strava"
     }
   },
   "profile": {

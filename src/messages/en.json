@@ -33,6 +33,24 @@
       "title": "Average speed on an MTB",
       "subtitle": "Enter your average on mountain bike rides.",
       "note": "*used to estimate route time when you choose MTB"
+    },
+    "progress": {
+      "height": "Height",
+      "weight": "Weight",
+      "age": "Age",
+      "averageSpeedGeneral": "Overall",
+      "averageSpeedRoad": "Road",
+      "averageSpeedMtb": "MTB"
+    },
+    "actions": {
+      "continue": "Continue",
+      "skip": "Skip",
+      "back": "Back",
+      "decrease": "Decrease",
+      "increase": "Increase",
+      "strava": "Import from Strava",
+      "stravaLoading": "Redirecting...",
+      "fromStrava": "Imported from Strava"
     }
   },
   "profile": {

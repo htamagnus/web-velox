@@ -1,17 +1,35 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { useTexts } from '@/helpers/use-texts';
+import { EASE } from '@/components/landing/reveal';
+
 interface ProgressBarProps {
-  currentStep: number;
-  totalSteps: number;
+  steps: string[];
+  current: number;
 }
 
-export function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
-  const progress = ((currentStep + 1) / totalSteps) * 100;
+// a faixa de segmentos do hero: um traço por passo, o atual acende e os feitos ficam cheios
+export function ProgressBar({ steps, current }: ProgressBarProps) {
+  const { t } = useTexts('onboarding.progress');
 
   return (
-    <div className="absolute top-0 left-0 w-full h-2 bg-black/40">
-      <div
-        className="h-full transition-all duration-300 bg-gradient-to-r from-[#92a848] to-[#a8b87a]"
-        style={{ width: `${progress}%` }}
-      />
-    </div>
+    <ol className="onb__progress">
+      {steps.map((key, i) => (
+        <li key={key} aria-current={i === current ? 'step' : undefined} data-done={i < current || undefined}>
+          <span className="onb__progress-bar">
+            {i <= current && (
+              <motion.span
+                className="onb__progress-fill"
+                initial={{ scaleX: i === current ? 0 : 1 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, ease: EASE }}
+              />
+            )}
+          </span>
+          <span className="onb__progress-name">{t(key)}</span>
+        </li>
+      ))}
+    </ol>
   );
-} 
+}
