@@ -2,18 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import {
-  animate,
-  motion,
-  useInView,
-  useMotionValue,
-  useReducedMotion,
-  useTransform,
-} from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
 import { EASE } from './reveal';
+import RollingTime from './rolling-time';
 import { GENERIC_MINUTES, MODES, ROUTE, minutesFor, type Mode } from './modes';
 
 type Props = {
@@ -58,13 +52,6 @@ export default function HeroPoster({ mode, onChange }: Props) {
     onChange(m);
   };
 
-  const rolling = useMotionValue(minutes);
-  const rollingText = useTransform(rolling, (v) => hm(Math.round(v)));
-  useEffect(() => {
-    const controls = animate(rolling, minutes, { duration: 0.9, ease: EASE });
-    return () => controls.stop();
-  }, [minutes, rolling]);
-
   const facts = [
     { value: `${ROUTE.km} km`, label: t('sample') },
     { value: `${ROUTE.climb} m`, label: t('climbLabel') },
@@ -99,9 +86,9 @@ export default function HeroPoster({ mode, onChange }: Props) {
         <span className="visually-hidden" aria-live="polite">
           {hm(minutes)}
         </span>
-        <motion.p className="hero__time" aria-hidden="true">
-          {rollingText}
-        </motion.p>
+        <p className="hero__time" aria-hidden="true">
+          <RollingTime minutes={minutes} />
+        </p>
         <p className="hero__figure-label">{t('subtitle')}</p>
       </motion.div>
 

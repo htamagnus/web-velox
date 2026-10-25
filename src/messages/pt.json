@@ -413,11 +413,9 @@
       "colRoute": "Rota",
       "colDistance": "Distância",
       "colClimb": "Subida",
-      "colTime": "Tempo",
-      "colDiff": "Diferença",
       "lessClimbing": "Menos subidas",
       "longer": "Mais longa",
-      "caption": "Exemplo com média de 22,5\u00a0km/h na Speed."
+      "caption": "Exemplo com média de {{speed}} km/h na {{mode}}."
     },
     "conditions": {
       "title": "Clima e trânsito antes de sair",

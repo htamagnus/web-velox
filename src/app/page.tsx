@@ -14,6 +14,7 @@ import CountUp from '@/components/landing/count-up';
 import SpeedField from '@/components/landing/speed-field';
 import Ticker from '@/components/landing/ticker';
 import Race from '@/components/landing/race';
+import Routes from '@/components/landing/routes';
 import { MODES, minutesFor, type Mode } from '@/components/landing/modes';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
@@ -41,32 +42,6 @@ const SAMPLE = { distanceKm: 30, speedKmh: 22.5, gain: 200, loss: 180, kcal: 640
 const SAMPLE_PROFILE =
   '0,90 10,86.5 20,80.8 30,74.2 40,77.3 50,71.5 60,63.2 70,53.5 80,45.2 90,48.3 100,39.9 110,32.5 120,25 130,28.5 140,20.2 150,14 160,18 170,24.1 180,29.4 190,25.9 200,33.3 210,40.8 220,46.9 230,52.2 240,57.1 250,63.2 260,68 270,73.7 280,77.7 290,80.3 300,81.2';
 
-// exemplo coerente com o back: tempo = distância ÷ média (22,5 km/h) e rótulos pelos mesmos limites
-const SAMPLE_ROUTES = [
-  {
-    name: 'routeSelector.labels.recommended',
-    summary: 'calculate.fastestRoute',
-    km: 30,
-    climb: 200,
-    minutes: 80,
-  },
-  {
-    name: 'routeSelector.labels.alternative',
-    n: 1,
-    summary: 'landing.routes.lessClimbing',
-    km: 32,
-    climb: 150,
-    minutes: 85,
-  },
-  {
-    name: 'routeSelector.labels.alternative',
-    n: 2,
-    summary: 'landing.routes.longer',
-    km: 34,
-    climb: 230,
-    minutes: 91,
-  },
-];
 const WEATHER_RULES = [
   ['humidity', 'rainRule'],
   ['temperature', 'temperatureRule'],
@@ -283,51 +258,7 @@ export default function LandingPage() {
               </div>
             </section>
 
-            <section className="routes">
-              <div className="container">
-                <Reveal>
-                  <div className="routes__head">
-                    <h2>{t('routes.title')}</h2>
-                    <p className="lead">{t('routes.lead')}</p>
-                  </div>
-                </Reveal>
-                <Reveal delay={0.1}>
-                  <table className="routes__table">
-                    <caption>{t('routes.caption')}</caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">{t('routes.colRoute')}</th>
-                        <th scope="col">{t('routes.colDistance')}</th>
-                        <th scope="col">{t('routes.colClimb')}</th>
-                        <th scope="col">{t('routes.colTime')}</th>
-                        <th scope="col">{t('routes.colDiff')}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {SAMPLE_ROUTES.map((route, i) => (
-                        <tr key={route.km} className={i === 0 ? 'is-main' : undefined}>
-                          <th scope="row">
-                            <span className="routes__name">
-                              {tApp(route.name)}
-                              {route.n ? ` ${route.n}` : ''}
-                            </span>
-                            <span className="routes__summary">{tApp(route.summary)}</span>
-                          </th>
-                          <td data-label={t('routes.colDistance')}>{route.km} km</td>
-                          <td data-label={t('routes.colClimb')}>{route.climb} m</td>
-                          <td data-label={t('routes.colTime')}>
-                            <span className="routes__time">{hm(route.minutes)}</span>
-                          </td>
-                          <td data-label={t('routes.colDiff')}>
-                            {i > 0 && `+${route.minutes - SAMPLE_ROUTES[0].minutes} min`}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Reveal>
-              </div>
-            </section>
+            <Routes mode={mode} onChange={setMode} />
 
             <section className="conditions">
               <div className="container">

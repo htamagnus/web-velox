@@ -413,11 +413,9 @@
       "colRoute": "Route",
       "colDistance": "Distance",
       "colClimb": "Climb",
-      "colTime": "Time",
-      "colDiff": "Difference",
       "lessClimbing": "Less climbing",
       "longer": "Longer",
-      "caption": "Example at a 22.5\u00a0km/h average on a road bike."
+      "caption": "Example at a {{speed}} km/h average on {{mode}}."
     },
     "conditions": {
       "title": "Weather and traffic before you go",
