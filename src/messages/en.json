@@ -111,6 +111,8 @@
     }
   },
   "login": {
+    "headline1": "Back",
+    "headline2": "in the saddle.",
     "title": "Sign in to Velox",
     "subtitle": "Access your account to start planning routes.",
     "email": {
@@ -130,9 +132,15 @@
       "unexpected": "Unexpected error. Try again.",
       "email": "Invalid email.",
       "password": "Invalid password."
+    },
+    "link": {
+      "noAccount": "Don't have an account? ",
+      "register": "Create account"
     }
   },
   "register": {
+    "headline1": "Your time",
+    "headline2": "starts here.",
     "title": "Create account",
     "subtitle": "Fill in the fields below to start using Velox",
     "name": {
@@ -147,10 +155,10 @@
       "label": "Password",
       "placeholder": "Enter your password",
       "requirements": {
-        "length": "• At least 8 characters",
-        "uppercase": "• One uppercase letter",
-        "number": "• One number",
-        "specialChar": "• One special character"
+        "length": "At least 8 characters",
+        "uppercase": "One uppercase letter",
+        "number": "One number",
+        "specialChar": "One special character"
       }
     },
     "button": {
@@ -430,11 +438,11 @@
       "weatherTitle": "Weather alerts",
       "trafficTitle": "Traffic levels",
       "rainRule": "over 70% chance",
-      "temperatureRule": "below 10\u00a0°C or above 30\u00a0°C",
-      "windRule": "over 25\u00a0km/h",
-      "normalRule": "under 5\u00a0min of delay",
-      "intenseRule": "5 to 15\u00a0min of delay",
-      "congestedRule": "15\u00a0min or more, and the app suggests waiting"
+      "temperatureRule": "below 10 °C or above 30 °C",
+      "windRule": "over 25 km/h",
+      "normalRule": "under 5 min of delay",
+      "intenseRule": "5 to 15 min of delay",
+      "congestedRule": "15 min or more, and the app suggests waiting"
     },
     "footer": {
       "install": "Works in the browser and installs on your phone like an app."

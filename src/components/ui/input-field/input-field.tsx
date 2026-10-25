@@ -8,6 +8,7 @@ type InputFieldProps = {
   error?: string
   required?: boolean
   maxLength?: number
+  autoComplete?: string
 }
 
 export default function InputField({
@@ -20,10 +21,11 @@ export default function InputField({
   error,
   required = false,
   maxLength,
+  autoComplete,
 }: InputFieldProps) {
   return (
-    <div className="w-full">
-      <label htmlFor={name} className="block text-s font-medium text-gray-400 mb-2">
+    <div className="field">
+      <label htmlFor={name} className="field__label">
         {label}
       </label>
       <input
@@ -35,11 +37,16 @@ export default function InputField({
         placeholder={placeholder}
         required={required}
         maxLength={maxLength}
-        className={`mt-1 block w-full px-4 py-3 rounded-xl text-white bg-white/5 border ${
-          error ? 'border-red-500' : 'border-white/10 hover:border-white/20 focus:border-primary-light/50'
-        } outline-none transition-all`}
+        autoComplete={autoComplete}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${name}-error` : undefined}
+        className="field__input"
       />
-      {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+      {error && (
+        <p id={`${name}-error`} className="field__error">
+          {error}
+        </p>
+      )}
     </div>
   )
 }

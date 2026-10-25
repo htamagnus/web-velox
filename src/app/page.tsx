@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Archivo } from 'next/font/google';
 import { motion, MotionConfig, useMotionValueEvent, useScroll } from 'framer-motion';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import LanguageSelector from '@/components/language-selector/language-selector';
@@ -19,9 +18,7 @@ import Conditions from '@/components/landing/conditions';
 import Close from '@/components/landing/close';
 import { MODES, type Mode } from '@/components/landing/modes';
 import { useTexts } from '@/helpers/use-texts';
-
-// uma família variável com eixo de largura: condensada nos títulos, expandida nas legendas
-const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], variable: '--font-archivo' });
+import { archivo } from './fonts';
 
 export default function LandingPage() {
   const { t } = useTexts('landing');

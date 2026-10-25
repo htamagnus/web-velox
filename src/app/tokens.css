@@ -19,6 +19,7 @@
   --color-amber: oklch(82% 0.15 72);
   --color-amber-ink: oklch(24% 0.06 60);
   --color-amber-deep: oklch(60% 0.15 62);
+  --color-danger: oklch(72% 0.17 25);
   --color-slot: oklch(76% 0.07 258);
   --color-strava: oklch(68% 0.21 38);
   /* uma família só, três larguras: condensada nos títulos, normal no corpo e nos números, expandida nas legendas */

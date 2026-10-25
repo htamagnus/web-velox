@@ -111,6 +111,8 @@
     }
   },
   "login": {
+    "headline1": "De volta",
+    "headline2": "ao pedal.",
     "title": "Entrar no Velox",
     "subtitle": "Acesse sua conta para começar a planejar rotas.",
     "email": {
@@ -130,9 +132,15 @@
       "unexpected": "Erro inesperado. Tente novamente.",
       "email": "E-mail inválido.",
       "password": "Senha inválida."
+    },
+    "link": {
+      "noAccount": "Ainda não tem conta? ",
+      "register": "Criar conta"
     }
   },
   "register": {
+    "headline1": "Seu tempo",
+    "headline2": "começa aqui.",
     "title": "Criar conta",
     "subtitle": "Preencha os dados abaixo para começar a usar o Velox",
     "name": {
@@ -147,10 +155,10 @@
       "label": "Senha",
       "placeholder": "Digite sua senha",
       "requirements": {
-        "length": "• Pelo menos 8 caracteres",
-        "uppercase": "• Uma letra maiúscula",
-        "number": "• Um número",
-        "specialChar": "• Um caractere especial"
+        "length": "Pelo menos 8 caracteres",
+        "uppercase": "Uma letra maiúscula",
+        "number": "Um número",
+        "specialChar": "Um caractere especial"
       }
     },
     "button": {
@@ -430,11 +438,11 @@
       "weatherTitle": "Alertas de clima",
       "trafficTitle": "Níveis de trânsito",
       "rainRule": "acima de 70% de chance",
-      "temperatureRule": "abaixo de 10\u00a0°C ou acima de 30\u00a0°C",
-      "windRule": "acima de 25\u00a0km/h",
-      "normalRule": "menos de 5\u00a0min de atraso",
-      "intenseRule": "de 5 a 15\u00a0min de atraso",
-      "congestedRule": "15\u00a0min ou mais, e o app sugere adiar"
+      "temperatureRule": "abaixo de 10 °C ou acima de 30 °C",
+      "windRule": "acima de 25 km/h",
+      "normalRule": "menos de 5 min de atraso",
+      "intenseRule": "de 5 a 15 min de atraso",
+      "congestedRule": "15 min ou mais, e o app sugere adiar"
     },
     "footer": {
       "install": "Funciona no navegador e instala no celular como app."
