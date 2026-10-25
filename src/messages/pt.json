@@ -355,22 +355,21 @@
       "atSpeed": "Média de {{speed}} km/h"
     },
     "problem": {
-      "eyebrow": "O problema",
       "title": "A previsão te",
       "titleHighlight": "deixou na mão?",
       "cards": {
         "prediction": {
-          "figure": "+50 min",
+          "unit": "min",
           "title": "Previsão furada",
           "desc": "Errar pra mais ou pra menos bagunça tudo o que vem depois."
         },
         "time": {
-          "figure": "14 km/h",
+          "unit": "km/h",
           "title": "Média chutada",
           "desc": "Quando o treino precisa caber na rotina, não dá pra planejar em cima de um chute."
         },
         "bike": {
-          "figure": "3 ritmos",
+          "unit": "ritmos",
           "title": "Não é qualquer bike",
           "desc": "MTB, Speed e urbana têm ritmos diferentes, mas os apps usam a mesma base pra todas."
         }

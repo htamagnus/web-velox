@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Saira_Condensed, Albert_Sans, JetBrains_Mono } from 'next/font/google';
-import { AlarmClockOff, Bike, Gauge, MapPin, Navigation } from 'lucide-react';
+import { MapPin, Navigation } from 'lucide-react';
 import { motion, MotionConfig } from 'framer-motion';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import LanguageSelector from '@/components/language-selector/language-selector';
 import HeroTimes from '@/components/landing/hero-times';
 import Reveal, { EASE } from '@/components/landing/reveal';
+import CountUp from '@/components/landing/count-up';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
@@ -23,10 +24,11 @@ const jetbrains = JetBrains_Mono({
   variable: '--font-jetbrains',
 });
 
+// as figuras saem do exemplo da página: 2h10 contra 1h20 em 30 km
 const PAINS = [
-  { key: 'prediction', icon: AlarmClockOff },
-  { key: 'time', icon: Gauge },
-  { key: 'bike', icon: Bike },
+  { key: 'prediction', value: 50, prefix: '+' },
+  { key: 'time', value: 14 },
+  { key: 'bike', value: 3 },
 ];
 const FEATURES = ['prediction', 'modality', 'strava', 'elevation'];
 const MODES = ['road', 'mtb', 'general'];
@@ -180,26 +182,24 @@ export default function LandingPage() {
             <section className="pains">
               <div className="container">
                 <Reveal>
-                  <p className="pains__eyebrow">{t('problem.eyebrow')}</p>
                   <h2>
                     {t('problem.title')} {t('problem.titleHighlight')}
                   </h2>
                 </Reveal>
-                <ul className="pains__grid">
-                  {PAINS.map(({ key, icon: Icon }, i) => (
-                    <li key={key}>
-                      <Reveal delay={0.1 + i * 0.1}>
-                        <article className="pain">
-                          <div className="pain__top">
-                            <span className="pain__icon">
-                              <Icon size={22} aria-hidden="true" />
-                            </span>
-                            <span className="pain__index">0{i + 1}</span>
-                          </div>
-                          <p className="pain__figure">{t(`problem.cards.${key}.figure`)}</p>
-                          <h3>{t(`problem.cards.${key}.title`)}</h3>
-                          <p>{t(`problem.cards.${key}.desc`)}</p>
-                        </article>
+                <ul className="pains__sheet">
+                  {PAINS.map((pain, i) => (
+                    <li key={pain.key} className="pains__cell">
+                      <Reveal delay={0.1 + i * 0.12}>
+                        <p
+                          className={
+                            i === 0 ? 'pains__figure figure is-volt' : 'pains__figure figure'
+                          }
+                        >
+                          <CountUp to={pain.value} prefix={pain.prefix} />
+                          <span>{t(`problem.cards.${pain.key}.unit`)}</span>
+                        </p>
+                        <h3>{t(`problem.cards.${pain.key}.title`)}</h3>
+                        <p>{t(`problem.cards.${pain.key}.desc`)}</p>
                       </Reveal>
                     </li>
                   ))}

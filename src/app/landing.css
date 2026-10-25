@@ -418,77 +418,53 @@
 .pains h2 {
   text-transform: uppercase;
 }
-.pains__eyebrow {
-  display: inline-block;
-  margin-bottom: var(--space-md);
-  padding: var(--space-2xs) var(--space-xs);
-  border-radius: var(--radius-card);
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  font: 500 var(--text-xs) / 1.4 var(--font-outlier);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.pains__grid {
+.pains__sheet {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-lg);
   margin: var(--space-2xl) 0 0;
   padding: 0;
   list-style: none;
+  border-top: var(--rule-bar) solid var(--color-rule-2);
 }
-.pains__grid > li {
-  display: grid;
+.pains__cell {
+  padding: var(--space-xl) var(--space-xl) 0;
+  border-left: var(--rule-hair) solid var(--color-rule);
 }
-.pain {
-  display: grid;
-  align-content: start;
-  gap: var(--space-sm);
-  height: 100%;
-  padding: var(--space-lg);
-  border: var(--rule-hair) solid var(--color-rule);
-  border-radius: var(--radius-card);
-  background: var(--color-paper-2);
-  transition:
-    transform var(--dur-short) var(--ease-out),
-    background-color var(--dur-short) var(--ease-out),
-    box-shadow var(--dur-short) var(--ease-out);
+.pains__cell:first-child {
+  padding-left: 0;
+  border-left: 0;
 }
-.pain:hover {
-  transform: translateY(-3px);
-  background: var(--color-paper);
-  box-shadow: 0 28px 50px -30px color-mix(in oklab, var(--color-ink) 45%, transparent);
-}
-.pain__top {
+/* .pains__cell na frente porque o reset do base.css zera margem de p e h3 com a mesma especificidade */
+.pains__cell .pains__figure {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-sm);
   margin-bottom: var(--space-lg);
-}
-.pain__icon {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-card);
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  box-shadow: 0 12px 24px -12px var(--color-accent-deep);
-}
-.pain__index {
-  font: 500 var(--text-sm) / 1 var(--font-outlier);
-  color: var(--color-muted);
-}
-.pain__figure {
-  font: 500 var(--text-3xl) / 1 var(--font-outlier);
-  font-variant-numeric: tabular-nums;
+  font: var(--display-weight) clamp(3.5rem, 6vw, 6rem) / 0.95 var(--font-display);
+  letter-spacing: var(--tracking-display);
   color: var(--color-accent-deep);
 }
-.pain h3 {
+.pains__figure span:last-child {
+  font: 500 var(--text-lg) / 1 var(--font-body);
+  color: var(--color-muted);
+}
+.pains__figure.is-volt {
+  color: var(--color-accent-ink);
+}
+.pains__figure.is-volt > :first-child {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-card);
+  background: var(--color-accent);
+  box-shadow: 0 16px 32px -16px var(--color-accent-deep);
+}
+.pains__cell h3 {
   font-size: var(--text-xl);
   text-transform: uppercase;
 }
-.pain p:not(.pain__figure) {
+.pains__cell p:not(.pains__figure) {
+  margin-top: var(--space-xs);
+  max-width: 32ch;
   color: var(--color-ink-2);
 }
 
@@ -877,8 +853,16 @@
 }
 
 @media (max-width: 60rem) {
-  .pains__grid {
+  .pains__sheet {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .pains__cell {
+    padding: var(--space-lg) 0 0;
+    border-left: 0;
+  }
+  .pains__cell + .pains__cell {
+    margin-top: var(--space-lg);
+    border-top: var(--rule-hair) solid var(--color-rule);
   }
   .product__head {
     grid-template-columns: minmax(0, 1fr);
