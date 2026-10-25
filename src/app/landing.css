@@ -330,18 +330,12 @@
   overflow: hidden;
   background: var(--color-rule-on-ink);
 }
-.hero__mode-bar::after {
-  content: '';
+.hero__mode-fill {
   position: absolute;
   inset: 0;
+  transform-origin: left;
   background: var(--color-accent);
   box-shadow: 0 0 12px var(--color-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--dur-long) var(--ease-out);
-}
-.hero__mode[aria-pressed='true'] .hero__mode-bar::after {
-  transform: scaleX(1);
 }
 .hero__mode-name {
   font: var(--display-weight) var(--text-sm) / 1 var(--font-display);

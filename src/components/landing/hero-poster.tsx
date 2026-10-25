@@ -1,8 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
+import {
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from 'framer-motion';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
@@ -13,6 +20,9 @@ type Props = {
   mode: Mode;
   onChange: (mode: Mode) => void;
 };
+
+// quanto tempo cada bike fica no pôster antes de passar pra próxima
+const DWELL = 5000;
 
 const rise = (delay: number) => ({
   initial: { opacity: 0, y: 16 },
@@ -28,6 +38,26 @@ export default function HeroPoster({ mode, onChange }: Props) {
   const fmt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 1 });
   const minutes = minutesFor(mode.speed);
 
+  // o pôster passa sozinho pelas bikes enquanto está na tela; o mouse na faixa segura, escolher uma na mão encerra
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.5 });
+  const reduced = useReducedMotion();
+  const [auto, setAuto] = useState(true);
+  const [held, setHeld] = useState(false);
+  const running = auto && inView && !held && !reduced;
+  useEffect(() => {
+    if (!running) return;
+    const id = setTimeout(() => {
+      const i = MODES.findIndex((m) => m.id === mode.id);
+      onChange(MODES[(i + 1) % MODES.length]);
+    }, DWELL);
+    return () => clearTimeout(id);
+  }, [running, mode, onChange]);
+  const pick = (m: Mode) => {
+    setAuto(false);
+    onChange(m);
+  };
+
   const rolling = useMotionValue(minutes);
   const rollingText = useTransform(rolling, (v) => hm(Math.round(v)));
   useEffect(() => {
@@ -42,7 +72,7 @@ export default function HeroPoster({ mode, onChange }: Props) {
   ];
 
   return (
-    <div className="container hero__poster">
+    <div ref={ref} className="container hero__poster">
       <motion.dl className="hero__facts" {...rise(0.6)}>
         {facts.map((fact) => (
           <div key={fact.label}>
@@ -99,6 +129,10 @@ export default function HeroPoster({ mode, onChange }: Props) {
         className="hero__modes"
         role="group"
         aria-label={tApp('planner.summary.modality').replace(/:$/, '')}
+        onPointerEnter={() => setHeld(true)}
+        onPointerLeave={() => setHeld(false)}
+        onFocusCapture={() => setHeld(true)}
+        onBlurCapture={() => setHeld(false)}
         {...rise(0.95)}
       >
         {MODES.map((m) => (
@@ -107,9 +141,23 @@ export default function HeroPoster({ mode, onChange }: Props) {
             type="button"
             className="hero__mode"
             aria-pressed={mode.id === m.id}
-            onClick={() => onChange(m)}
+            onClick={() => pick(m)}
           >
-            <span className="hero__mode-bar" />
+            <span className="hero__mode-bar">
+              {mode.id === m.id && (
+                <motion.span
+                  key={running ? 'running' : 'held'}
+                  className="hero__mode-fill"
+                  initial={{ scaleX: running ? 0 : 1 }}
+                  animate={{ scaleX: 1 }}
+                  transition={
+                    running
+                      ? { duration: DWELL / 1000, ease: 'linear' }
+                      : { duration: 0.4, ease: EASE }
+                  }
+                />
+              )}
+            </span>
             <span className="hero__mode-name">{tApp(`speedModal.options.${m.id}.label`)}</span>
             <span className="hero__mode-speed">
               {fmt.format(m.speed)} km/h · {hm(minutesFor(m.speed))}
