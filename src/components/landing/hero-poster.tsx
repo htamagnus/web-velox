@@ -7,7 +7,7 @@ import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
 import { EASE } from './reveal';
-import RollingTime from './rolling-time';
+import RollingValue from './rolling-value';
 import { GENERIC_MINUTES, MODES, ROUTE, minutesFor, type Mode } from './modes';
 
 type Props = {
@@ -87,7 +87,7 @@ export default function HeroPoster({ mode, onChange }: Props) {
           {hm(minutes)}
         </span>
         <p className="hero__time" aria-hidden="true">
-          <RollingTime minutes={minutes} />
+          <RollingValue value={minutes} format={hm} />
         </p>
         <p className="hero__figure-label">{t('subtitle')}</p>
       </motion.div>

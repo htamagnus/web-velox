@@ -420,6 +420,12 @@
     "conditions": {
       "title": "Weather and traffic before you go",
       "lead": "Velox checks the weather at the middle of the route and the traffic along it, and tells you when it's better to wait.",
+      "slotsLabel": "Departure time",
+      "delay": "Delay on the route",
+      "go": "Good time to go",
+      "wait": "Better wait",
+      "clear": "Nothing above the limits.",
+      "sampleNote": "A sample day. When you leave, the app checks the weather mid-route and the traffic along the way.",
       "weatherTitle": "Weather alerts",
       "trafficTitle": "Traffic levels",
       "rainRule": "over 70% chance",

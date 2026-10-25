@@ -15,6 +15,7 @@ import SpeedField from '@/components/landing/speed-field';
 import Ticker from '@/components/landing/ticker';
 import Race from '@/components/landing/race';
 import Routes from '@/components/landing/routes';
+import Conditions from '@/components/landing/conditions';
 import { MODES, minutesFor, type Mode } from '@/components/landing/modes';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
@@ -41,13 +42,6 @@ const MOCK_MODES = ['road', 'mtb', 'general'];
 const SAMPLE = { distanceKm: 30, speedKmh: 22.5, gain: 200, loss: 180, kcal: 640 };
 const SAMPLE_PROFILE =
   '0,90 10,86.5 20,80.8 30,74.2 40,77.3 50,71.5 60,63.2 70,53.5 80,45.2 90,48.3 100,39.9 110,32.5 120,25 130,28.5 140,20.2 150,14 160,18 170,24.1 180,29.4 190,25.9 200,33.3 210,40.8 220,46.9 230,52.2 240,57.1 250,63.2 260,68 270,73.7 280,77.7 290,80.3 300,81.2';
-
-const WEATHER_RULES = [
-  ['humidity', 'rainRule'],
-  ['temperature', 'temperatureRule'],
-  ['wind', 'windRule'],
-];
-const TRAFFIC_LEVELS = ['normal', 'intense', 'congested'];
 
 export default function LandingPage() {
   const { t } = useTexts('landing');
@@ -260,38 +254,7 @@ export default function LandingPage() {
 
             <Routes mode={mode} onChange={setMode} />
 
-            <section className="conditions">
-              <div className="container">
-                <Reveal>
-                  <h2>{t('conditions.title')}</h2>
-                  <p className="lead">{t('conditions.lead')}</p>
-                  <div className="conditions__grid">
-                    <div>
-                      <h3>{t('conditions.weatherTitle')}</h3>
-                      <dl className="conditions__list">
-                        {WEATHER_RULES.map(([labelKey, ruleKey]) => (
-                          <div key={labelKey}>
-                            <dt>{tApp(`calculate.weather.${labelKey}`)}</dt>
-                            <dd>{t(`conditions.${ruleKey}`)}</dd>
-                          </div>
-                        ))}
-                      </dl>
-                    </div>
-                    <div>
-                      <h3>{t('conditions.trafficTitle')}</h3>
-                      <dl className="conditions__list">
-                        {TRAFFIC_LEVELS.map((level) => (
-                          <div key={level}>
-                            <dt>{tApp(`calculate.traffic.severity.${level}`)}</dt>
-                            <dd>{t(`conditions.${level}Rule`)}</dd>
-                          </div>
-                        ))}
-                      </dl>
-                    </div>
-                  </div>
-                </Reveal>
-              </div>
-            </section>
+            <Conditions />
 
             <section className="close grain">
               <div className="close__photo photo--duotone">

@@ -420,6 +420,12 @@
     "conditions": {
       "title": "Clima e trânsito antes de sair",
       "lead": "O Velox confere o clima no meio da rota e o trânsito do trajeto, e avisa quando é melhor esperar.",
+      "slotsLabel": "Horário de saída",
+      "delay": "Atraso no trajeto",
+      "go": "Boa hora pra sair",
+      "wait": "Melhor esperar",
+      "clear": "Nada acima dos limites.",
+      "sampleNote": "Um dia de exemplo. Na hora de sair, o app confere o clima no meio da rota e o trânsito do trajeto.",
       "weatherTitle": "Alertas de clima",
       "trafficTitle": "Níveis de trânsito",
       "rainRule": "acima de 70% de chance",

@@ -5,7 +5,7 @@ import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
 import Reveal, { EASE } from './reveal';
-import RollingTime from './rolling-time';
+import RollingValue from './rolling-value';
 import { GENERIC_MINUTES, MODES, type Mode } from './modes';
 
 // as três rotas do exemplo; o tempo de cada uma sai da distância pela média da bike escolhida
@@ -58,7 +58,7 @@ export default function Routes({ mode, onChange }: Props) {
                 <button
                   key={m.id}
                   type="button"
-                  className="routes__mode"
+                  className="chip"
                   aria-pressed={mode.id === m.id}
                   onClick={() => onChange(m)}
                 >
@@ -97,7 +97,7 @@ export default function Routes({ mode, onChange }: Props) {
                   </span>
                   <span className="routes__time-cell">
                     {i > 0 && <span className="routes__diff">+{minutes - base} min</span>}
-                    <RollingTime minutes={minutes} className="routes__time" />
+                    <RollingValue value={minutes} format={hm} className="routes__time" />
                   </span>
                   <span className="routes__bar" aria-hidden="true">
                     <motion.span
