@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://web-velox.vercel.app'),
   title: 'Velox - Planejador de Rotas de Bike',
   description: 'Planeje suas rotas de bike com precisão, calculando tempo, calorias e elevação personalizada.',
   manifest: '/manifest.json',
@@ -36,11 +37,13 @@ export const metadata: Metadata = {
     siteName: 'Velox',
     title: 'Velox - Planejador de Rotas de Bike',
     description: 'Planeje suas rotas de bike com precisão, calculando tempo, calorias e elevação personalizada.',
+    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Velox: o tempo da rota na sua velocidade' }],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Velox - Planejador de Rotas de Bike',
     description: 'Planeje suas rotas de bike com precisão, calculando tempo, calorias e elevação personalizada.',
+    images: ['/og.jpg'],
   },
 };
 

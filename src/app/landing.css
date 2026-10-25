@@ -39,6 +39,37 @@
   opacity: 0.55;
   cursor: not-allowed;
 }
+/* a barra fixa: fina, colada no topo, só depois do hero */
+.bar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: var(--z-sticky-nav);
+  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+  background: color-mix(in oklab, var(--color-ink) 94%, transparent);
+  color: var(--color-paper);
+}
+.bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  min-height: 56px;
+}
+.bar__brand {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.bar__brand img {
+  width: 40px;
+  height: auto;
+}
 .lang > div {
   padding-block: 0;
   border-color: transparent;
@@ -97,6 +128,11 @@
   background: var(--color-accent-hover);
   box-shadow: 0 12px 32px -10px color-mix(in oklab, var(--color-accent) 70%, transparent);
   transform: translateY(-1px);
+}
+.btn--small {
+  min-height: 36px;
+  padding-inline: var(--space-md);
+  font-size: var(--text-sm);
 }
 .btn--line {
   border-color: var(--color-paper);
@@ -737,6 +773,43 @@
   font-stretch: var(--stretch-wide);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+/* a régua de quilômetros sob as pistas: a rolagem é o tempo, a régua é a distância */
+.race__scale {
+  position: relative;
+  height: 1.75rem;
+  margin: calc(-1 * var(--space-lg)) 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-muted-on-ink);
+}
+.race__scale span {
+  position: absolute;
+  top: 0;
+  padding-top: var(--space-sm);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.race__scale span::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 8px;
+  background: var(--color-rule-on-ink);
+}
+.race__scale span:first-child {
+  transform: none;
+}
+.race__scale span:first-child::before {
+  left: 0;
+}
+.race__scale span:last-child {
+  transform: translateX(-100%);
+}
+.race__scale span:last-child::before {
+  left: auto;
+  right: 0;
 }
 .race__note {
   font: var(--display-weight) var(--text-section) / 1 var(--font-display);

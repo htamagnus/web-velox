@@ -51,6 +51,7 @@ export default function Race({ mode }: { mode: Mode }) {
   return (
     <section ref={ref} className="race">
       <div className="race__stage grain">
+        <div className="hero__lines" aria-hidden="true" />
         <div className="container race__inner">
           <div className="race__head">
             <p className="eyebrow eyebrow--ink">{tApp('landing.index.race')}</p>
@@ -83,6 +84,13 @@ export default function Race({ mode }: { mode: Mode }) {
               </div>
             ))}
           </div>
+          <p className="race__scale num" aria-hidden="true">
+            {[0, 10, 20, 30].map((km) => (
+              <span key={km} style={{ left: `${(km / ROUTE.km) * 100}%` }}>
+                {km} km
+              </span>
+            ))}
+          </p>
           <motion.p className="race__note" style={{ opacity: finish }}>
             {t('note').replace('{{diff}}', String(GENERIC_MINUTES - veloxMinutes))}
           </motion.p>

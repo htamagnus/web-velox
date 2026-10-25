@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Archivo } from 'next/font/google';
-import { motion, MotionConfig } from 'framer-motion';
+import { motion, MotionConfig, useMotionValueEvent, useScroll } from 'framer-motion';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import LanguageSelector from '@/components/language-selector/language-selector';
 import HeroPoster from '@/components/landing/hero-poster';
@@ -29,6 +29,10 @@ export default function LandingPage() {
   const [showTransition, setShowTransition] = useState(false);
   const [mode, setMode] = useState<Mode>(MODES[0]);
   const router = useRouter();
+  // a barra fina só aparece depois que o hero sai da tela, pra ação continuar à mão
+  const { scrollY } = useScroll();
+  const [docked, setDocked] = useState(false);
+  useMotionValueEvent(scrollY, 'change', (y) => setDocked(y > window.innerHeight * 0.85));
 
   const handleStart = () => {
     setShowTransition(true);
@@ -72,6 +76,38 @@ export default function LandingPage() {
               </div>
             </div>
           </motion.header>
+
+          <motion.div
+            className="bar"
+            initial={false}
+            animate={{ y: docked ? 0 : '-100%' }}
+            transition={{ duration: 0.5, ease: EASE }}
+            inert={!docked}
+          >
+            <div className="container bar__inner">
+              <button
+                type="button"
+                className="bar__brand"
+                aria-label="Velox"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              >
+                <Image src="/svg/velox-logo.svg" alt="" width={40} height={28} />
+              </button>
+              <div className="nav__end">
+                <div className="lang nav__lang">
+                  <LanguageSelector />
+                </div>
+                <button
+                  type="button"
+                  className="btn btn--primary btn--small"
+                  onClick={handleStart}
+                  disabled={loading}
+                >
+                  {t('cta.button')}
+                </button>
+              </div>
+            </div>
+          </motion.div>
 
           <main>
             <section className="hero grain" onPointerMove={spotlight}>
