@@ -181,15 +181,6 @@
 .hero__photo img {
   object-fit: cover;
   object-position: 50% 62%;
-  animation: hero-drift 28s var(--ease-in-out) infinite alternate;
-}
-@keyframes hero-drift {
-  from {
-    transform: scale(1.04);
-  }
-  to {
-    transform: scale(1.12) translate(-1.5%, -1%);
-  }
 }
 /* a foto manda: o scrim só fecha embaixo, onde ficam o título e a faixa, e abre em volta do mouse */
 .hero__photo::after {
@@ -1457,7 +1448,6 @@
 .close__photo img {
   object-fit: cover;
   object-position: 50% 40%;
-  animation: hero-drift 32s var(--ease-in-out) infinite alternate;
 }
 .close__over {
   position: relative;
