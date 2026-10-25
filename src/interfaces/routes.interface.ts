@@ -86,6 +86,7 @@ export type GetPlannedRouteResponseDto = {
   elevationLoss: number
   polyline: string
   averageSpeedUsed: number
+  elevationProfile?: ElevationPoint[]
   alternatives?: RouteAlternative[]
 }
 

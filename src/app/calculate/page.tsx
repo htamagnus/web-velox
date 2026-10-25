@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 import { ArrowLeft } from 'lucide-react';
 import ApiVeloxService from '@/providers/api-velox.provider';
 import GoogleRouteMap from '@/components/map/google-route-map';
-import { ElevationPoint } from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
 import RouteSheet, { RouteOption } from '@/components/planner/route-sheet';
 import LanguageSelector from '@/components/language-selector/language-selector';
@@ -117,21 +116,6 @@ export default function CalculateRoutePage() {
     }
   };
 
-  const generateMockElevationProfile = (distance: number, variation = 1): ElevationPoint[] => {
-    const points: ElevationPoint[] = [];
-    const numPoints = 50;
-    const baseElevation = 100;
-    
-    for (let i = 0; i <= numPoints; i++) {
-      const distancePoint = (distance * 1000 * i) / numPoints;
-      const elevation = baseElevation + Math.sin((i / 5) + variation) * 20 + Math.random() * 10;
-      points.push({ distance: distancePoint, elevation });
-    }
-    
-    return points;
-  };
-
-
   const handleCalculate = async () => {
     if (!originLabel || !destinationLabel) {
       toast.info(t('requireOriginDestination'));
@@ -157,7 +141,7 @@ export default function CalculateRoutePage() {
         elevationLoss: response.elevationLoss,
         estimatedCalories: response.estimatedCalories,
         averageSpeedUsed: response.averageSpeedUsed,
-        elevationProfile: generateMockElevationProfile(response.distanceKm),
+        elevationProfile: response.elevationProfile,
         summary: t('fastestRoute'),
       };
 
@@ -174,7 +158,7 @@ export default function CalculateRoutePage() {
             elevationLoss: alt.elevationLoss,
             estimatedCalories: alt.estimatedCalories,
             averageSpeedUsed: alt.averageSpeedUsed,
-            elevationProfile: alt.elevationProfile || generateMockElevationProfile(alt.distanceKm),
+            elevationProfile: alt.elevationProfile,
             summary: alt.summary,
             warnings: alt.warnings,
           });
