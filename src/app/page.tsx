@@ -16,6 +16,7 @@ import Ticker from '@/components/landing/ticker';
 import Race from '@/components/landing/race';
 import Routes from '@/components/landing/routes';
 import Conditions from '@/components/landing/conditions';
+import Close from '@/components/landing/close';
 import { MODES, minutesFor, type Mode } from '@/components/landing/modes';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
@@ -256,32 +257,14 @@ export default function LandingPage() {
 
             <Conditions />
 
-            <section className="close grain">
-              <div className="close__photo photo--duotone">
-                <Image src="/images/cta-bike.jpg" alt="Ciclista em movimento" fill sizes="100vw" />
-              </div>
-              <div className="close__over">
-                <div className="container">
-                  <Reveal>
-                    <h2>{t('cta.title')}</h2>
-                    <p className="lead">{t('cta.subtitle')}</p>
-                    <button
-                      type="button"
-                      className="btn btn--primary"
-                      onClick={handleStart}
-                      disabled={loading}
-                    >
-                      {t('cta.button')}
-                    </button>
-                  </Reveal>
-                </div>
-              </div>
-            </section>
+            <Close mode={mode} onStart={handleStart} loading={loading} />
+
+            <Ticker />
           </main>
 
           <footer className="foot">
             <div className="container foot__inner">
-              <Image src="/svg/velox-logo.svg" alt="Velox" width={176} height={120} />
+              <Image src="/svg/velox-logo.svg" alt="Velox" width={64} height={44} />
               <div className="foot__end">
                 <p className="foot__note">{t('footer.install')}</p>
                 <div className="lang">

@@ -1214,8 +1214,9 @@
   isolation: isolate;
   display: grid;
   align-items: center;
-  min-height: 560px;
+  min-height: 84svh;
   margin-top: var(--section-gap-l);
+  overflow: hidden;
   background: var(--color-ink);
   color: var(--color-paper);
 }
@@ -1226,6 +1227,7 @@
 .close__photo img {
   object-fit: cover;
   object-position: 50% 40%;
+  animation: hero-drift 32s var(--ease-in-out) infinite alternate;
 }
 .close__over {
   position: relative;
@@ -1237,25 +1239,59 @@
   background: linear-gradient(
     90deg,
     var(--color-ink) 0%,
-    color-mix(in oklab, var(--color-ink) 88%, transparent) 38%,
-    transparent 72%
+    color-mix(in oklab, var(--color-ink) 90%, transparent) 42%,
+    transparent 80%
   );
 }
+.close__inner {
+  display: grid;
+  gap: var(--space-lg);
+  justify-items: start;
+}
+.close__eyebrow {
+  font: 500 var(--text-sm) / 1 var(--font-outlier);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
 .close h2 {
-  max-width: 13ch;
-  font-size: var(--text-display);
+  max-width: 12ch;
+  font-size: var(--text-hero);
+  line-height: 0.95;
   text-transform: uppercase;
 }
-.close .lead {
-  margin-top: var(--space-lg);
-  max-width: 36ch;
+.close__word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
 }
-.close .btn {
-  margin-top: var(--space-xl);
+.close__word > span {
+  display: inline-block;
+}
+.close .lead {
+  max-width: 36ch;
+  color: var(--color-muted-on-ink);
+}
+@media (max-width: 60rem) {
+  .close__over {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-ink) 72%, transparent),
+      color-mix(in oklab, var(--color-ink) 92%, transparent)
+    );
+  }
+}
+.btn--big {
+  min-height: 60px;
+  padding-inline: var(--space-2xl);
+  font-size: var(--text-xl);
+  box-shadow: 0 0 48px color-mix(in oklab, var(--color-accent) 45%, transparent);
 }
 
 .foot {
-  padding-block: var(--section-gap-s) var(--space-2xl);
+  padding-block: var(--space-xl);
   border-top: var(--rule-hair) solid var(--color-rule-on-ink);
   background: var(--color-ink);
   color: var(--color-paper);
@@ -1263,12 +1299,12 @@
 .foot__inner {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-lg);
 }
 .foot img {
-  width: 176px;
+  width: 64px;
 }
 .foot__end {
   display: flex;
@@ -1328,8 +1364,5 @@
   }
   .features__cell + .features__cell {
     border-top: var(--rule-hair) solid var(--color-rule-on-ink);
-  }
-  .close__over {
-    background: color-mix(in oklab, var(--color-ink) 80%, transparent);
   }
 }
