@@ -219,7 +219,13 @@
     "destinationPlaceholder": "Escolher destino",
     "save": "salvar",
     "plan": "Planejar",
-    "planning": "calculando rota..."
+    "planning": "calculando rota...",
+    "title1": "De onde,",
+    "title2": "pra onde?",
+    "originLabel": "Saída",
+    "destinationLabel": "Chegada",
+    "searchPlaceholder": "Endereço ou lugar",
+    "clear": "Limpar"
   },
   "calculate": {
     "geolocationError": "não foi possível pegar localização",
@@ -259,7 +265,8 @@
         "normal": "Tráfego normal na sua rota. É um bom momento para sair.",
         "intense": "Tráfego intenso na sua rota. Considere sair em outro horário.",
         "congested": "Rota congestionada. Recomendamos adiar a pedalada."
-      }
+      },
+      "label": "Trânsito"
     },
     "weather": {
       "title": "Previsão de clima",
@@ -294,8 +301,11 @@
           "title": "Vento forte",
           "message": "{{speed}}km/h. Tenha cuidado em descidas."
         }
-      }
-    }
+      },
+      "label": "Clima"
+    },
+    "routes": "Rotas",
+    "conditions": "Condições agora"
   },
   "speedModal": {
     "title": "Modalidade",

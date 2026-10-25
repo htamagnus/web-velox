@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { MapPin, Building2, Home, X } from 'lucide-react';
+import { useEffect, useState, useCallback, useRef, useId } from 'react';
+import { X } from 'lucide-react';
 import { useLocale } from '@/contexts/locale-context';
+import { useTexts } from '@/helpers/use-texts';
 
 type Props = {
-  icon?: React.ReactNode;
+  label: string;
   placeholder: string;
   initialValue?: string;
   onSelect: (coords: [number, number], label: string) => void;
@@ -20,14 +21,17 @@ type PlaceSuggestion = {
   fullText: string;
 };
 
+// o campo de lugar como os do login: rótulo em cima, só o fio embaixo, sugestões numa lista solta
 export default function AutocompleteInput({
-  icon,
+  label,
   placeholder,
   initialValue,
   onSelect,
   onClear,
 }: Props) {
   const { locale } = useLocale();
+  const { t } = useTexts('plannerPanel');
+  const id = useId();
   const [value, setValue] = useState('');
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [ready, setReady] = useState(false);
@@ -166,61 +170,37 @@ export default function AutocompleteInput({
     }
   };
 
-  const getIconForType = (types: string[]) => {
-    if (types.includes('establishment') || types.includes('point_of_interest')) {
-      return <Building2 size={16} className="text-primary-light" />;
-    }
-    if (types.includes('street_address') || types.includes('route')) {
-      return <Home size={16} className="text-primary-light" />;
-    }
-    return <MapPin size={16} className="text-primary-light" />;
-  };
-
   return (
-    <div className="relative">
-      <div className="flex items-center gap-3 bg-gradient-to-r from-white/5 to-white/[0.02] border border-white/10 hover:border-white/20 focus-within:border-primary-light/50 px-4 py-3.5 rounded-xl transition-all duration-200 shadow-sm">
-        <div className="flex-shrink-0">
-          {icon}
-        </div>
+    <div className="field place">
+      <label htmlFor={id} className="field__label">
+        {label}
+      </label>
+      <div className="place__box">
         <input
+          id={id}
+          className="field__input"
           value={value}
           onChange={(e) => handleInputChange(e.target.value)}
           placeholder={placeholder}
           disabled={!ready}
           maxLength={500}
-          className="bg-transparent outline-none w-full text-white placeholder:text-gray-400 font-medium"
+          autoComplete="off"
         />
         {value && (
-          <button
-            onClick={handleClear}
-            className="flex-shrink-0 text-copy/40 hover:text-copy transition-colors"
-          >
-            <X size={16} />
+          <button type="button" className="place__clear" onClick={handleClear} aria-label={t('clear')}>
+            <X size={18} />
           </button>
         )}
       </div>
 
       {suggestions.length > 0 && (
-        <ul className="absolute top-full mt-2 w-full bg-gradient-to-b from-[#1a2234] to-[#0f1419] border border-white/10 rounded-xl max-h-64 overflow-y-auto z-50 shadow-2xl backdrop-blur-xl">
+        <ul className="place__list">
           {suggestions.map((suggestion) => (
-            <li
-              key={suggestion.placeId}
-              onClick={() => handleSelect(suggestion)}
-              className="px-4 py-3.5 cursor-pointer hover:bg-primary-light/10 transition-all duration-200 border-b border-white/5 last:border-b-0 flex items-start gap-3 group"
-            >
-              <div className="mt-0.5 group-hover:scale-110 transition-transform">
-                {getIconForType(suggestion.types)}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-white font-semibold truncate group-hover:text-primary-light transition-colors">
-                  {suggestion.mainText}
-                </div>
-                {suggestion.secondaryText && (
-                  <div className="text-gray-400 text-sm truncate mt-0.5">
-                    {suggestion.secondaryText}
-                  </div>
-                )}
-              </div>
+            <li key={suggestion.placeId}>
+              <button type="button" className="place__option" onClick={() => handleSelect(suggestion)}>
+                <b>{suggestion.mainText}</b>
+                {suggestion.secondaryText && <span>{suggestion.secondaryText}</span>}
+              </button>
             </li>
           ))}
         </ul>

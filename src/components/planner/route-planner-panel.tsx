@@ -1,13 +1,14 @@
 'use client';
 
-import { ArrowLeft, LocateFixed, Plus, Route } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { useTexts } from '@/helpers/use-texts';
-import SpeedOptions from '../speed-modal/speed-options';
-import AutocompleteInput from '../route-input/route-input';
-import { useEffect, useState } from 'react';
-import Button from '@/components/ui/button/button';
+import { useLocale } from '@/contexts/locale-context';
 import { Modality } from '@/interfaces/routes.interface';
+import { EASE } from '@/components/landing/reveal';
+import AutocompleteInput from '../route-input/route-input';
+
+const BIKES: Modality[] = ['road', 'mtb', 'general'];
 
 type Props = {
   originLabel: string | null;
@@ -17,15 +18,13 @@ type Props = {
   onClearOrigin?: () => void;
   onClearDestination?: () => void;
   onStart: () => void;
-  onSelectModality: (modality: Modality, speed?: number) => void;
-  speeds: {
-    general: number;
-    road: number;
-    mtb: number;
-  };
+  modality: Modality;
+  onSelectModality: (modality: Modality) => void;
+  speeds: Record<Modality, number>;
   isCalculatingRoute: boolean;
 };
 
+// o formulário como o pôster: título condensado, os dois campos em fio e a faixa de bikes
 export default function RoutePlannerPanel({
   originLabel,
   destinationLabel,
@@ -34,79 +33,92 @@ export default function RoutePlannerPanel({
   onClearOrigin,
   onClearDestination,
   onStart,
+  modality,
   onSelectModality,
   speeds,
   isCalculatingRoute,
 }: Props) {
   const { t } = useTexts('plannerPanel');
-  const router = useRouter();
-
-  const [modalitySelected, setModalitySelected] = useState(false);
-
-  const canCalculate = Boolean(originLabel && destinationLabel && modalitySelected);
-
-  useEffect(() => {
-    if (!modalitySelected && speeds.general && speeds.general > 0) {
-      setModalitySelected(true);
-      onSelectModality('general', speeds.general);
-    }
-  }, [modalitySelected, speeds.general, onSelectModality]);
+  const { t: tApp } = useTexts();
+  const { locale } = useLocale();
+  const fmt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 1 });
+  const canCalculate = Boolean(originLabel && destinationLabel && speeds[modality] > 0);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0e1a] via-[#111827] to-[#111827] px-3 pt-3 pb-3 sm:px-4 sm:pt-6 sm:pb-6 rounded-t-2xl sm:rounded-t-3xl z-[9999] shadow-2xl border-t border-copy/10 space-y-3 sm:space-y-5 max-h-[42vh] sm:max-h-none overflow-y-auto">
-      <div className="flex justify-between items-center mb-2 sm:mb-3">
-        <button
-          onClick={() => router.push('/home')}
-          className="text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
-        >
-          <ArrowLeft size={20} />
-        </button>
+    <form
+      className="plan__form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onStart();
+      }}
+    >
+      <h1>
+        {['title1', 'title2'].map((key, i) => (
+          <span key={key} className="hero__line">
+            <motion.span
+              initial={{ y: '110%' }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9, delay: 0.2 + i * 0.12, ease: EASE }}
+            >
+              {t(key)}
+            </motion.span>
+          </span>
+        ))}
+      </h1>
 
-        <div className="flex items-center gap-2.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
-          <Route size={20} className="text-primary-light" />
-          <h2 className="font-bold text-gray-100 text-lg sm:text-xl tracking-tight">
-            {t('title')}
-          </h2>
-        </div>
-
-        <div className="w-20"></div>
-      </div>
-
-      <div className="space-y-2 sm:space-y-3">
+      <div className="plan__fields">
         <AutocompleteInput
-          icon={<LocateFixed size={20} stroke="#92a848"/>}
-          placeholder={t('originPlaceholder')}
+          label={t('originLabel')}
+          placeholder={t('searchPlaceholder')}
           initialValue={originLabel ?? undefined}
           onSelect={onSetOrigin}
           onClear={onClearOrigin}
         />
-
         <AutocompleteInput
-          icon={<Plus size={20} stroke="#92a848"/>}
-          placeholder={t('destinationPlaceholder')}
+          label={t('destinationLabel')}
+          placeholder={t('searchPlaceholder')}
           initialValue={destinationLabel ?? undefined}
           onSelect={onSetDestination}
           onClear={onClearDestination}
         />
       </div>
 
-      <SpeedOptions
-        onSelect={(modality, speed) => {
-          setModalitySelected(true);
-          onSelectModality(modality, speed);
-        }}
-        speeds={speeds}
-      />
+      <fieldset className="plan__bikes">
+        <legend className="field__label">{tApp('speedModal.title')}</legend>
+        <div className="modes modes--ink">
+          {BIKES.map((m) =>
+            speeds[m] > 0 ? (
+              <button
+                key={m}
+                type="button"
+                className="modes__item"
+                aria-pressed={modality === m}
+                onClick={() => onSelectModality(m)}
+              >
+                <span className="modes__bar" aria-hidden="true" />
+                <span className="modes__name">{tApp(`speedModal.options.${m}.label`)}</span>
+                <span className="modes__speed num">{fmt.format(speeds[m])} km/h</span>
+              </button>
+            ) : (
+              // sem média nessa bike não dá pra calcular: o segmento leva pro perfil
+              <Link key={m} href="/profile" className="modes__item plan__configure">
+                <span className="modes__bar" aria-hidden="true" />
+                <span className="modes__name">{tApp(`speedModal.options.${m}.label`)}</span>
+                <span className="modes__speed">{tApp('speedModal.configure')} →</span>
+              </Link>
+            ),
+          )}
+        </div>
+      </fieldset>
 
-      <Button
-        variant="confirm"
-        onClick={onStart}
+      <button
+        type="submit"
+        className="btn btn--primary btn--big plan__submit"
         disabled={!canCalculate || isCalculatingRoute}
-        loading={isCalculatingRoute}
-        className="w-full"
+        aria-busy={isCalculatingRoute}
       >
-        {t('plan')}
-      </Button>
-    </div>
+        {isCalculatingRoute ? t('planning') : t('plan')}
+      </button>
+    </form>
   );
 }

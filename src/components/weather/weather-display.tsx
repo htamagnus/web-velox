@@ -1,9 +1,7 @@
 'use client'
 
-import { Cloud, CloudRain, Sun, Wind, Droplets, AlertCircle, Zap } from 'lucide-react'
 import { useTexts } from '@/helpers/use-texts'
 import { WeatherData, WeatherCondition } from '@/interfaces/routes.interface'
-import styles from './weather-display.module.css'
 
 type Props = {
   weatherData: WeatherData
@@ -12,21 +10,6 @@ type Props = {
 export default function WeatherDisplay({ weatherData }: Props) {
   const { t } = useTexts('calculate.weather')
 
-  const getConditionIcon = () => {
-    switch (weatherData.condition) {
-      case WeatherCondition.SUNNY:
-        return <Sun size={20} />
-      case WeatherCondition.CLOUDY:
-        return <Cloud size={20} />
-      case WeatherCondition.RAINY:
-        return <CloudRain size={20} />
-      case WeatherCondition.STORMY:
-        return <Zap size={20} />
-      case WeatherCondition.SNOWY:
-        return <Cloud size={20} />
-    }
-  }
-
   const getConditionLabel = () => {
     const conditionKey = weatherData.condition
     if (conditionKey === WeatherCondition.SUNNY) return t('condition.sunny')
@@ -34,21 +17,6 @@ export default function WeatherDisplay({ weatherData }: Props) {
     if (conditionKey === WeatherCondition.RAINY) return t('condition.rainy')
     if (conditionKey === WeatherCondition.STORMY) return t('condition.stormy')
     return t('condition.snowy')
-  }
-
-  const getConditionClassName = () => {
-    switch (weatherData.condition) {
-      case WeatherCondition.SUNNY:
-        return styles.conditionSunny
-      case WeatherCondition.CLOUDY:
-        return styles.conditionCloudy
-      case WeatherCondition.RAINY:
-        return styles.conditionRainy
-      case WeatherCondition.STORMY:
-        return styles.conditionStormy
-      case WeatherCondition.SNOWY:
-        return styles.conditionSnowy
-    }
   }
 
   const getAlertMessage = (alert: typeof weatherData.alerts[0]) => {
@@ -98,84 +66,31 @@ export default function WeatherDisplay({ weatherData }: Props) {
     }
   }
 
-  const getDefaultMessageClassName = () => {
-    switch (weatherData.condition) {
-      case WeatherCondition.SUNNY:
-        return styles.alertLow
-      case WeatherCondition.CLOUDY:
-        return styles.alertLow
-      case WeatherCondition.RAINY:
-        return styles.alertMedium
-      case WeatherCondition.STORMY:
-        return styles.alertHigh
-      case WeatherCondition.SNOWY:
-        return styles.alertMedium
-    }
-  }
-
   const hasAlerts = weatherData.alerts.length > 0
 
+  // chuva, tempestade ou neve contam como alerta mesmo sem aviso da api
+  const isRough = [WeatherCondition.RAINY, WeatherCondition.STORMY, WeatherCondition.SNOWY].includes(weatherData.condition)
+
   return (
-    <div className={styles.weatherContainer}>
-      <div className={`${styles.header} justify-between`}>
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-          <span className={styles.title}>{t('title')}</span>
-        </div>
-        <div className={`${styles.conditionBadge} ${getConditionClassName()}`}>
-          {getConditionIcon()}
-          {getConditionLabel()}
-        </div>
-      </div>
-
-      <div className={styles.statsGrid}>
-        <div className={styles.statItem}>
-          <span className={styles.statLabel}>{t('temperature')}</span>
-          <span className={styles.statValue}>{weatherData.temperature}°c</span>
-        </div>
-        <div className={styles.statItem}>
-          <span className={styles.statLabel}>{t('humidity')}</span>
-          <div className={styles.statValueWithIcon}>
-            <Droplets size={14} />
-            <span>{weatherData.rainProbability}%</span>
-          </div>
-        </div>
-        <div className={styles.statItem}>
-          <span className={styles.statLabel}>{t('wind')}</span>
-          <div className={styles.statValueWithIcon}>
-            <Wind size={14} />
-            <span>{weatherData.windSpeed}km/h</span>
-          </div>
-        </div>
-      </div>
-
-      {hasAlerts && (
-        <div className={styles.alertsContainer}>
-          {weatherData.alerts.map((alert, index) => (
-            <div
-              key={index}
-              className={`${styles.alert} ${
-                alert.severity === 'high' ? styles.alertHigh : alert.severity === 'medium' ? styles.alertMedium : styles.alertLow
-              }`}
-            >
-              <AlertCircle size={14} />
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold text-xs">{getAlertTitle(alert)}</span>
-                <span className="text-xs">{getAlertMessage(alert)}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {!hasAlerts && (
-        <div className={`${styles.alert} ${getDefaultMessageClassName()}`}>
-          <AlertCircle size={14} />
-          <div className="flex flex-col gap-1">
-            <span className="text-xs">{getDefaultMessage()}</span>
-          </div>
-        </div>
-      )}
+    <div className="plan-cond" data-alert={hasAlerts || isRough || undefined}>
+      <dt>{t('label')}</dt>
+      <dd>
+        <b>
+          {getConditionLabel()} · {weatherData.temperature}°C
+        </b>
+        <span className="plan-cond__meta num">
+          {t('humidity')} {weatherData.rainProbability}% · {t('wind')} {weatherData.windSpeed} km/h
+        </span>
+        {hasAlerts ? (
+          weatherData.alerts.map((alert, index) => (
+            <span key={index} className="plan-cond__note">
+              {getAlertTitle(alert)}. {getAlertMessage(alert)}
+            </span>
+          ))
+        ) : (
+          <span className="plan-cond__note">{getDefaultMessage()}</span>
+        )}
+      </dd>
     </div>
   )
 }

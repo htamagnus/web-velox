@@ -5,6 +5,7 @@
 @import "./auth.css";
 @import "./onboarding.css";
 @import "./home.css";
+@import "./planner.css";
 
 :root {
   /* primary brand colors */

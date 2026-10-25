@@ -219,7 +219,13 @@
     "destinationPlaceholder": "Choose destination",
     "save": "save",
     "plan": "Plan",
-    "planning": "calculating route..."
+    "planning": "calculating route...",
+    "title1": "From where,",
+    "title2": "to where?",
+    "originLabel": "Start",
+    "destinationLabel": "Finish",
+    "searchPlaceholder": "Address or place",
+    "clear": "Clear"
   },
   "calculate": {
     "geolocationError": "could not get location",
@@ -259,7 +265,8 @@
         "normal": "Normal traffic on your route. It's a good time to go.",
         "intense": "Heavy traffic on your route. Consider leaving at another time.",
         "congested": "Your route is congested. We recommend postponing your ride."
-      }
+      },
+      "label": "Traffic"
     },
     "weather": {
       "title": "Weather forecast",
@@ -294,8 +301,11 @@
           "title": "Strong wind",
           "message": "{{speed}}km/h. Be careful on descents."
         }
-      }
-    }
+      },
+      "label": "Weather"
+    },
+    "routes": "Routes",
+    "conditions": "Conditions now"
   },
   "speedModal": {
     "title": "Bike type",

@@ -1,0 +1,418 @@
+/* Planejador: a folha em tinta à esquerda, o mapa noturno no resto; no celular o mapa fica preso em cima. */
+
+.planner {
+  color-scheme: dark;
+  display: grid;
+  grid-template-columns: minmax(22rem, 32rem) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    'nav map'
+    'panel map';
+  height: 100svh;
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.planner__nav {
+  grid-area: nav;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-xl);
+  border-right: var(--rule-hair) solid var(--color-rule-on-ink);
+}
+.planner__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-muted-on-ink);
+  transition: color var(--dur-short) var(--ease-out);
+}
+.planner__back:hover {
+  color: var(--color-paper);
+}
+.planner__panel {
+  grid-area: panel;
+  overflow-y: auto;
+  padding: var(--space-lg) var(--space-xl) var(--space-2xl);
+  border-right: var(--rule-hair) solid var(--color-rule-on-ink);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule-on-ink) transparent;
+}
+.planner__map {
+  grid-area: map;
+  position: relative;
+  min-height: 0;
+  background: var(--color-ink);
+}
+.planner__canvas {
+  position: absolute;
+  inset: 0;
+}
+.planner :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.planner :is(h1, h2, h3, .btn) {
+  word-spacing: 0.08em;
+}
+
+/* ---- o formulário ---- */
+.plan__form {
+  display: grid;
+  gap: var(--space-xl);
+}
+.planner h1 {
+  max-width: none;
+  font-size: var(--text-display-s);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.planner h1 .hero__line:last-child {
+  color: var(--color-accent);
+}
+.plan__fields {
+  display: grid;
+  gap: var(--space-lg);
+}
+.place {
+  position: relative;
+}
+.place__box {
+  position: relative;
+}
+.place__box .field__input {
+  padding-right: 44px;
+}
+.place__clear {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  translate: 0 -50%;
+  border: 0;
+  background: none;
+  color: var(--color-muted-on-ink);
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.place__clear:hover {
+  color: var(--color-paper);
+}
+.place__list {
+  position: absolute;
+  top: 100%;
+  inset-inline: 0;
+  z-index: var(--z-dropdown);
+  max-height: 18rem;
+  margin: var(--space-2xs) 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  border: var(--rule-hair) solid var(--color-rule-on-ink);
+  border-radius: var(--radius-card);
+  background: var(--color-ink-2);
+  box-shadow: 0 24px 48px -16px rgb(0 0 0 / 0.7);
+}
+.place__option {
+  display: grid;
+  gap: var(--space-3xs);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 0;
+  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.place__list li:last-child .place__option {
+  border-bottom: 0;
+}
+.place__option:hover,
+.place__option:focus-visible {
+  background: var(--color-ink-3);
+}
+.place__option b {
+  font-weight: 600;
+}
+.place__option span {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.plan__bikes {
+  display: grid;
+  gap: var(--space-sm);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.plan__bikes legend {
+  margin-bottom: var(--space-sm);
+  padding: 0;
+}
+/* bike sem média: o segmento vira atalho pro perfil, em âmbar */
+.plan__configure {
+  text-decoration: none;
+}
+.plan__configure .modes__speed {
+  color: var(--color-amber);
+}
+.plan__submit {
+  width: 100%;
+}
+
+/* ---- a folha do resultado ---- */
+.plan__sheet {
+  display: grid;
+  gap: var(--space-xl);
+}
+.plan__head .eyebrow {
+  margin-bottom: var(--space-md);
+}
+/* a saída como pino vazado e a chegada em volt, como no mapa */
+.plan__ends {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+.plan__ends li {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: baseline;
+}
+.plan__ends li::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-paper);
+  border-radius: 50%;
+  translate: 0 1px;
+}
+.plan__ends li:last-child::before {
+  border-color: var(--color-ink);
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent);
+}
+.planner .plan__label {
+  color: var(--color-muted-on-ink);
+}
+.plan__clock-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+.plan__clock {
+  margin: var(--space-xs) 0 0;
+  font: var(--display-weight) clamp(5rem, 8vw, 8rem) / 0.85 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-shadow: 0 0 60px color-mix(in oklab, var(--color-accent) 40%, transparent);
+}
+.plan__diff {
+  font-size: var(--text-xl);
+  color: var(--color-amber);
+}
+.plan__speed {
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.plan__speed span {
+  color: var(--color-paper);
+}
+.plan__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--space-lg);
+  margin: 0;
+}
+.plan__facts div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-3xs);
+  padding-block: var(--space-sm);
+  border-top: var(--rule-hair) solid var(--color-rule-on-ink);
+}
+.plan__facts dt {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.plan__facts dd {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+.plan__profile {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+}
+.plan__plot {
+  position: relative;
+  margin-top: var(--space-xl);
+}
+.plan__plot svg {
+  display: block;
+  width: 100%;
+  height: 120px;
+  overflow: visible;
+}
+.plan__plot polygon {
+  fill: color-mix(in oklab, var(--color-accent) 14%, transparent);
+}
+.plan__plot polyline {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-accent) 60%, transparent));
+}
+/* o cume: o número e um fio descendo até o ponto mais alto */
+.plan__summit {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  translate: -50% -100%;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.plan__summit::after {
+  content: '';
+  width: var(--rule-hair);
+  height: var(--space-md);
+  margin-top: var(--space-2xs);
+  background: color-mix(in oklab, var(--color-paper) 60%, transparent);
+}
+.plan__axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--color-muted-on-ink);
+}
+.plan__warnings {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0 0 0 var(--space-md);
+  list-style: none;
+  border-left: var(--rule-bar) solid var(--color-amber);
+  font-size: var(--text-sm);
+  color: var(--color-amber);
+}
+.plan__conditions {
+  display: grid;
+  gap: var(--space-md);
+}
+.planner .plan__conditions h2 {
+  max-width: none;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  word-spacing: normal;
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+}
+.plan__conditions dl {
+  margin: 0;
+  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+}
+.plan-cond {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-top: var(--rule-hair) solid var(--color-rule-on-ink);
+}
+.plan-cond dt {
+  padding-top: 0.3em;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+}
+.plan-cond dd {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: 0;
+}
+.plan-cond b {
+  font: var(--display-weight) var(--text-xl) / 1.05 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.plan-cond__meta {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.plan-cond__note {
+  font-size: var(--text-sm);
+}
+.plan-cond[data-alert] :is(b, .plan-cond__note) {
+  color: var(--color-amber);
+}
+.plan__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.plan__actions .btn {
+  flex: 1 1 10rem;
+  min-height: 56px;
+}
+
+/* no celular: a barra, o mapa preso em cima e a folha rolando por baixo dele */
+@media (max-width: 60rem) {
+  .planner {
+    display: block;
+    height: auto;
+    min-height: 100svh;
+  }
+  .planner__nav {
+    padding-inline: var(--gutter);
+    border-right: 0;
+  }
+  .planner__map {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    height: 40svh;
+    border-block: var(--rule-hair) solid var(--color-rule-on-ink);
+  }
+  .planner__map .hero__lines {
+    background-size: calc(100% / 3) 100%;
+    background-position: calc(100% / 3) 0;
+  }
+  .planner__panel {
+    overflow: visible;
+    padding: var(--space-xl) var(--gutter) var(--space-2xl);
+    border-right: 0;
+  }
+  .plan__clock {
+    font-size: clamp(4.5rem, 24vw, 7rem);
+  }
+}

@@ -1,38 +1,24 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import polyline from '@mapbox/polyline';
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
+import { toast } from 'sonner';
+import { ArrowLeft } from 'lucide-react';
 import ApiVeloxService from '@/providers/api-velox.provider';
 import GoogleRouteMap from '@/components/map/google-route-map';
-import RouteSelector from '@/components/map/route-selector';
-import ElevationProfile, { ElevationPoint } from '@/components/map/elevation-profile';
+import { ElevationPoint } from '@/components/map/elevation-profile';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
-import TrafficDisplay from '@/components/traffic/traffic-display';
-import WeatherDisplay from '@/components/weather/weather-display';
-import Button from '@/components/ui/button/button';
+import RouteSheet, { RouteOption } from '@/components/planner/route-sheet';
+import LanguageSelector from '@/components/language-selector/language-selector';
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
+import { EASE } from '@/components/landing/reveal';
 import { Athlete } from '@/interfaces/athlete.interface';
-import { getModalityLabel } from '@/helpers/modality.helper';
-import { AnimatePresence, motion } from 'framer-motion';
-import { toast } from 'sonner';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
-import { User, Gauge, Save, RotateCcw, ArrowLeft } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality, GetTrafficOutputDto, GetWeatherOutputDto } from '@/interfaces/routes.interface';
-import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
-import { useRouter } from 'next/navigation';
-
-type RouteOption = {
-  polyline: [number, number][];
-  distanceKm: number;
-  estimatedTimeMinutes: number;
-  elevationGain: number;
-  elevationLoss: number;
-  estimatedCalories: number;
-  averageSpeedUsed: number;
-  elevationProfile?: ElevationPoint[];
-  summary?: string;
-  warnings?: string[];
-};
+import { archivo } from '../fonts';
 
 type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][];
@@ -42,7 +28,7 @@ export default function CalculateRoutePage() {
   useProtectedRoute();
   const api = useMemo(() => new ApiVeloxService(), []);
   const { t } = useTexts('calculate');
-  const router = useRouter();
+  const tPanel = useTexts('plannerPanel').t;
 
   const [origin, setOrigin] = useState<[number, number] | null>(null);
   const [destination, setDestination] = useState<[number, number] | null>(null);
@@ -202,6 +188,7 @@ export default function CalculateRoutePage() {
       
       setRouteOptions([mainRoute, ...alternatives]);
       setSelectedRouteIndex(0);
+      window.scrollTo({ top: 0 });
       
     } catch {
       toast.error(t('routeError'));
@@ -249,159 +236,95 @@ export default function CalculateRoutePage() {
     setTrafficData(null);
   };
 
+  if (!userData) {
+    return <PageTransitionOverlay visible={true} message={t('loadingProfile')} />;
+  }
+
+  // a folha em tinta à esquerda e o mapa noturno no resto; no celular o mapa fica preso em cima
   return (
-    <div className="relative w-full h-screen pb-40 sm:pb-48">
-      <GoogleRouteMap
-        origin={origin}
-        destination={destination}
-        routes={routeOptions}
-        selectedRouteIndex={selectedRouteIndex}
-        onRouteSelect={setSelectedRouteIndex}
-        onMapClick={handleMapClick}
-      />
+    <MotionConfig reducedMotion="user">
+      <div className={`landing planner ${archivo.variable}`}>
+        <header className="planner__nav">
+          <Link href="/home" className="planner__back">
+            <ArrowLeft size={18} aria-hidden="true" />
+            {tPanel('backButton')}
+          </Link>
+          <div className="lang">
+            <LanguageSelector />
+          </div>
+        </header>
 
-      {isCalculatingRoute && (
-        <PageTransitionOverlay visible={true} message={t('calculating.title')} />
-      )}
+        <div className="planner__map">
+          <GoogleRouteMap
+            className="planner__canvas"
+            origin={origin}
+            destination={destination}
+            routes={routeOptions}
+            selectedRouteIndex={selectedRouteIndex}
+            onRouteSelect={setSelectedRouteIndex}
+            onMapClick={handleMapClick}
+          />
+          <div className="hero__lines" aria-hidden="true" />
+        </div>
 
-      <AnimatePresence mode="wait">
-        {!userData ? (
-          <PageTransitionOverlay visible={true} message={t('loadingProfile')} />
-        ) : routeOptions.length > 0 ? (
-          <motion.div
-            key="route-result"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute bottom-4 left-4 right-4 bg-background p-4 rounded-xl shadow-lg z-[999] text-copy max-h-[60vh] overflow-y-auto"
-          >
-            <div className="space-y-4">
-              <button
-                onClick={() => router.back()}
-                className="flex items-center gap-2 text-copy hover:text-primary-light transition-colors"
-              >
-                <ArrowLeft size={20} />
-                <span className="text-sm font-semibold"></span>
-              </button>
-
-              <RouteSelector
-                routes={routeOptions}
-                selectedIndex={selectedRouteIndex}
-                onSelect={setSelectedRouteIndex}
-              />
-              
-                {weatherData && weatherData.weather && !isLoadingWeather && (
-                <WeatherDisplay weatherData={weatherData.weather} />
-              )}
-
-
-              {trafficData && trafficData.traffic && !isLoadingTraffic && (
-                <TrafficDisplay trafficData={trafficData.traffic} />
-              )}
-
-              <div className="relative bg-gradient-to-r from-[#92a848]/20 to-[#92a848]/10 border-l-4 border-[#92a848] rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-[#92a848] animate-pulse"></div>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-[#92a848]">
-                    {t('personalized.title')}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-sm text-copy">
-                    <User size={16} className="text-primary-light flex-shrink-0" />
-                    <span>
-                      {t('personalized.modality')} <span className="font-bold text-primary-light">{getModalityLabel(selectedModality)}</span>
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-copy">
-                    <Gauge size={16} className="text-primary-light flex-shrink-0" />
-                    <span>
-                      {t('personalized.averageSpeed')} <span className="font-bold text-primary-light">{routeOptions[selectedRouteIndex].averageSpeedUsed} km/h</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {routeOptions[selectedRouteIndex]?.elevationProfile && (
-                <ElevationProfile
-                  elevationData={routeOptions[selectedRouteIndex].elevationProfile!}
-                  elevationGain={routeOptions[selectedRouteIndex].elevationGain}
-                  elevationLoss={routeOptions[selectedRouteIndex].elevationLoss}
+        <main className="planner__panel">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={routeOptions.length > 0 ? 'sheet' : 'form'}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.5, ease: EASE }}
+            >
+              {routeOptions.length > 0 ? (
+                <RouteSheet
+                  routes={routeOptions}
+                  selectedIndex={selectedRouteIndex}
+                  onSelect={setSelectedRouteIndex}
+                  origin={originLabel!}
+                  destination={destinationLabel!}
+                  modality={selectedModality}
+                  weather={isLoadingWeather ? undefined : weatherData?.weather}
+                  traffic={isLoadingTraffic ? undefined : trafficData?.traffic}
+                  onSave={handleSaveRoute}
+                  saving={isSaving}
+                  onReset={handleReset}
+                />
+              ) : (
+                <RoutePlannerPanel
+                  originLabel={originLabel}
+                  destinationLabel={destinationLabel}
+                  onSetOrigin={(coords, label) => {
+                    setOrigin(coords);
+                    setOriginLabel(label);
+                  }}
+                  onSetDestination={(coords, label) => {
+                    setDestination(coords);
+                    setDestinationLabel(label);
+                  }}
+                  onClearOrigin={() => {
+                    setOrigin(null);
+                    setOriginLabel(null);
+                  }}
+                  onClearDestination={() => {
+                    setDestination(null);
+                    setDestinationLabel(null);
+                  }}
+                  onStart={handleCalculate}
+                  modality={selectedModality}
+                  onSelectModality={setSelectedModality}
+                  speeds={{
+                    general: userData.averageSpeedGeneral,
+                    road: userData.averageSpeedRoad,
+                    mtb: userData.averageSpeedMtb,
+                  }}
+                  isCalculatingRoute={isCalculatingRoute}
                 />
               )}
-
-              <div className="flex flex-col sm:flex-row gap-3 w-full pt-2">
-                <Button
-                  onClick={handleSaveRoute}
-                  disabled={isSaving}
-                  loading={isSaving}
-                  variant="confirm"
-                  className="flex-1"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <Save size={20} />
-                    {t('buttons.save')}
-                  </span>
-                </Button>
-                <button
-                  onClick={handleReset}
-                  className="flex-1 bg-[#92a848]/10 border border-[#92a848] hover:bg-[#92a848] text-copy font-semibold py-3.5 px-6 rounded-xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] shadow-lg"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <RotateCcw size={20} />
-                    {t('buttons.newSearch')}
-                  </span>
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="route-planner"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute bottom-0 left-0 right-0"
-          >
-            <RoutePlannerPanel
-              originLabel={originLabel}
-              destinationLabel={destinationLabel}
-              onSetOrigin={(coords, label) => {
-                setOrigin(coords);
-                setOriginLabel(label);
-              }}
-              onSetDestination={(coords, label) => {
-                setDestination(coords);
-                setDestinationLabel(label);
-              }}
-            onClearOrigin={() => {
-              setOrigin(null);
-              setOriginLabel(null);
-              setRouteData(null);
-              setRouteOptions([]);
-              setSelectedRouteIndex(0);
-            }}
-            onClearDestination={() => {
-              setDestination(null);
-              setDestinationLabel(null);
-              setRouteData(null);
-              setRouteOptions([]);
-              setSelectedRouteIndex(0);
-            }}
-              onStart={() => handleCalculate()}
-              onSelectModality={(modality) => {
-                setSelectedModality(modality);
-              }}
-              speeds={{
-                general: userData.averageSpeedGeneral,
-                road: userData.averageSpeedRoad,
-                mtb: userData.averageSpeedMtb,
-              }}
-              isCalculatingRoute={isCalculatingRoute}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+            </motion.div>
+          </AnimatePresence>
+        </main>
+      </div>
+    </MotionConfig>
   );
 }
