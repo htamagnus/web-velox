@@ -354,6 +354,14 @@
       "veloxLabel": "Velox, at your average",
       "atSpeed": "{{speed}} km/h average"
     },
+    "race": {
+      "title": "Same route. Two clocks.",
+      "lead": "{{km}} km and {{climb}} m of climbing. Scroll to ride.",
+      "generic": "Generic estimate",
+      "velox": "Velox",
+      "finished": "Finished",
+      "note": "{{diff}} min earlier."
+    },
     "problem": {
       "title": "Did the prediction",
       "titleHighlight": "let you down?",

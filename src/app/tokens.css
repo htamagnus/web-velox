@@ -16,6 +16,9 @@
   --color-accent-ink: oklch(16% 0.08 260);
   --color-accent-deep: oklch(56% 0.12 121);
   --color-focus: oklch(56% 0.12 121);
+  --color-amber: oklch(82% 0.15 72);
+  --color-amber-ink: oklch(24% 0.06 60);
+  --color-amber-deep: oklch(60% 0.15 62);
   --color-slot: oklch(76% 0.07 258);
   --font-display: var(--font-saira), sans-serif;
   --font-body: var(--font-albert), ui-sans-serif, sans-serif;

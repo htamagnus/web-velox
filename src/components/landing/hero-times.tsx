@@ -1,30 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
 import { EASE } from './reveal';
+import { GENERIC_MINUTES, MODES, ROUTE, minutesFor, type Mode } from './modes';
 
-const ROUTE = { km: 30, climb: 200 };
-// a previsão genérica que a página já citava: mais de 2 horas pra 30 km
-const GENERIC_MINUTES = 130;
-// médias típicas por modalidade; a da Speed bate com a tabela de rotas abaixo (30 km → 1h20)
-const MODES = [
-  { id: 'road', speed: 22.5 },
-  { id: 'mtb', speed: 15 },
-  { id: 'general', speed: 18 },
-] as const;
+type Props = { mode: Mode; onChange: (mode: Mode) => void };
 
-export default function HeroTimes() {
+export default function HeroTimes({ mode, onChange }: Props) {
   const { t } = useTexts('landing.hero');
   const { t: tApp } = useTexts();
   const { locale } = useLocale();
-  const [mode, setMode] = useState<(typeof MODES)[number]>(MODES[0]);
 
   const fmt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 1 });
-  const minutes = Math.round((ROUTE.km / mode.speed) * 60);
+  const minutes = minutesFor(mode.speed);
 
   // o tempo roda como cronômetro até o novo valor em vez de trocar seco
   const rolling = useMotionValue(minutes);
@@ -61,7 +53,7 @@ export default function HeroTimes() {
               type="button"
               className="compare__mode"
               aria-pressed={mode.id === m.id}
-              onClick={() => setMode(m)}
+              onClick={() => onChange(m)}
             >
               {mode.id === m.id && (
                 <motion.span

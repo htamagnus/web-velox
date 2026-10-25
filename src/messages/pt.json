@@ -354,6 +354,14 @@
       "veloxLabel": "Velox, na sua média",
       "atSpeed": "Média de {{speed}} km/h"
     },
+    "race": {
+      "title": "Mesma rota. Dois relógios.",
+      "lead": "{{km}} km e {{climb}} m de subida. Role pra pedalar.",
+      "generic": "Previsão genérica",
+      "velox": "Velox",
+      "finished": "Chegou",
+      "note": "{{diff}} min antes."
+    },
     "problem": {
       "title": "A previsão te",
       "titleHighlight": "deixou na mão?",

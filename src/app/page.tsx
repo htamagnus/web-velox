@@ -12,6 +12,10 @@ import LanguageSelector from '@/components/language-selector/language-selector';
 import HeroTimes from '@/components/landing/hero-times';
 import Reveal, { EASE } from '@/components/landing/reveal';
 import CountUp from '@/components/landing/count-up';
+import SpeedField from '@/components/landing/speed-field';
+import Ticker from '@/components/landing/ticker';
+import Race from '@/components/landing/race';
+import { MODES, minutesFor, type Mode } from '@/components/landing/modes';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
@@ -31,10 +35,10 @@ const PAINS = [
   { key: 'bike', value: 3 },
 ];
 const FEATURES = ['prediction', 'modality', 'strava', 'elevation'];
-const MODES = ['road', 'mtb', 'general'];
+const MOCK_MODES = ['road', 'mtb', 'general'];
 
 // valores de exemplo do mock; o print do planner redesenhado substitui o slot inteiro
-const SAMPLE = { time: '1h20', distanceKm: 30, speedKmh: 22.5, gain: 200, loss: 180, kcal: 640 };
+const SAMPLE = { distanceKm: 30, speedKmh: 22.5, gain: 200, loss: 180, kcal: 640 };
 const SAMPLE_PROFILE =
   '0,90 10,86.5 20,80.8 30,74.2 40,77.3 50,71.5 60,63.2 70,53.5 80,45.2 90,48.3 100,39.9 110,32.5 120,25 130,28.5 140,20.2 150,14 160,18 170,24.1 180,29.4 190,25.9 200,33.3 210,40.8 220,46.9 230,52.2 240,57.1 250,63.2 260,68 270,73.7 280,77.7 290,80.3 300,81.2';
 
@@ -77,6 +81,7 @@ export default function LandingPage() {
   const { locale } = useLocale();
   const [loading, setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
+  const [mode, setMode] = useState<Mode>(MODES[0]);
   const router = useRouter();
 
   const handleStart = () => {
@@ -128,10 +133,11 @@ export default function LandingPage() {
           </motion.header>
 
           <main>
-            <section className="hero" onPointerMove={spotlight}>
+            <section className="hero grain" onPointerMove={spotlight}>
               <figure className="hero__photo">
                 <Image src="/images/hero-bike.jpg" alt="" fill priority sizes="100vw" />
               </figure>
+              <SpeedField speed={mode.speed} />
               <div className="container hero__grid">
                 <div className="hero__type">
                   <h1>
@@ -175,9 +181,11 @@ export default function LandingPage() {
                     </a>
                   </motion.div>
                 </div>
-                <HeroTimes />
+                <HeroTimes mode={mode} onChange={setMode} />
               </div>
             </section>
+
+            <Ticker />
 
             <section className="pains">
               <div className="container">
@@ -191,9 +199,13 @@ export default function LandingPage() {
                     <li key={pain.key} className="pains__cell">
                       <Reveal delay={0.1 + i * 0.12}>
                         <p
-                          className={
-                            i === 0 ? 'pains__figure figure is-volt' : 'pains__figure figure'
-                          }
+                          className={[
+                            'pains__figure figure',
+                            i === 0 && 'is-plate',
+                            i < 2 && 'is-amber',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
                         >
                           <CountUp to={pain.value} prefix={pain.prefix} />
                           <span>{t(`problem.cards.${pain.key}.unit`)}</span>
@@ -207,7 +219,9 @@ export default function LandingPage() {
               </div>
             </section>
 
-            <section className="product" id="produto">
+            <Race mode={mode} />
+
+            <section className="product grain" id="produto">
               <div className="container">
                 <Reveal>
                   <div className="product__head">
@@ -229,7 +243,7 @@ export default function LandingPage() {
                     data-alt="Tela de resultado do planner redesenhado: modalidade, rota, tempo estimado, distância, altimetria e calorias"
                   >
                     <div className="result__modes">
-                      {MODES.map((mode, i) => (
+                      {MOCK_MODES.map((mode, i) => (
                         <span
                           key={mode}
                           className={i === 0 ? 'result__mode is-on' : 'result__mode'}
@@ -251,15 +265,19 @@ export default function LandingPage() {
                       </ul>
                       <div className="result__profile">
                         <p className="result__label">{tApp('elevationProfile.title')}</p>
-                        <svg
+                        <motion.svg
                           viewBox="0 0 300 100"
                           preserveAspectRatio="none"
                           role="img"
                           aria-label={tApp('elevationProfile.title')}
+                          initial={{ clipPath: 'inset(0 100% 0 0)' }}
+                          whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
+                          viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+                          transition={{ duration: 2.2, ease: EASE }}
                         >
                           <polygon points={`0,100 ${SAMPLE_PROFILE} 300,100`} />
                           <polyline points={SAMPLE_PROFILE} />
-                        </svg>
+                        </motion.svg>
                         <p className="result__axis">
                           <span>0 km</span>
                           <span>{SAMPLE.distanceKm} km</span>
@@ -270,7 +288,9 @@ export default function LandingPage() {
                       <div>
                         <p className="result__label">{label('planner.summary.time')}</p>
                         <p className="result__time">
-                          <span>{SAMPLE.time}</span>
+                          <span>
+                            <CountUp to={minutesFor(SAMPLE.speedKmh)} format={hm} duration={2.2} />
+                          </span>
                         </p>
                         <p className="result__speed">
                           {tApp('planner.summary.averageSpeedInfo').replace('{{speed}}', speed)}
@@ -394,7 +414,7 @@ export default function LandingPage() {
               </div>
             </section>
 
-            <section className="close">
+            <section className="close grain">
               <div
                 className="close__photo"
                 data-slot="fechamento"

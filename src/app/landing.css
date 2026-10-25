@@ -9,6 +9,7 @@
 /* Hallmark · dismissed kept · hero-bike.jpg and cta-bike.jpg are both still on the page, now served through next/image, so the rendered src reads /_next/image instead of the file path */
 /* Hallmark · reworded "Pedale no seu ritmo. Planeje com precisão." to "O tempo da rota na sua velocidade.", "Sem tempo pra erro" to "Média chutada", "Previsão real" to "Tempo estimado", "Velocidade por modalidade" to "Uma média por bike", "Integração com o Strava" to "Direto do Strava", "Calorias e altimetria" to "O perfil da rota" · the owner asked for new copy after the finish review named these heads as ones any cycling app could print */
 /* Hallmark · owner override · motion added at the owner's word over the theme's "nothing moves": entrance choreography, the time rolling like a stopwatch, the pill sliding between modes, the bars, the photo drifting and a pointer spotlight opening the scrim · reduced motion stills all of it */
+/* Owner · "vai": the theme's limits are off on this page. A second accent (amber for the generic estimate), grain and glow on the ink bands, light streaks drawn on a canvas behind the hero, a ticker, a scroll-driven race and poster-size figures */
 /* Hallmark · answered F16 · the app hides the page scrollbar in globals.css, so there is no scrollbar left to theme on this page */
 
 .nav {
@@ -209,6 +210,27 @@
       );
   }
 }
+.hero__streaks {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+/* grão de filme sobre as bandas escuras */
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px;
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+}
 .hero__line {
   display: block;
   overflow: hidden;
@@ -219,6 +241,8 @@
   display: block;
 }
 .hero__grid {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   column-gap: var(--space-3xl);
@@ -357,6 +381,13 @@
   font-variant-numeric: tabular-nums;
   color: var(--color-muted-on-ink);
 }
+.compare__row:not(.is-on) dd {
+  color: var(--color-amber);
+}
+.compare__row:not(.is-on) .compare__bar span {
+  background: var(--color-amber);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--color-amber) 60%, transparent);
+}
 .compare__row.is-on dd {
   padding: 0;
 }
@@ -412,6 +443,43 @@
   }
 }
 
+.ticker {
+  overflow: hidden;
+  border-block: var(--rule-hair) solid var(--color-rule-on-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker 42s linear infinite;
+}
+.ticker:hover .ticker__track {
+  animation-play-state: paused;
+}
+.ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-sm) 0 var(--space-sm) var(--space-lg);
+  font: 500 var(--text-sm) / 1 var(--font-outlier);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ticker__item::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-amber);
+}
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .pains {
   padding-top: var(--section-gap);
 }
@@ -448,15 +516,18 @@
   font: 500 var(--text-lg) / 1 var(--font-body);
   color: var(--color-muted);
 }
-.pains__figure.is-volt {
-  color: var(--color-accent-ink);
+.pains__cell .pains__figure.is-amber {
+  color: var(--color-amber-deep);
 }
-.pains__figure.is-volt > :first-child {
+.pains__cell .pains__figure.is-plate {
+  color: var(--color-amber-ink);
+}
+.pains__figure.is-plate > :first-child {
   display: inline-block;
   padding: var(--space-xs) var(--space-md);
   border-radius: var(--radius-card);
-  background: var(--color-accent);
-  box-shadow: 0 16px 32px -16px var(--color-accent-deep);
+  background: var(--color-amber);
+  box-shadow: 0 16px 32px -16px var(--color-amber-deep);
 }
 .pains__cell h3 {
   font-size: var(--text-xl);
@@ -468,10 +539,147 @@
   color: var(--color-ink-2);
 }
 
-.product {
+/* a corrida: a seção é alta e o palco fica preso enquanto a rolagem faz o tempo passar */
+.race {
+  position: relative;
+  height: 260svh;
   margin-top: var(--section-gap-l);
-  padding-block: var(--section-gap-s);
   background: var(--color-ink);
+  color: var(--color-paper);
+}
+.race__stage {
+  position: sticky;
+  top: 0;
+  display: grid;
+  align-items: center;
+  height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      900px 520px at 50% 110%,
+      color-mix(in oklab, var(--color-accent) 16%, transparent),
+      transparent 70%
+    ),
+    var(--color-ink);
+}
+.race__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-2xl);
+}
+.race__head {
+  display: grid;
+  gap: var(--space-md);
+}
+.race h2 {
+  text-transform: uppercase;
+}
+.race .lead {
+  color: var(--color-muted-on-ink);
+}
+.race__lanes {
+  display: grid;
+  gap: var(--space-xl);
+}
+.race__lane {
+  display: grid;
+  gap: var(--space-md);
+}
+.race__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+.race__name {
+  color: var(--color-paper);
+  font: var(--display-weight) var(--text-lg) / 1 var(--font-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.race__km {
+  white-space: nowrap;
+  font: 500 var(--text-sm) / 1 var(--font-outlier);
+  color: var(--color-muted-on-ink);
+}
+.race__clock {
+  margin-left: auto;
+  font: 500 var(--text-3xl) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+}
+.race__track {
+  position: relative;
+  height: var(--rule-bar);
+  margin-block: var(--space-md);
+  background: var(--color-rule-on-ink);
+}
+.race__fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: currentColor;
+  box-shadow: 0 0 16px currentColor;
+}
+.race__rider {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: var(--color-ink);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 24px color-mix(in oklab, currentColor 50%, transparent);
+}
+.race__lane.is-generic {
+  color: var(--color-amber);
+}
+.race__lane.is-velox {
+  color: var(--color-accent);
+}
+.race__flag {
+  position: absolute;
+  top: var(--space-md);
+  right: 0;
+  padding: var(--space-3xs) var(--space-xs);
+  border-radius: var(--radius-card);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font: 500 var(--text-xs) / 1.4 var(--font-outlier);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.race__note {
+  font: var(--display-weight) var(--text-section) / 1 var(--font-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.race__ghost {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.14em;
+  z-index: 0;
+  margin: 0;
+  font: var(--display-weight) clamp(9rem, 30vw, 28rem) / 0.8 var(--font-display);
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  pointer-events: none;
+}
+
+.product {
+  position: relative;
+  padding-block: var(--section-gap-s);
+  background:
+    radial-gradient(
+      900px 480px at 78% 12%,
+      color-mix(in oklab, var(--color-accent) 16%, transparent),
+      transparent 70%
+    ),
+    var(--color-ink);
   color: var(--color-paper);
 }
 .product__head {
@@ -495,6 +703,10 @@
   color: var(--color-muted-on-ink);
 }
 
+.product .container {
+  position: relative;
+  z-index: 2;
+}
 .result[data-slot] {
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
