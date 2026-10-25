@@ -1,16 +1,4 @@
-/* Hallmark · shape: race sheet (swapped from the draw's Letter, the page's words are not first-person) · genre: editorial · theme: Sport (deal 1/3, seed bike-route-planner-cyclists-a4e1·5e244971·2026-10-24·r0) · redesign: full
- * hero: Counter on the ink, the sample route's two times as a sheet beside the head (the generic estimate against the rider's own, switched by bike type), the night photograph kept as the ground under a scrim · nav: a bare line over the hero, not a bar (the draw's pill, squared to the theme's 4px) · footer: mast (the logo large over the closing line) · imagery: photographs 2, the user's own (hero in colour, close in the ink duotone) · product sample in produto · signature: the two times on one sheet, the rider's own in volt changing with the bike
- * axes: light/display-condensed/chromatic-volt · posture: restrained · contrast: pass · fold: pass · job: sign up · draw: df5961 · accent: the logo's lime #bfd572 in place of the theme's volt · photo: natural on the hero, the user's photograph kept in colour at their word · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V5 · weakest: S, the hero head is the page's own slogan and fits any training app; the 2h10 against 1h20 sheet sits right under it to carry the claim only Velox makes */
-/* Hallmark · hero-review: fix · 5 findings · 5 resolved */
-/* Hallmark · finish-review: subagent · 5 findings · 5 resolved · gap: none · first capture answered recapture (the 1280 fold shot before the hero image decoded) */
-/* Hallmark · waive 84 · the planner runs only behind a login on the production API · the user asked for a mock because the planner screens get redesigned next, so a capture today would date the page */
-/* Hallmark · waive 72 · the 1h20 plate is cut to the digits like a timing board, their ink sits 30px inside it · Saira Condensed reports a 1.58em text box, so any plate that fits the time on the lime is measured as crowded */
-/* Hallmark · dismissed kept · hero-bike.jpg and cta-bike.jpg are both still on the page, now served through next/image, so the rendered src reads /_next/image instead of the file path */
-/* Hallmark · reworded "Pedale no seu ritmo. Planeje com precisão." to "O tempo da rota na sua velocidade.", "Sem tempo pra erro" to "Média chutada", "Previsão real" to "Tempo estimado", "Velocidade por modalidade" to "Uma média por bike", "Integração com o Strava" to "Direto do Strava", "Calorias e altimetria" to "O perfil da rota" · the owner asked for new copy after the finish review named these heads as ones any cycling app could print */
-/* Hallmark · owner override · motion added at the owner's word over the theme's "nothing moves": entrance choreography, the time rolling like a stopwatch, the pill sliding between modes, the bars, the photo drifting and a pointer spotlight opening the scrim · reduced motion stills all of it */
-/* Owner · "vai": the theme's limits are off on this page. A second accent (amber for the generic estimate), grain and glow on the ink bands, light streaks drawn on a canvas behind the hero, a ticker, a scroll-driven race and poster-size figures */
-/* Hallmark · answered F16 · the app hides the page scrollbar in globals.css, so there is no scrollbar left to theme on this page */
+/* Landing do Velox. Tokens em tokens.css, base compartilhada em base.css. */
 
 .nav {
   position: absolute;
@@ -707,7 +695,7 @@
   position: relative;
   z-index: 2;
 }
-.result[data-slot] {
+.result {
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   margin: var(--space-2xl) 0 0;
@@ -1002,11 +990,12 @@
   background: var(--color-ink);
   color: var(--color-paper);
 }
-.close__photo[data-slot] {
+.close__photo {
   position: absolute;
   inset: 0;
 }
 .close__photo img {
+  object-fit: cover;
   object-position: 50% 40%;
 }
 .close__over {
@@ -1082,7 +1071,7 @@
   .product :is(h2, .product__aside) {
     grid-column: 1 / -1;
   }
-  .result[data-slot] {
+  .result {
     grid-template-columns: minmax(0, 1fr);
   }
   .result__route {

@@ -236,12 +236,7 @@ export default function LandingPage() {
                 </Reveal>
 
                 <Reveal delay={0.1}>
-                  <figure
-                    className="result"
-                    data-slot="produto"
-                    data-kind="product"
-                    data-alt="Tela de resultado do planner redesenhado: modalidade, rota, tempo estimado, distância, altimetria e calorias"
-                  >
+                  <figure className="result">
                     <div className="result__modes">
                       {MOCK_MODES.map((mode, i) => (
                         <span
@@ -415,11 +410,7 @@ export default function LandingPage() {
             </section>
 
             <section className="close grain">
-              <div
-                className="close__photo"
-                data-slot="fechamento"
-                data-alt="Ciclista de estrada em velocidade, de dia"
-              >
+              <div className="close__photo photo--duotone">
                 <Image src="/images/cta-bike.jpg" alt="Ciclista em movimento" fill sizes="100vw" />
               </div>
               <div className="close__over">

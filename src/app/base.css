@@ -93,26 +93,6 @@ body {
   clip-path: inset(50%);
   white-space: nowrap;
 }
-.landing [data-slot] {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(
-    160deg,
-    var(--color-paper-2, var(--color-paper)),
-    var(--color-paper-3, var(--color-paper))
-  );
-}
-.landing [data-slot] > img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-}
-.landing [data-slot]:has(> img) > :not(img):not([data-keep]) {
-  display: none !important;
-}
 @media (prefers-reduced-motion: reduce) {
   .landing *:not(.keep-motion),
   .landing *:not(.keep-motion)::before,
@@ -123,19 +103,18 @@ body {
     scroll-behavior: auto !important;
   }
 }
-/* photographs: duotone ink paper con=20; product captures keep their own colour */
-.landing [data-slot]:not([data-kind='product']):has(> img) {
+/* foto em duotone (tinta sobre papel): opcional, por classe; sem a classe a foto fica em cor */
+.landing .photo--duotone {
   isolation: isolate;
   background: var(--color-paper);
   outline: 1px solid color-mix(in oklab, var(--color-ink) 8%, transparent);
   outline-offset: -1px;
 }
-.landing [data-slot]:not([data-kind='product']) > img {
-  z-index: 0;
+.landing .photo--duotone > img {
   filter: grayscale(1) contrast(1.2);
   mix-blend-mode: multiply;
 }
-.landing [data-slot]:not([data-kind='product']):has(> img)::before {
+.landing .photo--duotone::before {
   content: '';
   position: absolute;
   inset: 0;
