@@ -346,13 +346,10 @@
       "title2": "na sua velocidade.",
       "subtitle": "O Velox usa a sua velocidade média real, separada por tipo de bike.",
       "cta": "Criar conta",
-      "secondary": "Ver como funciona",
       "sample": "Rota de exemplo",
-      "route": "{{km}} km · {{climb}} m de subida",
-      "genericLabel": "Previsão genérica",
-      "genericNote": "A mesma conta pra qualquer ciclista",
-      "veloxLabel": "Velox, na sua média",
-      "atSpeed": "Média de {{speed}} km/h"
+      "climbLabel": "Subida",
+      "speedLabel": "Sua média",
+      "genericLabel": "Previsão genérica"
     },
     "race": {
       "title": "Mesma rota. Dois relógios.",

@@ -346,13 +346,10 @@
       "title2": "at your own speed.",
       "subtitle": "Velox uses your real average speed, tracked separately for each bike type.",
       "cta": "Create account",
-      "secondary": "See how it works",
       "sample": "Sample route",
-      "route": "{{km}} km · {{climb}} m of climbing",
-      "genericLabel": "Generic estimate",
-      "genericNote": "The same math for every rider",
-      "veloxLabel": "Velox, at your average",
-      "atSpeed": "{{speed}} km/h average"
+      "climbLabel": "Climb",
+      "speedLabel": "Your average",
+      "genericLabel": "Generic estimate"
     },
     "race": {
       "title": "Same route. Two clocks.",

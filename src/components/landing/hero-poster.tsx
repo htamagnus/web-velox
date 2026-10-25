@@ -1,0 +1,122 @@
+'use client';
+
+import { useEffect } from 'react';
+import Image from 'next/image';
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
+import { useTexts } from '@/helpers/use-texts';
+import { useLocale } from '@/contexts/locale-context';
+import { hm } from '@/helpers/format-minutes';
+import { EASE } from './reveal';
+import { GENERIC_MINUTES, MODES, ROUTE, minutesFor, type Mode } from './modes';
+
+type Props = {
+  mode: Mode;
+  onChange: (mode: Mode) => void;
+};
+
+const rise = (delay: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, delay, ease: EASE },
+});
+
+// o hero como pôster: a foto manda, um tempo gigante no centro, os fatos pequenos nas bordas
+export default function HeroPoster({ mode, onChange }: Props) {
+  const { t } = useTexts('landing.hero');
+  const { t: tApp } = useTexts();
+  const { locale } = useLocale();
+  const fmt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 1 });
+  const minutes = minutesFor(mode.speed);
+
+  const rolling = useMotionValue(minutes);
+  const rollingText = useTransform(rolling, (v) => hm(Math.round(v)));
+  useEffect(() => {
+    const controls = animate(rolling, minutes, { duration: 0.9, ease: EASE });
+    return () => controls.stop();
+  }, [minutes, rolling]);
+
+  const facts = [
+    { value: `${ROUTE.km} km`, label: t('sample') },
+    { value: `${ROUTE.climb} m`, label: t('climbLabel') },
+    { value: `${fmt.format(mode.speed)} km/h`, label: t('speedLabel') },
+  ];
+
+  return (
+    <div className="container hero__poster">
+      <motion.dl className="hero__facts" {...rise(0.6)}>
+        {facts.map((fact) => (
+          <div key={fact.label}>
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))}
+      </motion.dl>
+
+      <motion.div
+        className="hero__figure"
+        initial={{ opacity: 0, scale: 1.08, filter: 'blur(14px)' }}
+        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        transition={{ duration: 1.3, delay: 0.25, ease: EASE }}
+      >
+        <Image
+          src="/svg/velox-logo.svg"
+          alt="Velox"
+          width={120}
+          height={83}
+          priority
+          className="hero__logo"
+        />
+        <span className="visually-hidden" aria-live="polite">
+          {hm(minutes)}
+        </span>
+        <motion.p className="hero__time" aria-hidden="true">
+          {rollingText}
+        </motion.p>
+        <p className="hero__figure-label">{t('subtitle')}</p>
+      </motion.div>
+
+      <div className="hero__type">
+        <h1>
+          {['title1', 'title2'].map((key, i) => (
+            <span key={key} className="hero__line">
+              <motion.span
+                initial={{ y: '110%' }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.9, delay: 0.35 + i * 0.12, ease: EASE }}
+              >
+                {t(key)}
+              </motion.span>
+            </span>
+          ))}
+        </h1>
+        <motion.p className="hero__generic" {...rise(0.8)}>
+          <span>{hm(GENERIC_MINUTES)}</span>
+          {t('genericLabel')}
+        </motion.p>
+      </div>
+
+      <motion.div
+        className="hero__modes"
+        role="group"
+        aria-label={tApp('planner.summary.modality').replace(/:$/, '')}
+        {...rise(0.95)}
+      >
+        {MODES.map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            className="hero__mode"
+            aria-pressed={mode.id === m.id}
+            onClick={() => onChange(m)}
+          >
+            <span className="hero__mode-bar" />
+            <span className="hero__mode-name">{tApp(`speedModal.options.${m.id}.label`)}</span>
+            <span className="hero__mode-speed">
+              {fmt.format(m.speed)} km/h · {hm(minutesFor(m.speed))}
+            </span>
+          </button>
+        ))}
+      </motion.div>
+    </div>
+  );
+}

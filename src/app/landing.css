@@ -10,16 +10,9 @@
 .nav__bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--space-lg);
   min-height: 44px;
-}
-.nav__home {
-  display: inline-flex;
-  flex-shrink: 0;
-}
-.nav__home img {
-  width: 48px;
 }
 .nav__end {
   display: flex;
@@ -132,9 +125,8 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  align-items: center;
   min-height: 100svh;
-  padding-block: calc(var(--space-md) + 44px + var(--space-xl)) var(--space-2xl);
+  padding-block: calc(var(--space-md) + 44px + var(--space-lg)) var(--space-lg);
   background: var(--color-ink);
   color: var(--color-paper);
   transition:
@@ -161,7 +153,7 @@
     transform: scale(1.12) translate(-1.5%, -1%);
   }
 }
-/* o scrim abre em volta do mouse (--mx/--my), como um farol passando pela foto */
+/* a foto manda: o scrim só fecha embaixo, onde ficam o título e a faixa, e abre em volta do mouse */
 .hero__photo::after {
   content: '';
   position: absolute;
@@ -170,33 +162,14 @@
     radial-gradient(
       620px circle at var(--mx) var(--my),
       transparent,
-      color-mix(in oklab, var(--color-ink) 74%, transparent) 70%
+      color-mix(in oklab, var(--color-ink) 38%, transparent) 70%
     ),
     linear-gradient(
-      90deg,
-      color-mix(in oklab, var(--color-ink) 62%, transparent),
-      color-mix(in oklab, var(--color-ink) 38%, transparent)
+      180deg,
+      color-mix(in oklab, var(--color-ink) 45%, transparent),
+      color-mix(in oklab, var(--color-ink) 22%, transparent) 45%,
+      color-mix(in oklab, var(--color-ink) 88%, transparent)
     );
-}
-@media (max-width: 60rem) {
-  /* sem mouse não há farol: o foco sai da tela e o scrim fica mais fechado atrás do texto */
-  .hero {
-    --mx: 50%;
-    --my: 130%;
-  }
-  .hero__photo::after {
-    background:
-      radial-gradient(
-        620px circle at var(--mx) var(--my),
-        transparent,
-        color-mix(in oklab, var(--color-ink) 74%, transparent) 70%
-      ),
-      linear-gradient(
-        180deg,
-        color-mix(in oklab, var(--color-ink) 72%, transparent),
-        color-mix(in oklab, var(--color-ink) 52%, transparent)
-      );
-  }
 }
 .hero__streaks {
   position: absolute;
@@ -219,6 +192,107 @@
   opacity: 0.16;
   mix-blend-mode: soft-light;
 }
+/* a grade: fios verticais como num pôster de corrida */
+.hero__lines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--color-paper) 9%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: calc(100% / 6) 100%;
+  background-position: calc(100% / 6) 0;
+}
+.hero__poster {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    'facts figure aside'
+    'type type type'
+    'modes modes modes';
+  align-items: center;
+  column-gap: var(--space-xl);
+  row-gap: var(--space-2xl);
+}
+.hero__facts {
+  grid-area: facts;
+  display: grid;
+  gap: var(--space-lg);
+  margin: 0;
+}
+.hero__facts div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-3xs);
+}
+.hero__facts dt {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.hero__facts dd {
+  margin: 0;
+  font: 500 var(--text-2xl) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+}
+.hero__figure {
+  grid-area: figure;
+  text-align: center;
+}
+.hero__logo {
+  width: 120px;
+  height: auto;
+  margin: 0 auto var(--space-md);
+}
+.hero__time {
+  margin: 0;
+  font: var(--display-weight) clamp(5.5rem, 20vw, 19rem) / 0.85 var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-shadow: 0 0 80px color-mix(in oklab, var(--color-accent) 45%, transparent);
+}
+.hero__figure-label {
+  max-width: 34ch;
+  margin: var(--space-md) auto 0;
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  color: var(--color-paper);
+  text-wrap: balance;
+}
+.hero__generic {
+  display: grid;
+  gap: var(--space-3xs);
+  justify-items: end;
+  margin: 0;
+  text-align: right;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.hero__generic span {
+  font: 500 var(--text-2xl) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-amber);
+}
+.hero__type {
+  grid-area: type;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+.hero h1 {
+  max-width: none;
+  font-size: var(--text-display-s);
+  line-height: 1;
+  text-transform: uppercase;
+}
 .hero__line {
   display: block;
   overflow: hidden;
@@ -228,206 +302,112 @@
 .hero__line > span {
   display: block;
 }
-.hero__grid {
-  position: relative;
-  z-index: 2;
+/* a faixa de segmentos: a bike escolhida acende o seu traço */
+.hero__modes {
+  grid-area: modes;
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  column-gap: var(--space-3xl);
-  row-gap: var(--space-2xl);
-  align-items: center;
-}
-.hero h1 {
-  max-width: none;
-  font-size: var(--text-display);
-  line-height: 1.02;
-  text-transform: uppercase;
-}
-.hero .lead {
-  margin-top: var(--space-lg);
-  color: var(--color-muted-on-ink);
-}
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  margin-top: var(--space-xl);
-}
-
-/* the sheet: the sample route's two times, the generic against the rider's own, by bike type */
-.compare {
-  display: grid;
-  gap: var(--space-xl);
-  padding: var(--space-xl);
-  border: var(--rule-hair) solid color-mix(in oklab, var(--color-paper) 14%, transparent);
-  border-radius: var(--radius-card);
-  /* vidro: a foto passa por trás, desfocada, com um fio de luz na aresta de cima */
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in oklab, var(--color-paper) 9%, transparent),
-      transparent 45%
-    ),
-    color-mix(in oklab, var(--color-ink-2) 66%, transparent);
-  color: var(--color-paper);
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--color-paper) 22%, transparent),
-    0 40px 90px -40px color-mix(in oklab, var(--color-accent) 35%, transparent),
-    0 30px 60px -30px var(--color-ink);
-}
-.compare__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-md);
 }
-.compare__title {
-  font: var(--display-weight) var(--text-lg) / 1 var(--font-display);
+.hero__mode {
+  display: grid;
+  gap: var(--space-xs);
+  padding: 0 0 var(--space-2xs);
+  border: 0;
+  background: none;
+  color: var(--color-muted-on-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.hero__mode:hover,
+.hero__mode[aria-pressed='true'] {
+  color: var(--color-paper);
+}
+.hero__mode-bar {
+  position: relative;
+  height: var(--rule-bar);
+  overflow: hidden;
+  background: var(--color-rule-on-ink);
+}
+.hero__mode-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-long) var(--ease-out);
+}
+.hero__mode[aria-pressed='true'] .hero__mode-bar::after {
+  transform: scaleX(1);
+}
+.hero__mode-name {
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
   letter-spacing: var(--tracking-display);
   text-transform: uppercase;
 }
-.compare__route {
-  margin-top: var(--space-xs);
-  font-size: var(--text-sm);
-  color: var(--color-muted-on-ink);
+.hero__mode-speed {
+  font: 500 var(--text-xs) / 1 var(--font-outlier);
 }
-.compare__modes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-.compare__mode {
-  position: relative;
-  isolation: isolate;
-  min-height: 44px;
-  padding: 0 var(--space-md);
-  border: var(--rule-hair) solid var(--color-rule-on-ink);
-  border-radius: var(--radius-card);
-  background: transparent;
-  color: var(--color-muted-on-ink);
-  font: 500 var(--text-sm) / 1 var(--font-body);
-  cursor: pointer;
-  transition:
-    background-color var(--dur-short) var(--ease-out),
-    color var(--dur-short) var(--ease-out),
-    border-color var(--dur-short) var(--ease-out);
-}
-.compare__mode:hover {
-  border-color: var(--color-paper);
-  color: var(--color-paper);
-}
-.compare__mode[aria-pressed='true'] {
-  border-color: var(--color-paper);
-  color: var(--color-ink);
-}
-.compare__pill {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: var(--radius-card);
-  background: var(--color-paper);
-}
-.compare__mode:active {
-  transform: translateY(1px);
-}
-.compare :focus-visible {
+.hero :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
-.compare__sheet {
-  display: grid;
-  margin: 0;
-  border-top: var(--rule-bar) solid var(--color-rule-on-ink);
-}
-.compare__row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  column-gap: var(--space-lg);
-  padding-block: var(--space-lg);
-  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
-}
-.compare__row dt {
-  display: grid;
-  gap: var(--space-2xs);
-  font-size: var(--text-lg);
-  font-weight: 500;
-}
-.compare__row dt span {
-  font-size: var(--text-sm);
-  font-weight: 400;
-  color: var(--color-muted-on-ink);
-}
-.compare__row dd {
-  margin: 0;
-  padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-card);
-  font: 500 var(--text-display) / 1 var(--font-outlier);
-  font-variant-numeric: tabular-nums;
-  color: var(--color-muted-on-ink);
-}
-.compare__row:not(.is-on) dd {
-  color: var(--color-amber);
-}
-.compare__row:not(.is-on) .compare__bar span {
-  background: var(--color-amber);
-  box-shadow: 0 0 12px color-mix(in oklab, var(--color-amber) 60%, transparent);
-}
-.compare__row.is-on dd {
-  padding: 0;
-}
-.compare__plate {
-  display: inline-block;
-  padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-card);
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  box-shadow: 0 0 40px color-mix(in oklab, var(--color-accent) 35%, transparent);
-}
-.compare__bar {
-  grid-column: 1 / -1;
-  height: var(--rule-bar);
-  margin-top: var(--space-md);
-  background: var(--color-rule-on-ink);
-}
-.compare__bar span {
-  display: block;
-  height: 100%;
-  transform-origin: left;
-  background: var(--color-muted-on-ink);
-}
-.is-on .compare__bar span {
-  background: var(--color-accent);
-  box-shadow: 0 0 12px var(--color-accent);
-}
+
 @media (max-width: 60rem) {
   .hero {
-    padding-top: calc(var(--space-md) + 44px + var(--space-lg));
+    padding-top: calc(var(--space-md) + 44px + var(--space-md));
   }
-  .hero__grid {
+  .hero__photo::after {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-ink) 55%, transparent),
+      color-mix(in oklab, var(--color-ink) 40%, transparent) 40%,
+      color-mix(in oklab, var(--color-ink) 90%, transparent)
+    );
+  }
+  .hero__lines {
+    background-size: calc(100% / 3) 100%;
+    background-position: calc(100% / 3) 0;
+  }
+  .hero__poster {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      'figure'
+      'facts'
+      'type'
+      'modes';
     row-gap: var(--space-xl);
   }
-}
-@media (max-width: 40rem) {
-  .compare {
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-xl);
+  }
+  .hero__facts dd {
+    font-size: var(--text-xl);
+  }
+  .hero__type {
+    flex-direction: column;
+    align-items: flex-start;
     gap: var(--space-lg);
-    padding: var(--space-lg);
   }
-  .compare__row {
+  .hero__generic {
+    justify-items: start;
+    text-align: left;
+  }
+  .hero__logo {
+    width: 88px;
+  }
+  .hero__modes {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--space-sm);
+    gap: var(--space-sm);
   }
-  .compare__row dd {
-    justify-self: start;
-  }
-}
-@media (max-width: 30rem) {
-  .nav__lang {
-    display: none;
+  .hero__time {
+    font-size: clamp(5rem, 26vw, 8rem);
   }
 }
 

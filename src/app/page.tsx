@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Saira_Condensed, Albert_Sans, JetBrains_Mono } from 'next/font/google';
@@ -9,7 +8,7 @@ import { MapPin, Navigation } from 'lucide-react';
 import { motion, MotionConfig } from 'framer-motion';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import LanguageSelector from '@/components/language-selector/language-selector';
-import HeroTimes from '@/components/landing/hero-times';
+import HeroPoster from '@/components/landing/hero-poster';
 import Reveal, { EASE } from '@/components/landing/reveal';
 import CountUp from '@/components/landing/count-up';
 import SpeedField from '@/components/landing/speed-field';
@@ -113,9 +112,6 @@ export default function LandingPage() {
             transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
           >
             <div className="container nav__bar">
-              <Link href="/" className="nav__home">
-                <Image src="/svg/velox-logo.svg" alt="Velox" width={48} height={33} priority />
-              </Link>
               <div className="nav__end">
                 <div className="lang nav__lang">
                   <LanguageSelector />
@@ -138,51 +134,8 @@ export default function LandingPage() {
                 <Image src="/images/hero-bike.jpg" alt="" fill priority sizes="100vw" />
               </figure>
               <SpeedField speed={mode.speed} />
-              <div className="container hero__grid">
-                <div className="hero__type">
-                  <h1>
-                    {['hero.title1', 'hero.title2'].map((key, i) => (
-                      <span key={key} className="hero__line">
-                        <motion.span
-                          initial={{ y: '110%' }}
-                          animate={{ y: 0 }}
-                          transition={{ duration: 0.9, delay: 0.1 + i * 0.12, ease: EASE }}
-                        >
-                          {t(key)}
-                        </motion.span>
-                      </span>
-                    ))}
-                  </h1>
-                  <motion.p
-                    className="lead"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
-                  >
-                    {t('hero.subtitle')}
-                  </motion.p>
-                  <motion.div
-                    className="hero__actions"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-                  >
-                    <button
-                      type="button"
-                      className="btn btn--primary"
-                      onClick={handleStart}
-                      disabled={loading}
-                      aria-busy={loading}
-                    >
-                      {t('hero.cta')}
-                    </button>
-                    <a href="#produto" className="btn btn--line">
-                      {t('hero.secondary')}
-                    </a>
-                  </motion.div>
-                </div>
-                <HeroTimes mode={mode} onChange={setMode} />
-              </div>
+              <div className="hero__lines" aria-hidden="true" />
+              <HeroPoster mode={mode} onChange={setMode} />
             </section>
 
             <Ticker />
