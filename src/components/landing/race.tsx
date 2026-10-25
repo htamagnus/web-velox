@@ -53,6 +53,7 @@ export default function Race({ mode }: { mode: Mode }) {
       <div className="race__stage grain">
         <div className="container race__inner">
           <div className="race__head">
+            <p className="eyebrow eyebrow--ink">{tApp('landing.index.race')}</p>
             <h2>{t('title')}</h2>
             <p className="lead">
               {t('lead')

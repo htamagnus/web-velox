@@ -1,193 +1,256 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useTexts } from '@/helpers/use-texts';
 import Reveal, { EASE } from './reveal';
+import SplitWords from './split-words';
 import RollingValue from './rolling-value';
 
-// um dia de exemplo em três horários; os limites são os mesmos que o app usa pra avisar
-const SLOTS = [
-  { id: '07:00', rain: 10, temp: 18, wind: 9, delay: 3 },
-  { id: '12:00', rain: 35, temp: 31, wind: 14, delay: 8 },
-  { id: '17:00', rain: 80, temp: 24, wind: 28, delay: 18 },
-];
+// um dia de exemplo, hora a hora; os limites são os mesmos que o app usa pra avisar
+const HOURS = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+const TEMP = [15, 15, 18, 21, 24, 27, 29, 31, 32, 32, 30, 27, 24, 22, 20, 19];
+const RAIN = [5, 5, 10, 10, 15, 20, 30, 35, 40, 50, 65, 75, 80, 85, 70, 55];
+const WIND = [6, 7, 9, 10, 11, 12, 13, 14, 16, 19, 23, 26, 28, 27, 24, 20];
+const DELAY = [1, 2, 3, 9, 16, 10, 7, 8, 7, 6, 8, 12, 18, 20, 16, 9];
 const LIMITS = { rain: 70, tempMin: 10, tempMax: 30, wind: 25, intense: 5, congested: 15 };
-const LEVELS = ['normal', 'intense', 'congested'] as const;
-const DWELL = 6000;
+const START = 2; // 07:00
+const DWELL = 2400;
 
-type Slot = (typeof SLOTS)[number];
+const last = HOURS.length - 1;
+const clock = (h: number) => `${String(h).padStart(2, '0')}:00`;
+// o desenho vive num quadro de 1000 × 100 esticado; os traços não escalam
+const x = (i: number) => (i / last) * 1000;
+const y = (v: number, max: number) => 100 - (v / max) * 100;
+const line = (data: number[], max: number) => data.map((v, i) => `${x(i)},${y(v, max)}`).join(' ');
 const trafficLevel = (delay: number) =>
   delay >= LIMITS.congested ? 'congested' : delay >= LIMITS.intense ? 'intense' : 'normal';
+const trafficTone = (delay: number) =>
+  delay >= LIMITS.congested ? 'is-alert' : delay >= LIMITS.intense ? 'is-mid' : '';
 
 export default function Conditions() {
   const { t } = useTexts('landing.conditions');
   const { t: tApp } = useTexts();
-  const [slot, setSlot] = useState<Slot>(SLOTS[0]);
+  const [idx, setIdx] = useState(START);
 
-  // os horários passam sozinhos enquanto a seção está na tela; o mouse segura, escolher um encerra
+  // as horas passam sozinhas enquanto a seção está na tela; o mouse segura, mexer no cursor encerra
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.4 });
+  const inView = useInView(ref, { amount: 0.35 });
   const reduced = useReducedMotion();
   const [auto, setAuto] = useState(true);
   const [held, setHeld] = useState(false);
   const running = auto && inView && !held && !reduced;
   useEffect(() => {
     if (!running) return;
-    const id = setTimeout(() => {
-      const i = SLOTS.findIndex((s) => s.id === slot.id);
-      setSlot(SLOTS[(i + 1) % SLOTS.length]);
-    }, DWELL);
+    const id = setTimeout(() => setIdx((i) => (i + 1) % HOURS.length), DWELL);
     return () => clearTimeout(id);
-  }, [running, slot]);
-  const pick = (s: Slot) => {
+  }, [running, idx]);
+  const pick = (i: number) => {
     setAuto(false);
-    setSlot(s);
+    setIdx(i);
   };
 
+  const temp = TEMP[idx];
+  const rain = RAIN[idx];
+  const wind = WIND[idx];
+  const delay = DELAY[idx];
+  const level = trafficLevel(delay);
   const alerts = {
-    rain: slot.rain > LIMITS.rain,
-    temp: slot.temp < LIMITS.tempMin || slot.temp > LIMITS.tempMax,
-    wind: slot.wind > LIMITS.wind,
+    rain: rain > LIMITS.rain,
+    temp: temp < LIMITS.tempMin || temp > LIMITS.tempMax,
+    wind: wind > LIMITS.wind,
   };
-  const level = trafficLevel(slot.delay);
   const wait = alerts.rain || alerts.temp || alerts.wind || level === 'congested';
   const reasons = [
-    alerts.rain && `${tApp('calculate.weather.humidity')} ${slot.rain}%`,
-    alerts.temp && `${tApp('calculate.weather.temperature')} ${slot.temp} °C`,
-    alerts.wind && `${tApp('calculate.weather.wind')} ${slot.wind} km/h`,
-    level !== 'normal' && `${tApp(`calculate.traffic.severity.${level}`)} · +${slot.delay} min`,
+    alerts.rain && `${tApp('calculate.weather.humidity')} ${rain}%`,
+    alerts.temp && `${tApp('calculate.weather.temperature')} ${temp} °C`,
+    alerts.wind && `${tApp('calculate.weather.wind')} ${wind} km/h`,
+    level !== 'normal' && `${tApp(`calculate.traffic.severity.${level}`)} · +${delay} min`,
   ].filter(Boolean);
 
-  const meters = [
-    {
-      key: 'humidity',
-      value: slot.rain,
-      max: 100,
-      unit: '%',
-      ticks: [LIMITS.rain],
-      alert: alerts.rain,
-      rule: t('rainRule'),
-    },
+  const lanes = [
     {
       key: 'temperature',
-      value: slot.temp,
+      label: tApp('calculate.weather.temperature'),
+      data: TEMP,
       max: 40,
       unit: ' °C',
-      ticks: [LIMITS.tempMin, LIMITS.tempMax],
+      kind: 'line',
+      limits: [LIMITS.tempMin, LIMITS.tempMax],
       alert: alerts.temp,
       rule: t('temperatureRule'),
     },
     {
+      key: 'humidity',
+      label: tApp('calculate.weather.humidity'),
+      data: RAIN,
+      max: 100,
+      unit: '%',
+      kind: 'bars',
+      limits: [LIMITS.rain],
+      alert: alerts.rain,
+      rule: t('rainRule'),
+      tone: (v: number) => (v > LIMITS.rain ? 'is-alert' : ''),
+    },
+    {
       key: 'wind',
-      value: slot.wind,
+      label: tApp('calculate.weather.wind'),
+      data: WIND,
       max: 50,
       unit: ' km/h',
-      ticks: [LIMITS.wind],
+      kind: 'line',
+      limits: [LIMITS.wind],
       alert: alerts.wind,
       rule: t('windRule'),
     },
+    {
+      key: 'delay',
+      label: t('delay'),
+      data: DELAY,
+      max: 30,
+      unit: ' min',
+      kind: 'bars',
+      limits: [LIMITS.intense, LIMITS.congested],
+      alert: level !== 'normal',
+      rule: t(`${level}Rule`),
+      tone: trafficTone,
+    },
   ];
-
-  const meter = (m: {
-    key: string;
-    label: string;
-    value: number;
-    max: number;
-    unit: string;
-    ticks: number[];
-    alert: boolean;
-    rule?: string;
-  }) => (
-    <div key={m.key} className="cond__meter" data-alert={m.alert || undefined}>
-      <div className="cond__meter-head">
-        <span>{m.label}</span>
-        <RollingValue value={m.value} format={(v) => `${v}${m.unit}`} className="cond__value" />
-      </div>
-      <span className="cond__track" aria-hidden="true">
-        {m.ticks.map((tick) => (
-          <i key={tick} className="cond__tick" style={{ left: `${(tick / m.max) * 100}%` }} />
-        ))}
-        <motion.span
-          className="cond__fill"
-          animate={{ scaleX: Math.min(1, m.value / m.max) }}
-          transition={{ duration: 0.9, ease: EASE }}
-        />
-      </span>
-      {m.rule && <span className="cond__rule">{m.rule}</span>}
-    </div>
-  );
+  const cursor = { '--x': `${(idx / last) * 100}%` } as CSSProperties;
 
   return (
     <section className="conditions">
       <div ref={ref} className="container">
-        <Reveal>
-          <div className="cond__head">
-            <h2>{t('title')}</h2>
-            <p className="lead">{t('lead')}</p>
-            <div
-              className="cond__slots"
-              role="group"
-              aria-label={t('slotsLabel')}
-              onPointerEnter={() => setHeld(true)}
-              onPointerLeave={() => setHeld(false)}
-              onFocusCapture={() => setHeld(true)}
-              onBlurCapture={() => setHeld(false)}
-            >
-              <span className="cond__slots-label">{t('slotsLabel')}</span>
-              {SLOTS.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  className="chip"
-                  aria-pressed={slot.id === s.id}
-                  onClick={() => pick(s)}
-                >
-                  {s.id}
-                </button>
-              ))}
-            </div>
+        <div className="cond__head">
+          <div>
+            <Reveal>
+              <p className="eyebrow">{tApp('landing.index.conditions')}</p>
+            </Reveal>
+            <SplitWords text={t('title')} />
+            <Reveal delay={0.1}>
+              <p className="lead">{t('lead')}</p>
+            </Reveal>
           </div>
-        </Reveal>
+          <Reveal className="cond__pick" delay={0.15}>
+            <span className="label">{t('slotsLabel')}</span>
+            <span className="cond__hour" aria-live="polite">
+              {clock(HOURS[idx])}
+            </span>
+          </Reveal>
+        </div>
+
         <Reveal delay={0.1}>
-          <div className="cond__board">
-            <div className="cond__group">
-              <h3>{t('weatherTitle')}</h3>
-              {meters.map((m) => meter({ ...m, label: tApp(`calculate.weather.${m.key}`) }))}
+          <div
+            className="day"
+            onPointerEnter={() => setHeld(true)}
+            onPointerLeave={() => setHeld(false)}
+            onFocusCapture={() => setHeld(true)}
+            onBlurCapture={() => setHeld(false)}
+          >
+            {lanes.map((lane) => (
+              <div key={lane.key} className="day__lane" data-alert={lane.alert || undefined}>
+                <div className="day__meta">
+                  <span>{lane.label}</span>
+                  <RollingValue
+                    value={lane.data[idx]}
+                    format={(v) => `${v}${lane.unit}`}
+                    className="day__value num"
+                  />
+                  <span className="day__limit">{lane.rule}</span>
+                </div>
+                <div className="day__plot">
+                  <svg viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+                    {lane.kind === 'line' ? (
+                      <>
+                        <polygon
+                          className="day__area"
+                          points={`0,100 ${line(lane.data, lane.max)} 1000,100`}
+                        />
+                        <polyline className="day__line" points={line(lane.data, lane.max)} />
+                      </>
+                    ) : (
+                      lane.data.map((v, i) => (
+                        <rect
+                          key={i}
+                          className={`day__bar ${lane.tone?.(v) ?? ''}`}
+                          x={x(i) - 10}
+                          y={y(v, lane.max)}
+                          width="20"
+                          height={100 - y(v, lane.max)}
+                        />
+                      ))
+                    )}
+                    {lane.limits.map((limit) => (
+                      <line
+                        key={limit}
+                        className="day__thr"
+                        x1="0"
+                        x2="1000"
+                        y1={y(limit, lane.max)}
+                        y2={y(limit, lane.max)}
+                      />
+                    ))}
+                  </svg>
+                  {lane.limits.map((limit) => (
+                    <span
+                      key={limit}
+                      className="day__thr-label num"
+                      style={{ top: `${y(limit, lane.max)}%` }}
+                    >
+                      {limit}
+                      {lane.unit}
+                    </span>
+                  ))}
+                  {lane.kind === 'line' && (
+                    <i
+                      className="day__mark"
+                      style={{
+                        left: `${(idx / last) * 100}%`,
+                        top: `${y(lane.data[idx], lane.max)}%`,
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+            <div className="day__cursor" aria-hidden="true">
+              <i style={cursor} />
             </div>
-            <div className="cond__group">
-              <h3>{t('trafficTitle')}</h3>
-              {meter({
-                key: 'delay',
-                label: t('delay'),
-                value: slot.delay,
-                max: 30,
-                unit: ' min',
-                ticks: [LIMITS.intense, LIMITS.congested],
-                alert: level !== 'normal',
-              })}
-              <dl className="cond__levels">
-                {LEVELS.map((lv) => (
-                  <div key={lv} className={lv === level ? 'is-on' : undefined}>
-                    <dt>{tApp(`calculate.traffic.severity.${lv}`)}</dt>
-                    <dd>{t(`${lv}Rule`)}</dd>
-                  </div>
+            <div className="day__axis">
+              <span className="day__meta label">{t('slotsLabel')}</span>
+              <div className="day__hours">
+                {HOURS.map((h, i) => (
+                  <span key={h} className="num" style={{ left: `${(i / last) * 100}%` }}>
+                    {clock(h)}
+                  </span>
                 ))}
-              </dl>
+                <input
+                  type="range"
+                  className="day__range"
+                  min={0}
+                  max={last}
+                  step={1}
+                  value={idx}
+                  aria-label={t('slotsLabel')}
+                  aria-valuetext={clock(HOURS[idx])}
+                  onPointerDown={() => setAuto(false)}
+                  onChange={(e) => pick(Number(e.target.value))}
+                />
+              </div>
             </div>
-            <motion.div
-              key={slot.id}
-              className={wait ? 'cond__verdict is-wait' : 'cond__verdict'}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: EASE }}
-            >
-              <p className="cond__verdict-title">{wait ? t('wait') : t('go')}</p>
-              <p className="cond__verdict-note">
-                {reasons.length ? reasons.join(' · ') : t('clear')}
-              </p>
-            </motion.div>
           </div>
+          <motion.div
+            key={idx}
+            className={wait ? 'cond__verdict is-wait' : 'cond__verdict'}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
+          >
+            <p className="cond__verdict-title">{wait ? t('wait') : t('go')}</p>
+            <p className="cond__verdict-note">
+              {reasons.length ? reasons.join(' · ') : t('clear')}
+            </p>
+          </motion.div>
           <p className="cond__note">{t('sampleNote')}</p>
         </Reveal>
       </div>

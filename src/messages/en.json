@@ -415,7 +415,8 @@
       "colClimb": "Climb",
       "lessClimbing": "Less climbing",
       "longer": "Longer",
-      "caption": "Example at a {{speed}} km/h average on {{mode}}."
+      "caption": "Example at a {{speed}} km/h average on {{mode}}.",
+      "mapNote": "Illustrative map; in the app, routes come from Google Maps."
     },
     "conditions": {
       "title": "Weather and traffic before you go",
@@ -442,6 +443,16 @@
       "title": "How long does it really take you?",
       "subtitle": "Create your account, enter your speed and find out on your first route.",
       "button": "Create account"
+    },
+    "index": {
+      "pains": "01 · The problem",
+      "race": "02 · The race",
+      "product": "03 · The app",
+      "routes": "04 · The routes",
+      "conditions": "05 · Before you go"
+    },
+    "product": {
+      "strava": "via Strava"
     }
   }
 }

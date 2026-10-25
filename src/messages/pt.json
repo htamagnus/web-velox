@@ -415,7 +415,8 @@
       "colClimb": "Subida",
       "lessClimbing": "Menos subidas",
       "longer": "Mais longa",
-      "caption": "Exemplo com média de {{speed}} km/h na {{mode}}."
+      "caption": "Exemplo com média de {{speed}} km/h na {{mode}}.",
+      "mapNote": "Mapa ilustrativo; no app, as rotas vêm do Google Maps."
     },
     "conditions": {
       "title": "Clima e trânsito antes de sair",
@@ -442,6 +443,16 @@
       "title": "Quanto tempo você leva de verdade?",
       "subtitle": "Crie sua conta, informe sua velocidade e descubra na primeira rota.",
       "button": "Criar conta"
+    },
+    "index": {
+      "pains": "01 · O problema",
+      "race": "02 · A corrida",
+      "product": "03 · O app",
+      "routes": "04 · As rotas",
+      "conditions": "05 · Antes de sair"
+    },
+    "product": {
+      "strava": "via Strava"
     }
   }
 }
