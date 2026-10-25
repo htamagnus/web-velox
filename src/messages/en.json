@@ -330,26 +330,26 @@
     "title": "Elevation profile"
   },
   "home": {
-    "title": "Welcome to velox",
-    "subtitle": "plan your bike routes with precision",
-    "lastRoutes": "Recent routes",
-    "newRoute": "New route",
-    "newRouteDesc": "plan your route",
-    "myRoutes": "My routes",
-    "myRoutesDesc": "see saved routes",
-    "profile": "Profile",
-    "profileDesc": "edit your information",
-    "comingSoon": "Coming soon",
-    "comingSoonDesc": "new features on the way",
-    "stravaImport": {
-      "title": "Strava",
-      "description": "import average speed"
+    "greeting": "Hi, {{name}}",
+    "title1": "Where to",
+    "title2": "today?",
+    "speedLabel": "Your average",
+    "bikes": "Bike type",
+    "facts": {
+      "routes": "Saved routes",
+      "distance": "Planned",
+      "climb": "Total climb"
     },
-    "footer": {
-      "routes": "Routes",
-      "createRoute": "Create route",
-      "profile": "Profile"
-    }
+    "strava": {
+      "synced": "Overall average from Strava",
+      "import": "Import from Strava",
+      "note": "Swap the average you entered for the real average of your rides."
+    },
+    "newRoute": "New route",
+    "myRoutes": "My routes",
+    "profile": "Profile",
+    "lastRoutes": "Recent routes",
+    "seeAll": "See all"
   },
   "savedRoutesPage": {
     "routeFrom": "Route from"

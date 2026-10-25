@@ -330,26 +330,26 @@
     "title": "Perfil de elevação"
   },
   "home": {
-    "title": "Bem-vindo ao velox",
-    "subtitle": "planeje suas rotas de bike com precisão",
-    "lastRoutes": "Últimas rotas",
-    "newRoute": "Nova rota",
-    "newRouteDesc": "planeje seu percurso",
-    "myRoutes": "Minhas rotas",
-    "myRoutesDesc": "veja rotas salvas",
-    "profile": "Perfil",
-    "profileDesc": "edite suas informações",
-    "comingSoon": "Em breve",
-    "comingSoonDesc": "novidades chegando",
-    "stravaImport": {
-      "title": "Strava",
-      "description": "importar velocidade média"
+    "greeting": "Olá, {{name}}",
+    "title1": "Pra onde",
+    "title2": "hoje?",
+    "speedLabel": "Sua média",
+    "bikes": "Tipo de bike",
+    "facts": {
+      "routes": "Rotas salvas",
+      "distance": "Planejados",
+      "climb": "Subida somada"
     },
-    "footer": {
-      "routes": "Rotas",
-      "createRoute": "Criar rota",
-      "profile": "Perfil"
-    }
+    "strava": {
+      "synced": "Média geral do Strava",
+      "import": "Importar do Strava",
+      "note": "Troque a média que você informou pela média real das suas pedaladas."
+    },
+    "newRoute": "Nova rota",
+    "myRoutes": "Minhas rotas",
+    "profile": "Perfil",
+    "lastRoutes": "Últimas rotas",
+    "seeAll": "Ver todas"
   },
   "savedRoutesPage": {
     "routeFrom": "Percurso de"
