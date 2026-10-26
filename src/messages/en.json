@@ -250,6 +250,7 @@
     "loadingProfile": "loading profile...",
     "requireOriginDestination": "Set origin and destination before calculating the route.",
     "fastestRoute": "Fastest",
+    "quotaError": "The daily Google Maps search limit ran out. Try again tomorrow.",
     "routeError": "Error calculating route.",
     "routeSaved": "Route saved successfully!",
     "saved": "Route saved",

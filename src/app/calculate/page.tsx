@@ -7,6 +7,7 @@ import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { toast } from 'sonner';
 import { ArrowLeft } from 'lucide-react';
 import ApiVeloxService from '@/providers/api-velox.provider';
+import { ApiError } from '@/errors/api-errors';
 import GoogleRouteMap from '@/components/map/google-route-map';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
 import RouteSheet, { RouteOption } from '@/components/planner/route-sheet';
@@ -76,30 +77,23 @@ export default function CalculateRoutePage() {
         return;
       }
 
-      try {
-        setIsLoadingTraffic(true);
-        setIsLoadingWeather(true);
-        const selectedRoute = routeOptions[selectedRouteIndex];
-        const encodedPolyline = polyline.encode(selectedRoute.polyline);
-        
-        const traffic = await api.getTraffic(
-          userData.id,
-          encodedPolyline,
-          originLabel!,
-          destinationLabel!,
-        );
-        setTrafficData(traffic);
+      setIsLoadingTraffic(true);
+      setIsLoadingWeather(true);
+      const selectedRoute = routeOptions[selectedRouteIndex];
+      const midpoint = Math.floor(selectedRoute.polyline.length / 2);
+      const [latitude, longitude] = selectedRoute.polyline[midpoint];
 
-        const midpoint = Math.floor(selectedRoute.polyline.length / 2);
-        const [latitude, longitude] = selectedRoute.polyline[midpoint];
-        
-        const weather = await api.getWeather(userData.id, latitude, longitude);
-        setWeatherData(weather);
-      } catch {
-      } finally {
-        setIsLoadingTraffic(false);
-        setIsLoadingWeather(false);
-      }
+      // um não derruba o outro: sem cota do google pro trânsito, o clima (openweather) ainda aparece
+      await Promise.allSettled([
+        api
+          .getTraffic(userData.id, polyline.encode(selectedRoute.polyline), originLabel!, destinationLabel!)
+          .then(setTrafficData, () => setTrafficData(null))
+          .finally(() => setIsLoadingTraffic(false)),
+        api
+          .getWeather(userData.id, latitude, longitude)
+          .then(setWeatherData, () => setWeatherData(null))
+          .finally(() => setIsLoadingWeather(false)),
+      ]);
     };
 
     loadTrafficAndWeatherData();
@@ -186,8 +180,9 @@ export default function CalculateRoutePage() {
       setSavedIndexes([]);
       window.scrollTo({ top: 0 });
       
-    } catch {
-      toast.error(t('routeError'));
+    } catch (error) {
+      const quota = error instanceof ApiError && error.code === 'GOOGLE_QUOTA_EXCEEDED';
+      toast.error(t(quota ? 'quotaError' : 'routeError'));
     } finally {
       setIsCalculatingRoute(false);
     }

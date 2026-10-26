@@ -250,6 +250,7 @@
     "loadingProfile": "carregando perfil...",
     "requireOriginDestination": "Defina origem e destino antes de calcular a rota.",
     "fastestRoute": "Mais rápida",
+    "quotaError": "O limite diário de buscas do Google Maps acabou. Tente de novo amanhã.",
     "routeError": "Erro ao calcular rota.",
     "routeSaved": "Rota salva com sucesso!",
     "saved": "Rota salva",
