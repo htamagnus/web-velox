@@ -56,6 +56,8 @@ const mapOptions: google.maps.MapOptions = {
 const ACCENT = '#bfd572';
 const PAPER = '#f6f9fc';
 const INK = '#00082e';
+// uma cor por traçado (volt, ciano, rosa), longe do azul do chão; a faixa de rotas da folha usa as mesmas
+export const ROUTE_COLORS = [ACCENT, '#58d1e5', '#ec81c0'];
 
 export default function GoogleRouteMap({
   origin,
@@ -173,6 +175,7 @@ export default function GoogleRouteMap({
           const isSelected = index === selectedRouteIndex;
           const routeKey = `route-${index}-${route.polyline[0]?.[0]}-${route.polyline[0]?.[1]}-${route.polyline[route.polyline.length - 1]?.[0]}-${route.polyline[route.polyline.length - 1]?.[1]}`;
           const path = route.polyline.map(([lat, lng]) => ({ lat, lng }));
+          const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
 
           return (
             <Fragment key={routeKey}>
@@ -180,14 +183,14 @@ export default function GoogleRouteMap({
               {isSelected && (
                 <Polyline
                   path={path}
-                  options={{ strokeColor: ACCENT, strokeOpacity: 0.22, strokeWeight: 16, clickable: false, zIndex: 99 }}
+                  options={{ strokeColor: color, strokeOpacity: 0.22, strokeWeight: 16, clickable: false, zIndex: 99 }}
                 />
               )}
               <Polyline
                 path={path}
                 options={{
-                  strokeColor: isSelected ? ACCENT : PAPER,
-                  strokeOpacity: isSelected ? 1 : 0.35,
+                  strokeColor: color,
+                  strokeOpacity: isSelected ? 1 : 0.5,
                   strokeWeight: isSelected ? 5 : 4,
                   clickable: true,
                   zIndex: isSelected ? 100 : 50 - index,

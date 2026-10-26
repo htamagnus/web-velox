@@ -225,6 +225,14 @@
 .plan__speed span {
   color: var(--color-paper);
 }
+/* a faixa de rotas é a legenda do mapa: cada traço já mostra a cor do seu traçado, apagada até ser escolhido */
+.plan__routes .modes__bar {
+  background: color-mix(in oklab, var(--route) 35%, transparent);
+}
+.plan__routes .modes__bar::after {
+  background: var(--route);
+  box-shadow: 0 0 12px var(--route);
+}
 .plan__facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -367,6 +375,111 @@
 .plan__actions .btn {
   flex: 1 1 10rem;
   min-height: 56px;
+}
+
+/* ---- rotas salvas: o mesmo mapa, a lista no lugar do formulário; a escolhida acende em volt ---- */
+.archive {
+  display: grid;
+  align-content: start;
+  gap: var(--space-xl);
+}
+.archive__head {
+  display: grid;
+  gap: var(--space-md);
+}
+.archive__head .eyebrow {
+  margin: 0;
+}
+.archive__empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-lg);
+  color: var(--color-muted-on-ink);
+}
+/* .landing a herda a cor e apagaria o texto do botão */
+.archive__empty a.btn--primary {
+  color: var(--color-accent-ink);
+}
+.archive__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule-bar) solid var(--color-rule-on-ink);
+}
+.archive__list li {
+  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+}
+.archive__route {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr) 3.5rem;
+  align-items: center;
+  column-gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md) 0;
+  border: 0;
+  background: none;
+  color: var(--color-muted-on-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.archive__route:hover,
+.archive__route[aria-pressed='true'] {
+  color: var(--color-paper);
+}
+.archive__time {
+  font: var(--display-weight) 2.5rem / 0.9 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  transition:
+    color var(--dur-short) var(--ease-out),
+    text-shadow var(--dur-short) var(--ease-out);
+}
+.archive__text {
+  display: grid;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+.archive__ends {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font: var(--display-weight) var(--text-lg) / 1.05 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  word-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.archive__meta {
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-muted-on-ink);
+}
+.archive__trace {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+.archive__trace polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--dur-short) var(--ease-out);
+}
+.archive__route[aria-pressed='true'] .archive__time {
+  color: var(--color-accent);
+  text-shadow: 0 0 32px color-mix(in oklab, var(--color-accent) 45%, transparent);
+}
+.archive__route[aria-pressed='true'] polyline {
+  stroke: var(--color-accent);
+  filter: drop-shadow(0 0 4px var(--color-accent));
 }
 
 /* no celular: a barra, o mapa preso em cima e a folha rolando por baixo dele */

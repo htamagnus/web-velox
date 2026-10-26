@@ -1,11 +1,13 @@
 'use client';
 
+import type { CSSProperties } from 'react';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
 import { Modality, TrafficData, WeatherData } from '@/interfaces/routes.interface';
 import RollingValue from '@/components/landing/rolling-value';
 import ElevationProfile, { ElevationPoint } from '@/components/map/elevation-profile';
+import { ROUTE_COLORS } from '@/components/map/google-route-map';
 import WeatherDisplay from '@/components/weather/weather-display';
 import TrafficDisplay from '@/components/traffic/traffic-display';
 
@@ -97,12 +99,13 @@ export default function RouteSheet({
       </div>
 
       {routes.length > 1 && (
-        <div className="modes modes--ink" role="group" aria-label={t('routes')}>
+        <div className="modes modes--ink plan__routes" role="group" aria-label={t('routes')}>
           {routes.map((r, i) => (
             <button
               key={i}
               type="button"
               className="modes__item"
+              style={{ '--route': ROUTE_COLORS[i % ROUTE_COLORS.length] } as CSSProperties}
               aria-pressed={i === selectedIndex}
               onClick={() => onSelect(i)}
             >

@@ -1,37 +1,40 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
-
-import {
-  Map,
-  ArrowLeft,
-} from 'lucide-react';
+import { motion, MotionConfig } from 'framer-motion';
+import polyline from '@mapbox/polyline';
+import { ArrowLeft } from 'lucide-react';
 
 import { useTexts } from '@/helpers/use-texts';
+import { useLocale } from '@/contexts/locale-context';
+import { hm } from '@/helpers/format-minutes';
+import { trace } from '@/helpers/trace';
 import ApiVeloxService from '@/providers/api-velox.provider';
-
-import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
-import { useProtectedRoute } from '@/hooks/use-protected-route';
-import Button from '@/components/ui/button/button';
 import { SaveRouteDto } from '@/interfaces/routes.interface';
-import RouteCard from '@/components/route-card/route-card';
+import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
+import LanguageSelector from '@/components/language-selector/language-selector';
+import GoogleRouteMap from '@/components/map/google-route-map';
+import { EASE } from '@/components/landing/reveal';
+import { useProtectedRoute } from '@/hooks/use-protected-route';
+import { archivo } from '../fonts';
 
+// o arquivo no mesmo mapa noturno do planejador: a lista no lugar do formulário, a rota escolhida desenhada ao lado
 export default function SavedRoutesPage() {
-  useProtectedRoute()
+  useProtectedRoute();
   const api = useMemo(() => new ApiVeloxService(), []);
+  const { t } = useTexts('savedRoutes');
+  const { t: tApp } = useTexts();
+  const { locale } = useLocale();
   const [routes, setRoutes] = useState<SaveRouteDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useTexts('savedRoutes');
-  const router = useRouter();
+  const [selected, setSelected] = useState(0);
 
   useEffect(() => {
     async function fetchRoutes() {
       try {
-        const data = await api.getSavedRoutes();
-        setRoutes(data);
+        setRoutes(await api.getSavedRoutes());
       } catch {
         toast.error(t('error'));
       } finally {
@@ -42,86 +45,121 @@ export default function SavedRoutesPage() {
     fetchRoutes();
   }, [api, t]);
 
+  const shown = useMemo(() => {
+    const route = routes[selected];
+    if (!route) return null;
+    const path = polyline.decode(route.polyline) as [number, number][];
+    return { route: { ...route, polyline: path }, origin: path[0], destination: path[path.length - 1] };
+  }, [routes, selected]);
+
   if (loading) {
     return <PageTransitionOverlay visible={true} message={t('loading')} />;
   }
 
-  if (routes.length === 0) {
-    return (
-      <div className="relative flex flex-col items-center justify-center h-screen bg-background text-center px-6 space-y-6">
-        <button
-          onClick={() => router.back()}
-          className="absolute top-4 left-4 text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
-        >
-          <ArrowLeft size={20} />
-        </button>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="relative"
-        >
-          <div className="absolute inset-0 bg-primary-light/20 blur-3xl rounded-full"></div>
-          <Map size={96} className="text-primary-light relative z-10" />
-        </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-3"
-        >
-          <h2 className="text-xl font-bold text-white">
-            {t('emptyTitle')}
-          </h2>
-          <p className="text-copy-light text-sm">
-            {t('emptyDescription')}
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Button onClick={() => router.push('/calculate')} variant="confirm">
-            {t('ctaCreate')}
-          </Button>
-        </motion.div>
-      </div>
-    );
-  }
+  const fmt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 1 });
+  const fmtInt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 0 });
+  const km = fmtInt.format(routes.reduce((sum, r) => sum + r.distanceKm, 0));
+  const title = routes.length
+    ? [
+        routes.length === 1 ? t('countOne') : t('count').replace('{{count}}', fmtInt.format(routes.length)),
+        t('planned').replace('{{km}}', km),
+      ]
+    : [t('emptyTitle')];
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
-        <div className="flex items-center justify-between pt-4">
-          <button
-            onClick={() => router.back()}
-            className="text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          
-          <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
-            <Map size={20} className="text-primary-light" />
-            <h1 className="text-xl font-bold text-gray-100 tracking-tight">{t('title')}</h1>
+    <MotionConfig reducedMotion="user">
+      <div className={`landing planner ${archivo.variable}`}>
+        <header className="planner__nav">
+          <Link href="/home" className="back-link">
+            <ArrowLeft size={18} aria-hidden="true" />
+            {tApp('plannerPanel.backButton')}
+          </Link>
+          <div className="lang">
+            <LanguageSelector />
           </div>
-          
-          <div className="w-20"></div>
+        </header>
+
+        <div className="planner__map">
+          <GoogleRouteMap
+            className="planner__canvas"
+            origin={shown?.origin ?? null}
+            destination={shown?.destination ?? null}
+            routes={shown ? [shown.route] : []}
+            selectedRouteIndex={0}
+            onRouteSelect={() => {}}
+          />
+          <div className="hero__lines" aria-hidden="true" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {routes.map((route, index) => {
-          return (
-            <RouteCard
-              key={index}
-              route={route}
-              index={index}
-            />
-          );
-        })}
-        </div>
+
+        <main className="planner__panel archive">
+          <div className="archive__head">
+            <motion.p
+              className="eyebrow eyebrow--ink"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              {t('title')}
+            </motion.p>
+            <h1>
+              {title.map((line, i) => (
+                <span key={i} className="hero__line">
+                  <motion.span
+                    initial={{ y: '110%' }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.2 + i * 0.12, ease: EASE }}
+                  >
+                    {line}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+          </div>
+
+          {routes.length === 0 ? (
+            <div className="archive__empty">
+              <p>{t('emptyDescription')}</p>
+              <Link href="/calculate" className="btn btn--primary btn--big">
+                {t('ctaCreate')}
+              </Link>
+            </div>
+          ) : (
+            <ol className="archive__list">
+              {routes.map((route, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 + Math.min(i, 8) * 0.05, ease: EASE }}
+                >
+                  <button
+                    type="button"
+                    className="archive__route"
+                    aria-pressed={i === selected}
+                    onClick={() => setSelected(i)}
+                  >
+                    <span className="archive__time">{hm(Math.round(route.estimatedTimeMinutes))}</span>
+                    <span className="archive__text">
+                      <span className="archive__ends">
+                        {route.origin} <span aria-hidden="true">→</span> {route.destination}
+                      </span>
+                      <span className="archive__meta num">
+                        {fmt.format(route.distanceKm)} km · +{fmtInt.format(route.elevationGain)} m ·{' '}
+                        {fmtInt.format(route.estimatedCalories)} kcal
+                        <br />
+                        {tApp(`speedModal.options.${route.modality}.label`)} · {fmt.format(route.averageSpeedUsed)} km/h
+                      </span>
+                    </span>
+                    <svg className="archive__trace" viewBox="-4 -4 108 108" aria-hidden="true">
+                      <polyline points={trace(route.polyline)} />
+                    </svg>
+                  </button>
+                </motion.li>
+              ))}
+            </ol>
+          )}
+        </main>
       </div>
-    </div>
+    </MotionConfig>
   );
 }

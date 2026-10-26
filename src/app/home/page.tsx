@@ -4,12 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { motion, MotionConfig } from 'framer-motion';
-import polyline from '@mapbox/polyline';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
 import { useStravaAuth } from '@/hooks/use-strava-auth';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
+import { trace } from '@/helpers/trace';
 import ApiVeloxService from '@/providers/api-velox.provider';
 import { Athlete } from '@/interfaces/athlete.interface';
 import { Modality, SaveRouteDto } from '@/interfaces/routes.interface';
@@ -31,20 +31,6 @@ const rise = (delay: number) => ({
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.9, delay, ease: EASE },
 });
-
-// o traçado da rota salva a partir da polyline, num quadrado de 100, sem mapa por baixo
-function trace(encoded: string) {
-  const pts = polyline.decode(encoded);
-  if (pts.length < 2) return '';
-  const k = Math.cos((pts[0][0] * Math.PI) / 180);
-  const xs = pts.map(([, lng]) => lng * k);
-  const ys = pts.map(([lat]) => -lat);
-  const x0 = Math.min(...xs);
-  const y0 = Math.min(...ys);
-  const span = Math.max(Math.max(...xs) - x0, Math.max(...ys) - y0) || 1;
-  const at = (v: number, v0: number) => (((v - v0) / span) * 100).toFixed(1);
-  return xs.map((x, i) => `${at(x, x0)},${at(ys[i], y0)}`).join(' ');
-}
 
 // a home como o pôster do hero: a sua média gigante no centro, as suas rotas nas bordas e embaixo em lista
 export default function HomePage() {
