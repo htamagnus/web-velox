@@ -105,7 +105,9 @@
       "noChanges": "nenhuma alteração foi feita.",
       "loadError": "erro ao carregar perfil. tente novamente mais tarde.",
       "updateSuccess": "alterações salvas com sucesso!",
-      "updateError": "erro ao salvar alterações. tente novamente mais tarde."
+      "updateError": "erro ao salvar alterações. tente novamente mais tarde.",
+      "range": "Entre {{min}} e {{max}} {{unit}}.",
+      "fixRange": "Corrija os valores fora da faixa."
     },
     "unsaved": "Você tem alterações não salvas."
   },

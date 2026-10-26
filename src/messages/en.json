@@ -105,7 +105,9 @@
       "noChanges": "no changes were made.",
       "loadError": "error loading profile. try again later.",
       "updateSuccess": "changes saved successfully!",
-      "updateError": "error saving changes. try again later."
+      "updateError": "error saving changes. try again later.",
+      "range": "Between {{min}} and {{max}} {{unit}}.",
+      "fixRange": "Fix the values out of range."
     },
     "unsaved": "You have unsaved changes."
   },

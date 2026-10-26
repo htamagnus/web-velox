@@ -159,6 +159,23 @@
   grid-area: tag;
 }
 
+/* fora da faixa: o número, o traço e o recado em vermelho */
+.profile__error {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+.profile__bike .profile__error {
+  grid-area: tag;
+}
+.profile__bike[data-invalid]::before {
+  background: var(--color-danger);
+  box-shadow: 0 0 12px var(--color-danger);
+}
+.profile__bike[data-invalid] .profile__speed {
+  color: var(--color-danger);
+  filter: drop-shadow(0 0 28px color-mix(in oklab, var(--color-danger) 45%, transparent));
+}
+
 /* ---- no papel: a ficha do corpo e a conta, índice à esquerda e conteúdo à direita ---- */
 .profile__body {
   display: grid;
@@ -235,6 +252,18 @@
 .profile__num:focus-visible {
   outline: none;
   color: var(--color-accent-deep);
+}
+/* no papel o vermelho escurece pra manter contraste */
+.profile__row .profile__error {
+  grid-column: 1 / -1;
+  color: color-mix(in oklab, var(--color-danger) 65%, var(--color-ink));
+}
+.profile__row[data-invalid] {
+  border-bottom-color: color-mix(in oklab, var(--color-danger) 65%, var(--color-ink));
+}
+.profile__row[data-invalid] .profile__row-label,
+.profile__row[data-invalid] .profile__num {
+  color: color-mix(in oklab, var(--color-danger) 65%, var(--color-ink));
 }
 .profile__account {
   display: grid;

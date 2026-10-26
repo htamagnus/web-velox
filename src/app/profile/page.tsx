@@ -30,7 +30,22 @@ type FormState = {
   isGeneralSpeedFromStrava: boolean;
 };
 
-const BIKES = ['speedRoad', 'speedMtb', 'speedGeneral'] as const;
+// velocidade média real de bike; idade, peso e altura nas mesmas faixas do onboarding
+const LIMITS = {
+  averageSpeedRoad: [5, 60],
+  averageSpeedMtb: [5, 60],
+  averageSpeedGeneral: [5, 60],
+  age: [8, 150],
+  weight: [40, 500],
+  height: [140, 300],
+} as const;
+type Limited = keyof typeof LIMITS;
+
+const BIKES = [
+  { field: 'speedRoad', key: 'averageSpeedRoad' },
+  { field: 'speedMtb', key: 'averageSpeedMtb' },
+  { field: 'speedGeneral', key: 'averageSpeedGeneral' },
+] as const;
 const BODY = ['age', 'weight', 'height'] as const;
 
 const rise = (delay: number) => ({
@@ -112,13 +127,26 @@ export default function ProfilePage() {
     return payload;
   };
 
-  const handleSave = async () => {
-    const payload = getPayload();
+  const payload = getPayload();
+  const hasChanges = Object.keys(payload).length > 0;
+  // só o que mudou é checado: uma média antiga em 0 (bike não configurada) não trava o resto
+  const invalid = (key: Limited) => {
+    const value = payload[key];
+    return value !== undefined && (value < LIMITS[key][0] || value > LIMITS[key][1]);
+  };
+  const hasErrors = (Object.keys(LIMITS) as Limited[]).some(invalid);
+  const rangeError = (key: Limited, unit: string) =>
+    t('errors.range')
+      .replace('{{min}}', String(LIMITS[key][0]))
+      .replace('{{max}}', String(LIMITS[key][1]))
+      .replace('{{unit}}', unit);
 
-    if (Object.keys(payload).length === 0) {
+  const handleSave = async () => {
+    if (!hasChanges) {
       toast.info(t('errors.noChanges'));
       return;
     }
+    if (hasErrors) return;
 
     try {
       setIsSaving(true);
@@ -133,8 +161,6 @@ export default function ProfilePage() {
     }
   };
 
-  const hasChanges = Object.keys(getPayload()).length > 0;
-
   if (!userData) {
     return <PageTransitionOverlay visible={true} message={t('loadingMessage')} />;
   }
@@ -146,6 +172,7 @@ export default function ProfilePage() {
     <MotionConfig reducedMotion="user">
       <form
         className={`landing profile ${archivo.variable}`}
+        noValidate
         onSubmit={(e) => {
           e.preventDefault();
           handleSave();
@@ -193,23 +220,32 @@ export default function ProfilePage() {
               <p>{t('sections.speedsDescription')}</p>
             </div>
             <div className="profile__bikes">
-              {BIKES.map((field) => {
+              {BIKES.map(({ field, key }) => {
                 const locked = field === 'speedGeneral' && form.isGeneralSpeedFromStrava;
+                const wrong = invalid(key);
                 return (
-                  <label key={field} className="profile__bike">
+                  <label key={field} className="profile__bike" data-invalid={wrong || undefined}>
                     <span className="profile__bike-name">{t(`${field}.label`)}</span>
                     <input
                       type="number"
                       step="0.1"
-                      min="0"
+                      min={LIMITS[key][0]}
+                      max={LIMITS[key][1]}
                       inputMode="decimal"
                       className="profile__speed"
                       value={form[field]}
                       onChange={(e) => handleNumericChange(field, e.target.value)}
                       disabled={locked}
+                      aria-invalid={wrong}
+                      aria-describedby={wrong ? `${field}-error` : undefined}
                     />
                     <span className="profile__unit">{t(`${field}.unit`)}</span>
                     {locked && <span className="strava-tag">{tApp('home.strava.synced')}</span>}
+                    {wrong && (
+                      <span id={`${field}-error`} className="profile__error">
+                        {rangeError(key, t(`${field}.unit`))}
+                      </span>
+                    )}
                   </label>
                 );
               })}
@@ -224,22 +260,33 @@ export default function ProfilePage() {
               <p>{t('sections.metricsDescription')}</p>
             </div>
             <div className="profile__sheet">
-              {BODY.map((field) => (
-                <label key={field} className="profile__row">
-                  <span className="profile__row-label">{t(`${field}.label`)}</span>
-                  <span className="profile__row-value">
-                    <input
-                      type="number"
-                      min="0"
-                      inputMode="numeric"
-                      className="profile__num"
-                      value={form[field]}
-                      onChange={(e) => handleNumericChange(field, e.target.value)}
-                    />
-                    <span>{t(`${field}.unit`)}</span>
-                  </span>
-                </label>
-              ))}
+              {BODY.map((field) => {
+                const wrong = invalid(field);
+                return (
+                  <label key={field} className="profile__row" data-invalid={wrong || undefined}>
+                    <span className="profile__row-label">{t(`${field}.label`)}</span>
+                    <span className="profile__row-value">
+                      <input
+                        type="number"
+                        min={LIMITS[field][0]}
+                        max={LIMITS[field][1]}
+                        inputMode="numeric"
+                        className="profile__num"
+                        value={form[field]}
+                        onChange={(e) => handleNumericChange(field, e.target.value)}
+                        aria-invalid={wrong}
+                        aria-describedby={wrong ? `${field}-error` : undefined}
+                      />
+                      <span>{t(`${field}.unit`)}</span>
+                    </span>
+                    {wrong && (
+                      <span id={`${field}-error`} className="profile__error">
+                        {rangeError(field, t(`${field}.unit`))}
+                      </span>
+                    )}
+                  </label>
+                );
+              })}
             </div>
           </section>
 
@@ -286,8 +333,8 @@ export default function ProfilePage() {
           inert={!hasChanges}
         >
           <div className="container profile__bar-inner">
-            <p>{t('unsaved')}</p>
-            <button type="submit" className="btn btn--primary" disabled={isSaving} aria-busy={isSaving}>
+            <p>{hasErrors ? t('errors.fixRange') : t('unsaved')}</p>
+            <button type="submit" className="btn btn--primary" disabled={isSaving || hasErrors} aria-busy={isSaving}>
               {isSaving ? t('button.saving') : t('button.save')}
             </button>
           </div>
