@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { motion, MotionConfig } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Minus, Plus } from 'lucide-react';
 
 import ApiVeloxService from '@/providers/api-velox.provider';
 import { Athlete, UpdateAthleteDto } from '@/interfaces/athlete.interface';
@@ -53,6 +53,66 @@ const rise = (delay: number) => ({
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.9, delay, ease: EASE },
 });
+
+type NumberFieldProps = {
+  id: string;
+  value: Numeric;
+  limits: readonly [number, number];
+  unit: string;
+  label: string;
+  decimal?: boolean;
+  disabled?: boolean;
+  invalid: boolean;
+  onChange: (value: Numeric) => void;
+};
+
+// o número sobre a linha, como os campos do login, com − e + do lado: lê como campo antes do toque
+function NumberField({ id, value, limits: [min, max], unit, label, decimal, disabled, invalid, onChange }: NumberFieldProps) {
+  const { t } = useTexts('profile');
+  const n = Number(value) || 0;
+  // o passo encosta na faixa: de uma média em 0, o + já leva pro mínimo
+  const step = (delta: number) => onChange(Math.min(max, Math.max(min, Math.round((n + delta) * 10) / 10)));
+
+  return (
+    <div className="num-field" data-invalid={invalid || undefined}>
+      <input
+        id={id}
+        type="number"
+        step={decimal ? '0.1' : '1'}
+        min={min}
+        max={max}
+        inputMode={decimal ? 'decimal' : 'numeric'}
+        className="num-field__input"
+        value={value}
+        onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))}
+        disabled={disabled}
+        aria-invalid={invalid}
+        aria-describedby={invalid ? `${id}-error` : undefined}
+      />
+      <span className="num-field__unit">{unit}</span>
+      {!disabled && (
+        <span className="num-field__steps">
+          <button
+            type="button"
+            aria-label={t('decrease').replace('{{label}}', label)}
+            disabled={n <= min}
+            onClick={() => step(-1)}
+          >
+            <Minus size={18} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            aria-label={t('increase').replace('{{label}}', label)}
+            disabled={n >= max}
+            onClick={() => step(1)}
+          >
+            <Plus size={18} aria-hidden="true" />
+          </button>
+        </span>
+      )}
+    </div>
+  );
+}
 
 // o perfil como o pôster: o nome gigante e as três médias em volt em cima; o corpo e a conta no papel
 export default function ProfilePage() {
@@ -104,9 +164,8 @@ export default function ProfilePage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleNumericChange = (field: keyof FormState, value: string) => {
-    const nextValue: Numeric = value === '' ? '' : Number(value);
-    setForm((prev) => ({ ...prev, [field]: nextValue }));
+  const handleNumericChange = (field: keyof FormState, value: Numeric) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const getPayload = (): UpdateAthleteDto => {
@@ -224,29 +283,28 @@ export default function ProfilePage() {
                 const locked = field === 'speedGeneral' && form.isGeneralSpeedFromStrava;
                 const wrong = invalid(key);
                 return (
-                  <label key={field} className="profile__bike" data-invalid={wrong || undefined}>
-                    <span className="profile__bike-name">{t(`${field}.label`)}</span>
-                    <input
-                      type="number"
-                      step="0.1"
-                      min={LIMITS[key][0]}
-                      max={LIMITS[key][1]}
-                      inputMode="decimal"
-                      className="profile__speed"
+                  <div key={field} className="profile__bike">
+                    <label htmlFor={field} className="profile__bike-name">
+                      {t(`${field}.label`)}
+                    </label>
+                    <NumberField
+                      id={field}
                       value={form[field]}
-                      onChange={(e) => handleNumericChange(field, e.target.value)}
+                      limits={LIMITS[key]}
+                      unit={t(`${field}.unit`)}
+                      label={t(`${field}.label`)}
+                      decimal
                       disabled={locked}
-                      aria-invalid={wrong}
-                      aria-describedby={wrong ? `${field}-error` : undefined}
+                      invalid={wrong}
+                      onChange={(value) => handleNumericChange(field, value)}
                     />
-                    <span className="profile__unit">{t(`${field}.unit`)}</span>
                     {locked && <span className="strava-tag">{tApp('home.strava.synced')}</span>}
                     {wrong && (
                       <span id={`${field}-error`} className="profile__error">
                         {rangeError(key, t(`${field}.unit`))}
                       </span>
                     )}
-                  </label>
+                  </div>
                 );
               })}
             </div>
@@ -263,28 +321,25 @@ export default function ProfilePage() {
               {BODY.map((field) => {
                 const wrong = invalid(field);
                 return (
-                  <label key={field} className="profile__row" data-invalid={wrong || undefined}>
-                    <span className="profile__row-label">{t(`${field}.label`)}</span>
-                    <span className="profile__row-value">
-                      <input
-                        type="number"
-                        min={LIMITS[field][0]}
-                        max={LIMITS[field][1]}
-                        inputMode="numeric"
-                        className="profile__num"
-                        value={form[field]}
-                        onChange={(e) => handleNumericChange(field, e.target.value)}
-                        aria-invalid={wrong}
-                        aria-describedby={wrong ? `${field}-error` : undefined}
-                      />
-                      <span>{t(`${field}.unit`)}</span>
-                    </span>
+                  <div key={field} className="profile__row" data-invalid={wrong || undefined}>
+                    <label htmlFor={field} className="profile__row-label">
+                      {t(`${field}.label`)}
+                    </label>
+                    <NumberField
+                      id={field}
+                      value={form[field]}
+                      limits={LIMITS[field]}
+                      unit={t(`${field}.unit`)}
+                      label={t(`${field}.label`)}
+                      invalid={wrong}
+                      onChange={(value) => handleNumericChange(field, value)}
+                    />
                     {wrong && (
                       <span id={`${field}-error`} className="profile__error">
                         {rangeError(field, t(`${field}.unit`))}
                       </span>
                     )}
-                  </label>
+                  </div>
                 );
               })}
             </div>

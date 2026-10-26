@@ -109,7 +109,9 @@
       "range": "Between {{min}} and {{max}} {{unit}}.",
       "fixRange": "Fix the values out of range."
     },
-    "unsaved": "You have unsaved changes."
+    "unsaved": "You have unsaved changes.",
+    "decrease": "Decrease {{label}}",
+    "increase": "Increase {{label}}"
   },
   "planner": {
     "loadingProfile": "Loading profile...",

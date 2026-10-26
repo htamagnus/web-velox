@@ -109,7 +109,9 @@
       "range": "Entre {{min}} e {{max}} {{unit}}.",
       "fixRange": "Corrija os valores fora da faixa."
     },
-    "unsaved": "Você tem alterações não salvas."
+    "unsaved": "Você tem alterações não salvas.",
+    "decrease": "Diminuir {{label}}",
+    "increase": "Aumentar {{label}}"
   },
   "planner": {
     "loadingProfile": "Carregando perfil...",

@@ -84,34 +84,14 @@
 }
 .profile__bike {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    'bar bar'
-    'name unit'
-    'speed speed'
-    'tag tag';
   align-content: start;
-  align-items: baseline;
-  column-gap: var(--space-sm);
-  row-gap: var(--space-xs);
-  cursor: text;
+  justify-items: start;
+  gap: var(--space-sm);
 }
-.profile__bike::before {
-  content: '';
-  grid-area: bar;
-  height: var(--rule-bar);
-  margin-bottom: var(--space-xs);
-  background: var(--color-rule-on-ink);
-  transition:
-    background-color var(--dur-short) var(--ease-out),
-    box-shadow var(--dur-short) var(--ease-out);
-}
-.profile__bike:focus-within::before {
-  background: var(--color-accent);
-  box-shadow: 0 0 12px var(--color-accent);
+.profile__bike > .num-field {
+  justify-self: stretch;
 }
 .profile__bike-name {
-  grid-area: name;
   font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
   font-stretch: var(--stretch-display);
   letter-spacing: var(--tracking-display);
@@ -122,56 +102,119 @@
 .profile__bike:focus-within .profile__bike-name {
   color: var(--color-paper);
 }
-.profile__speed {
-  grid-area: speed;
+
+/* o campo numérico: o número sobre a linha do login, a unidade e o − e + do lado; as cores vêm do fundo */
+.profile__poster {
+  --num-line: color-mix(in oklab, var(--color-paper) 32%, transparent);
+  --num-line-hover: color-mix(in oklab, var(--color-paper) 60%, transparent);
+  --num-focus: var(--color-accent);
+  --num-danger: var(--color-danger);
+}
+.profile__body {
+  --num-line: color-mix(in oklab, var(--color-ink) 25%, transparent);
+  --num-line-hover: color-mix(in oklab, var(--color-ink) 50%, transparent);
+  --num-focus: var(--color-accent-deep);
+  /* no papel o vermelho escurece pra manter contraste */
+  --num-danger: color-mix(in oklab, var(--color-danger) 65%, var(--color-ink));
+}
+.num-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: var(--rule-bar) solid var(--num-line);
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out);
+}
+.num-field:hover {
+  border-bottom-color: var(--num-line-hover);
+}
+.num-field:focus-within {
+  border-bottom-color: var(--num-focus);
+  box-shadow: 0 1px 0 var(--num-focus);
+}
+.num-field[data-invalid] {
+  border-bottom-color: var(--num-danger);
+  box-shadow: 0 1px 0 var(--num-danger);
+}
+.num-field__input {
+  flex: 1;
+  min-width: 0;
   width: 100%;
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--color-accent);
-  font: var(--display-weight) clamp(4rem, 8vw, 8rem) / 0.9 var(--font-display);
-  font-stretch: var(--stretch-display);
+  color: inherit;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
-  /* text-shadow seria recortado pela caixa do input; o filtro brilha por fora dela */
-  filter: drop-shadow(0 0 28px color-mix(in oklab, var(--color-accent) 45%, transparent));
-  caret-color: var(--color-paper);
 }
-.profile__speed:focus,
-.profile__speed:focus-visible {
+.num-field__input:focus,
+.num-field__input:focus-visible {
   outline: none;
 }
-/* média do Strava não se edita aqui: o número fica, só não aceita cursor */
-.profile__speed:disabled {
-  opacity: 1;
-  -webkit-text-fill-color: var(--color-accent);
-  cursor: not-allowed;
-}
-.profile__unit {
-  grid-area: unit;
+.num-field__unit {
   font: 700 var(--text-xs) / 1 var(--font-outlier);
   font-stretch: var(--stretch-wide);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-muted-on-ink);
 }
-.profile__bike .strava-tag {
-  grid-area: tag;
+.num-field__steps {
+  display: flex;
+  gap: var(--space-2xs);
+}
+.num-field__steps button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: var(--rule-hair) solid var(--num-line-hover);
+  border-radius: var(--radius-card);
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out);
+}
+.num-field__steps button:hover:not(:disabled) {
+  border-color: var(--num-focus);
+  color: var(--num-focus);
+}
+.num-field__steps button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+/* média do Strava não se edita aqui: sem linha e sem botões, o número fica */
+.num-field:has(.num-field__input:disabled) {
+  border-bottom-color: transparent;
 }
 
-/* fora da faixa: o número, o traço e o recado em vermelho */
+/* no pôster o número é o volt grande da landing */
+.profile__poster .num-field {
+  color: var(--color-paper);
+}
+.profile__poster .num-field__input {
+  color: var(--color-accent);
+  font: var(--display-weight) clamp(3.5rem, 6vw, 6rem) / 0.95 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: -0.03em;
+  /* text-shadow seria recortado pela caixa do input; o filtro brilha por fora dela */
+  filter: drop-shadow(0 0 28px color-mix(in oklab, var(--color-accent) 45%, transparent));
+  caret-color: var(--color-paper);
+}
+.profile__poster .num-field__input:disabled {
+  opacity: 1;
+  -webkit-text-fill-color: var(--color-accent);
+  cursor: not-allowed;
+}
+
+/* fora da faixa: o número, a linha e o recado em vermelho */
 .profile__error {
   font-size: var(--text-sm);
-  color: var(--color-danger);
+  color: var(--num-danger);
 }
-.profile__bike .profile__error {
-  grid-area: tag;
-}
-.profile__bike[data-invalid]::before {
-  background: var(--color-danger);
-  box-shadow: 0 0 12px var(--color-danger);
-}
-.profile__bike[data-invalid] .profile__speed {
+.profile__poster .num-field[data-invalid] .num-field__input {
   color: var(--color-danger);
   filter: drop-shadow(0 0 28px color-mix(in oklab, var(--color-danger) 45%, transparent));
 }
@@ -207,16 +250,11 @@
 }
 .profile__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: var(--space-md);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+  align-items: center;
+  column-gap: var(--space-md);
+  row-gap: var(--space-xs);
   padding-block: var(--space-md);
-  border-bottom: var(--rule-hair) solid var(--color-rule);
-  cursor: text;
-  transition: border-color var(--dur-short) var(--ease-out);
-}
-.profile__row:focus-within {
-  border-bottom-color: var(--color-ink);
 }
 .profile__row-label {
   font: 700 var(--text-xs) / 1 var(--font-outlier);
@@ -229,41 +267,23 @@
 .profile__row:focus-within .profile__row-label {
   color: var(--color-accent-deep);
 }
-.profile__row-value {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-xs);
-  color: var(--color-muted);
-}
-.profile__num {
-  width: 3.2ch;
-  padding: 0;
-  border: 0;
-  background: transparent;
+.profile__row .num-field {
   color: var(--color-ink);
+}
+.profile__row .num-field__input {
   font: var(--display-weight) var(--text-display-s) / 1 var(--font-display);
   font-stretch: var(--stretch-display);
-  font-variant-numeric: tabular-nums;
   letter-spacing: var(--tracking-display);
-  text-align: right;
-  transition: color var(--dur-short) var(--ease-out);
 }
-.profile__num:focus,
-.profile__num:focus-visible {
-  outline: none;
-  color: var(--color-accent-deep);
+.profile__row .num-field__unit {
+  color: var(--color-muted);
 }
-/* no papel o vermelho escurece pra manter contraste */
 .profile__row .profile__error {
-  grid-column: 1 / -1;
-  color: color-mix(in oklab, var(--color-danger) 65%, var(--color-ink));
-}
-.profile__row[data-invalid] {
-  border-bottom-color: color-mix(in oklab, var(--color-danger) 65%, var(--color-ink));
+  grid-column: 2;
 }
 .profile__row[data-invalid] .profile__row-label,
-.profile__row[data-invalid] .profile__num {
-  color: color-mix(in oklab, var(--color-danger) 65%, var(--color-ink));
+.profile__row[data-invalid] .num-field__input {
+  color: var(--num-danger);
 }
 .profile__account {
   display: grid;
@@ -333,8 +353,8 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-lg);
   }
-  .profile__speed {
-    font-size: clamp(3.5rem, 20vw, 5rem);
+  .profile__poster .num-field__input {
+    font-size: clamp(3.5rem, 18vw, 5rem);
   }
   .profile__section {
     grid-template-columns: minmax(0, 1fr);
@@ -344,6 +364,12 @@
   }
 }
 @media (max-width: 40rem) {
+  .profile__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .profile__row .profile__error {
+    grid-column: 1;
+  }
   .profile__bar p {
     display: none;
   }
