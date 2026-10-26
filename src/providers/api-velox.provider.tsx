@@ -1,7 +1,7 @@
 import { ApiError, ApiErrorResponse } from "@/errors/api-errors"
 import { Athlete, CreateAthleteDto, UpdateAthleteDto } from "@/interfaces/athlete.interface"
 import { AuthData } from "@/interfaces/auth-data.interface"
-import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, SaveRouteDto, GetTrafficOutputDto, GetWeatherOutputDto } from "@/interfaces/routes.interface"
+import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, SaveRouteDto, SavedRoute, GetTrafficOutputDto, GetWeatherOutputDto } from "@/interfaces/routes.interface"
 
 type RegisterData = {
   name: string
@@ -206,7 +206,7 @@ export default class ApiVeloxService {
     return json as UpdateAthleteDto
   }
 
-  async getSavedRoutes(): Promise<SaveRouteDto[]> {
+  async getSavedRoutes(): Promise<SavedRoute[]> {
     const token = localStorage.getItem('velox_token')
   
     const response = await fetch(`${this.url}/athlete/routes/saved`, {
@@ -224,7 +224,25 @@ export default class ApiVeloxService {
       throw new Error((err as ApiErrorResponse).message || 'Erro ao buscar rotas salvas')
     }
   
-    return json as SaveRouteDto[]
+    return json as SavedRoute[]
+  }
+
+  async deleteSavedRoute(id: string): Promise<void> {
+    const token = localStorage.getItem('velox_token')
+
+    const response = await fetch(`${this.url}/athlete/routes/saved/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!response.ok) {
+      const text = await response.text()
+      const json: unknown = text ? JSON.parse(text) : {}
+      const err = isApiErrorResponse(json) ? json : { message: 'Erro ao excluir a rota' }
+      throw new ApiError(err.message || 'Erro ao excluir a rota', response.status, isApiErrorResponse(json) ? json.code : undefined, isApiErrorResponse(json) ? json : undefined)
+    }
   }
 
   async getTraffic(athleteId: string, polyline: string, origin: string, destination: string): Promise<GetTrafficOutputDto> {

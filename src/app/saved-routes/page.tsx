@@ -5,14 +5,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { motion, MotionConfig } from 'framer-motion';
 import polyline from '@mapbox/polyline';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
 import { trace } from '@/helpers/trace';
 import ApiVeloxService from '@/providers/api-velox.provider';
-import { SaveRouteDto } from '@/interfaces/routes.interface';
+import { SavedRoute } from '@/interfaces/routes.interface';
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import LanguageSelector from '@/components/language-selector/language-selector';
 import GoogleRouteMap from '@/components/map/google-route-map';
@@ -27,14 +27,20 @@ export default function SavedRoutesPage() {
   const { t } = useTexts('savedRoutes');
   const { t: tApp } = useTexts();
   const { locale } = useLocale();
-  const [routes, setRoutes] = useState<SaveRouteDto[]>([]);
+  const [routes, setRoutes] = useState<SavedRoute[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(0);
+  const [confirming, setConfirming] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     async function fetchRoutes() {
       try {
-        setRoutes(await api.getSavedRoutes());
+        const data = await api.getSavedRoutes();
+        setRoutes(data);
+        // a home manda ?r= com a rota clicada; a ordem das duas listas é a mesma (mais nova primeiro)
+        const r = Number(new URLSearchParams(window.location.search).get('r'));
+        if (r > 0 && r < data.length) setSelected(r);
       } catch {
         toast.error(t('error'));
       } finally {
@@ -52,12 +58,33 @@ export default function SavedRoutesPage() {
     return { route: { ...route, polyline: path }, origin: path[0], destination: path[path.length - 1] };
   }, [routes, selected]);
 
+  const select = (i: number) => {
+    setSelected(i);
+    setConfirming(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      setDeleting(true);
+      await api.deleteSavedRoute(id);
+      setRoutes((prev) => prev.filter((route) => route.id !== id));
+      setSelected((prev) => Math.max(0, Math.min(prev, routes.length - 2)));
+      setConfirming(false);
+      toast.success(t('deleted'));
+    } catch {
+      toast.error(t('deleteError'));
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return <PageTransitionOverlay visible={true} message={t('loading')} />;
   }
 
   const fmt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 1 });
   const fmtInt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 0 });
+  const fmtDate = new Intl.DateTimeFormat(locale === 'pt' ? 'pt-BR' : 'en', { dateStyle: 'short' });
   const km = fmtInt.format(routes.reduce((sum, r) => sum + r.distanceKm, 0));
   const title = routes.length
     ? [
@@ -127,7 +154,7 @@ export default function SavedRoutesPage() {
             <ol className="archive__list">
               {routes.map((route, i) => (
                 <motion.li
-                  key={i}
+                  key={route.id ?? i}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 + Math.min(i, 8) * 0.05, ease: EASE }}
@@ -136,7 +163,7 @@ export default function SavedRoutesPage() {
                     type="button"
                     className="archive__route"
                     aria-pressed={i === selected}
-                    onClick={() => setSelected(i)}
+                    onClick={() => select(i)}
                   >
                     {/* o tempo e a média que gerou ele, juntos, como no relógio do planejador */}
                     <span className="archive__figure">
@@ -147,18 +174,49 @@ export default function SavedRoutesPage() {
                       <span className="archive__bike">{tApp(`speedModal.options.${route.modality}.label`)}</span>
                     </span>
                     <span className="archive__text">
+                      {route.createdAt && (
+                        <span className="archive__date num">{fmtDate.format(new Date(route.createdAt))}</span>
+                      )}
                       <span className="archive__ends">
                         {route.origin} <span aria-hidden="true">→</span> {route.destination}
                       </span>
                       <span className="archive__meta num">
-                        {fmt.format(route.distanceKm)} km · +{fmtInt.format(route.elevationGain)} m ·{' '}
-                        {fmtInt.format(route.estimatedCalories)} kcal
+                        {fmt.format(route.distanceKm)}&nbsp;km · +{fmtInt.format(route.elevationGain)}&nbsp;m ·{' '}
+                        {fmtInt.format(route.estimatedCalories)}&nbsp;kcal
                       </span>
                     </span>
                     <svg className="archive__trace" viewBox="-4 -4 108 108" aria-hidden="true">
                       <polyline points={trace(route.polyline)} />
                     </svg>
                   </button>
+
+                  {/* excluir só aparece na rota escolhida, e pede um segundo toque antes de apagar */}
+                  {i === selected && route.id && (
+                    <div className="archive__actions">
+                      {confirming ? (
+                        <>
+                          <span>{t('confirmDelete')}</span>
+                          <button
+                            type="button"
+                            className="archive__action archive__action--danger"
+                            onClick={() => handleDelete(route.id!)}
+                            disabled={deleting}
+                            aria-busy={deleting}
+                          >
+                            {t('confirm')}
+                          </button>
+                          <button type="button" className="archive__action" onClick={() => setConfirming(false)}>
+                            {t('cancel')}
+                          </button>
+                        </>
+                      ) : (
+                        <button type="button" className="archive__action" onClick={() => setConfirming(true)}>
+                          <Trash2 size={16} aria-hidden="true" />
+                          {t('delete')}
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </motion.li>
               ))}
             </ol>

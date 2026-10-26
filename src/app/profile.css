@@ -185,6 +185,27 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+.num-field__input::placeholder {
+  color: var(--num-line-hover);
+  font-weight: 200;
+}
+/* bike sem média: o aviso em âmbar, como o atalho "configurar" do planejador */
+.profile__unset {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font: 700 var(--text-xs) / 1.4 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+}
+.profile__unset::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--color-amber);
+}
 /* média do Strava não se edita aqui: sem linha e sem botões, o número fica */
 .num-field:has(.num-field__input:disabled) {
   border-bottom-color: transparent;
@@ -288,6 +309,17 @@
 .profile__account {
   display: grid;
   gap: var(--space-lg);
+}
+/* sair fica no fim da conta, em linha de tinta: visível sem competir com salvar */
+.profile__logout {
+  justify-self: start;
+  margin-top: var(--space-md);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+.profile__logout:hover {
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 /* os campos do login vivem na tinta; no papel trocam a cor do texto e do fio */
 .profile__body .field__label {

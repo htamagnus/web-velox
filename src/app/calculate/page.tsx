@@ -37,6 +37,8 @@ export default function CalculateRoutePage() {
   const [routeOptions, setRouteOptions] = useState<RouteOption[]>([]);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+  // as rotas desta busca que já foram salvas: o botão vira link pra não duplicar na lista
+  const [savedIndexes, setSavedIndexes] = useState<number[]>([]);
   const [selectedModality, setSelectedModality] = useState<Modality>('general');
   const [userData, setUserData] = useState<Athlete | null>(null);
   const [isCalculatingRoute, setIsCalculatingRoute] = useState(false);
@@ -103,16 +105,25 @@ export default function CalculateRoutePage() {
     loadTrafficAndWeatherData();
   }, [routeOptions, userData, routeData, selectedRouteIndex, originLabel, destinationLabel, api]);
 
-  const handleMapClick = (e: google.maps.MapMouseEvent) => {
-    if (!e.latLng) return;
-    
+  // o ponto clicado só vale com endereço: é o texto que vai pro cálculo, então sem ele o ponto nem entra
+  const handleMapClick = async (e: google.maps.MapMouseEvent) => {
+    if (!e.latLng || (origin && destination)) return;
+
     const coords: [number, number] = [e.latLng.lat(), e.latLng.lng()];
-    if (!origin) {
-      setOrigin(coords);
-      setOriginLabel(null);
-    } else if (!destination) {
-      setDestination(coords);
-      setDestinationLabel(null);
+    try {
+      const { results } = await new google.maps.Geocoder().geocode({ location: e.latLng });
+      const label = results[0]?.formatted_address;
+      if (!label) throw new Error('sem endereço');
+
+      if (!origin) {
+        setOrigin(coords);
+        setOriginLabel(label);
+      } else {
+        setDestination(coords);
+        setDestinationLabel(label);
+      }
+    } catch {
+      toast.error(t('mapPointError'));
     }
   };
 
@@ -172,6 +183,7 @@ export default function CalculateRoutePage() {
       
       setRouteOptions([mainRoute, ...alternatives]);
       setSelectedRouteIndex(0);
+      setSavedIndexes([]);
       window.scrollTo({ top: 0 });
       
     } catch {
@@ -200,6 +212,7 @@ export default function CalculateRoutePage() {
         estimatedCalories: selectedRoute.estimatedCalories,
         averageSpeedUsed: selectedRoute.averageSpeedUsed,
       });
+      setSavedIndexes((prev) => [...prev, selectedRouteIndex]);
       toast.success(t('routeSaved'));
     } catch (error) {
       toast.error(t('routeSaveError'));
@@ -272,6 +285,7 @@ export default function CalculateRoutePage() {
                   traffic={isLoadingTraffic ? undefined : trafficData?.traffic}
                   onSave={handleSaveRoute}
                   saving={isSaving}
+                  saved={savedIndexes.includes(selectedRouteIndex)}
                   onReset={handleReset}
                 />
               ) : (

@@ -46,6 +46,10 @@
 .planner :is(h1, h2, h3, .btn) {
   word-spacing: 0.08em;
 }
+/* .landing a herda a cor e apagaria o texto dos botões que são link */
+.planner a.btn--primary {
+  color: var(--color-accent-ink);
+}
 
 /* ---- o formulário ---- */
 .plan__form {
@@ -367,6 +371,16 @@
 .plan-cond[data-alert] :is(b, .plan-cond__note) {
   color: var(--color-amber);
 }
+/* depois de salva, a rota avisa em volt e o botão vira o caminho pra lista */
+.plan__saved {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: calc(var(--space-md) - var(--space-xl));
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+}
 .plan__actions {
   display: flex;
   flex-wrap: wrap;
@@ -395,10 +409,6 @@
   justify-items: start;
   gap: var(--space-lg);
   color: var(--color-muted-on-ink);
-}
-/* .landing a herda a cor e apagaria o texto do botão */
-.archive__empty a.btn--primary {
-  color: var(--color-accent-ink);
 }
 .archive__list {
   margin: 0;
@@ -478,6 +488,44 @@
   letter-spacing: var(--tracking-display);
   word-spacing: 0.12em;
   text-transform: uppercase;
+}
+.archive__date {
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  color: var(--color-muted-on-ink);
+}
+/* a faixa da rota escolhida: excluir discreto, e em vermelho só na confirmação */
+.archive__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-xs) var(--space-md);
+  padding-bottom: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.archive__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 44px;
+  padding: 0 var(--space-xs);
+  border: 0;
+  background: none;
+  color: var(--color-muted-on-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.archive__action:hover {
+  color: var(--color-paper);
+}
+.archive__action--danger,
+.archive__action--danger:hover {
+  color: var(--color-danger);
 }
 .archive__meta {
   font-size: var(--text-xs);

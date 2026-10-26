@@ -102,3 +102,8 @@ export type SaveRouteDto = {
   estimatedCalories: number
   averageSpeedUsed: number
 }
+
+export type SavedRoute = SaveRouteDto & {
+  id?: string
+  createdAt?: string
+}

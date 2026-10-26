@@ -110,6 +110,8 @@
       "fixRange": "Corrija os valores fora da faixa."
     },
     "unsaved": "Você tem alterações não salvas.",
+    "unset": "Não configurada",
+    "logout": "Sair da conta",
     "decrease": "Diminuir {{label}}",
     "increase": "Aumentar {{label}}"
   },
@@ -210,6 +212,12 @@
     "count": "{{count}} rotas",
     "countOne": "1 rota",
     "planned": "{{km}} km planejados",
+    "delete": "Excluir rota",
+    "confirmDelete": "Excluir esta rota?",
+    "confirm": "Excluir",
+    "cancel": "Cancelar",
+    "deleted": "Rota excluída.",
+    "deleteError": "Não foi possível excluir a rota. Tente novamente.",
     "error": "Erro ao carregar rotas.",
     "routeTitle": "Percurso de {{origin}} para {{destination}}",
     "modalityLabel": "Modalidade:",
@@ -244,6 +252,8 @@
     "fastestRoute": "Mais rápida",
     "routeError": "Erro ao calcular rota.",
     "routeSaved": "Rota salva com sucesso!",
+    "saved": "Rota salva",
+    "mapPointError": "Não achamos um endereço nesse ponto. Digite no campo.",
     "routeSaveError": "Erro ao salvar rota.",
     "calculating": {
       "title": "Calculando rota",
@@ -257,6 +267,7 @@
     "buttons": {
       "save": "Salvar rota",
       "saving": "salvando...",
+      "seeSaved": "Ver em Minhas rotas",
       "newSearch": "Nova busca"
     },
     "traffic": {

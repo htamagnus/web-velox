@@ -110,6 +110,8 @@
       "fixRange": "Fix the values out of range."
     },
     "unsaved": "You have unsaved changes.",
+    "unset": "Not set",
+    "logout": "Log out",
     "decrease": "Decrease {{label}}",
     "increase": "Increase {{label}}"
   },
@@ -210,6 +212,12 @@
     "count": "{{count}} routes",
     "countOne": "1 route",
     "planned": "{{km}} km planned",
+    "delete": "Delete route",
+    "confirmDelete": "Delete this route?",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "deleted": "Route deleted.",
+    "deleteError": "Couldn't delete the route. Try again.",
     "error": "Error loading routes.",
     "routeTitle": "Route from {{origin}} to {{destination}}",
     "modalityLabel": "Bike type:",
@@ -244,6 +252,8 @@
     "fastestRoute": "Fastest",
     "routeError": "Error calculating route.",
     "routeSaved": "Route saved successfully!",
+    "saved": "Route saved",
+    "mapPointError": "Couldn't find an address at that point. Type it in the field.",
     "routeSaveError": "Error saving route.",
     "calculating": {
       "title": "Calculating route",
@@ -257,6 +267,7 @@
     "buttons": {
       "save": "Save route",
       "saving": "saving...",
+      "seeSaved": "See in My routes",
       "newSearch": "New search"
     },
     "traffic": {

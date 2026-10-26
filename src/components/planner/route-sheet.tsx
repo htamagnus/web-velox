@@ -1,6 +1,8 @@
 'use client';
 
 import type { CSSProperties } from 'react';
+import Link from 'next/link';
+import { Check } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
@@ -35,6 +37,7 @@ type Props = {
   traffic?: TrafficData;
   onSave: () => void;
   saving: boolean;
+  saved: boolean;
   onReset: () => void;
 };
 
@@ -50,6 +53,7 @@ export default function RouteSheet({
   traffic,
   onSave,
   saving,
+  saved,
   onReset,
 }: Props) {
   const { t } = useTexts('calculate');
@@ -149,10 +153,22 @@ export default function RouteSheet({
         </section>
       )}
 
+      {saved && (
+        <p className="plan__saved" role="status">
+          <Check size={16} aria-hidden="true" />
+          {t('saved')}
+        </p>
+      )}
       <div className="plan__actions">
-        <button type="button" className="btn btn--primary" onClick={onSave} disabled={saving} aria-busy={saving}>
-          {saving ? t('buttons.saving') : t('buttons.save')}
-        </button>
+        {saved ? (
+          <Link href="/saved-routes" className="btn btn--primary">
+            {t('buttons.seeSaved')}
+          </Link>
+        ) : (
+          <button type="button" className="btn btn--primary" onClick={onSave} disabled={saving} aria-busy={saving}>
+            {saving ? t('buttons.saving') : t('buttons.save')}
+          </button>
+        )}
         <button type="button" className="btn btn--line" onClick={onReset}>
           {t('buttons.newSearch')}
         </button>

@@ -230,7 +230,7 @@ export default function HomePage() {
                 {routes.slice(0, 3).map((route, i) => (
                   <li key={i}>
                     <Reveal delay={0.1 + i * 0.08}>
-                      <Link href="/saved-routes" className="home__route">
+                      <Link href={`/saved-routes?r=${i}`} className="home__route">
                         <span className="home__route-time">{hm(Math.round(route.estimatedTimeMinutes))}</span>
                         <span className="home__route-text">
                           <h3>

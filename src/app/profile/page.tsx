@@ -15,6 +15,7 @@ import LanguageSelector from '@/components/language-selector/language-selector';
 import SpeedField from '@/components/landing/speed-field';
 import { EASE } from '@/components/landing/reveal';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
+import { useAuth } from '@/contexts/auth-context';
 import { archivo } from '../fonts';
 
 type Numeric = number | '';
@@ -83,6 +84,7 @@ function NumberField({ id, value, limits: [min, max], unit, label, decimal, disa
         max={max}
         inputMode={decimal ? 'decimal' : 'numeric'}
         className="num-field__input"
+        placeholder="—"
         value={value}
         onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))}
         disabled={disabled}
@@ -120,6 +122,7 @@ export default function ProfilePage() {
   const api = useMemo(() => new ApiVeloxService(), []);
   const { t } = useTexts('profile');
   const { t: tApp } = useTexts();
+  const { logout } = useAuth();
 
   const [userData, setUserData] = useState<Athlete | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -147,9 +150,10 @@ export default function ProfilePage() {
           age: profile.age ?? 0,
           weight: profile.weight ?? 0,
           height: profile.height ?? 0,
-          speedGeneral: profile.averageSpeedGeneral ?? 0,
-          speedRoad: profile.averageSpeedRoad ?? 0,
-          speedMtb: profile.averageSpeedMtb ?? 0,
+          // média 0 é bike não configurada: o campo fica vazio com o traço, não com um 0 que parece média real
+          speedGeneral: profile.averageSpeedGeneral || '',
+          speedRoad: profile.averageSpeedRoad || '',
+          speedMtb: profile.averageSpeedMtb || '',
           isGeneralSpeedFromStrava: profile.averageSpeedGeneralIsFromStrava ?? false,
         });
       } catch {
@@ -299,6 +303,7 @@ export default function ProfilePage() {
                       onChange={(value) => handleNumericChange(field, value)}
                     />
                     {locked && <span className="strava-tag">{tApp('home.strava.synced')}</span>}
+                    {!locked && form[field] === '' && !userData[key] && <span className="profile__unset">{t('unset')}</span>}
                     {wrong && (
                       <span id={`${field}-error`} className="profile__error">
                         {rangeError(key, t(`${field}.unit`))}
@@ -376,6 +381,9 @@ export default function ProfilePage() {
                   onChange={(e) => handleInputChange('email', e.target.value)}
                 />
               </div>
+              <button type="button" className="btn btn--line profile__logout" onClick={logout}>
+                {t('logout')}
+              </button>
             </div>
           </section>
         </main>
