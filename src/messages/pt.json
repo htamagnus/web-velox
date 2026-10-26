@@ -102,10 +102,10 @@
       "saving": "salvando alterações..."
     },
     "errors": {
-      "noChanges": "nenhuma alteração foi feita.",
-      "loadError": "erro ao carregar perfil. tente novamente mais tarde.",
-      "updateSuccess": "alterações salvas com sucesso!",
-      "updateError": "erro ao salvar alterações. tente novamente mais tarde.",
+      "noChanges": "Nenhuma alteração foi feita.",
+      "loadError": "Erro ao carregar perfil. Tente novamente mais tarde.",
+      "updateSuccess": "Alterações salvas com sucesso!",
+      "updateError": "Erro ao salvar alterações. Tente novamente mais tarde.",
       "range": "Entre {{min}} e {{max}} {{unit}}.",
       "fixRange": "Corrija os valores fora da faixa."
     },
@@ -238,13 +238,13 @@
   },
   "calculate": {
     "geolocationError": "não foi possível pegar localização",
-    "profileError": "erro ao buscar perfil",
+    "profileError": "Erro ao buscar perfil.",
     "loadingProfile": "carregando perfil...",
-    "requireOriginDestination": "defina origem e destino antes de calcular a rota.",
+    "requireOriginDestination": "Defina origem e destino antes de calcular a rota.",
     "fastestRoute": "Mais rápida",
-    "routeError": "erro ao calcular rota",
-    "routeSaved": "rota salva com sucesso!",
-    "routeSaveError": "erro ao salvar rota",
+    "routeError": "Erro ao calcular rota.",
+    "routeSaved": "Rota salva com sucesso!",
+    "routeSaveError": "Erro ao salvar rota.",
     "calculating": {
       "title": "Calculando rota",
       "subtitle": "encontrando o melhor caminho para você..."

@@ -102,10 +102,10 @@
       "saving": "saving changes..."
     },
     "errors": {
-      "noChanges": "no changes were made.",
-      "loadError": "error loading profile. try again later.",
-      "updateSuccess": "changes saved successfully!",
-      "updateError": "error saving changes. try again later.",
+      "noChanges": "No changes were made.",
+      "loadError": "Error loading profile. Try again later.",
+      "updateSuccess": "Changes saved successfully!",
+      "updateError": "Error saving changes. Try again later.",
       "range": "Between {{min}} and {{max}} {{unit}}.",
       "fixRange": "Fix the values out of range."
     },
@@ -238,13 +238,13 @@
   },
   "calculate": {
     "geolocationError": "could not get location",
-    "profileError": "error fetching profile",
+    "profileError": "Error fetching profile.",
     "loadingProfile": "loading profile...",
-    "requireOriginDestination": "set origin and destination before calculating the route.",
+    "requireOriginDestination": "Set origin and destination before calculating the route.",
     "fastestRoute": "Fastest",
-    "routeError": "error calculating route",
-    "routeSaved": "route saved successfully!",
-    "routeSaveError": "error saving route",
+    "routeError": "Error calculating route.",
+    "routeSaved": "Route saved successfully!",
+    "routeSaveError": "Error saving route.",
     "calculating": {
       "title": "Calculating route",
       "subtitle": "finding the best path for you..."
