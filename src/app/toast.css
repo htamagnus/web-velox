@@ -1,0 +1,53 @@
+/* Os avisos como a barra de salvar do perfil: tinta, fio fino, e o traço da cor do tipo na borda esquerda. */
+
+[data-sonner-toaster].toaster {
+  --width: 380px;
+  font-family: var(--font-body);
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: var(--width);
+  padding: var(--space-md) var(--space-lg) var(--space-md) var(--space-md);
+  border: var(--rule-hair) solid var(--color-rule-on-ink);
+  border-radius: var(--radius-card);
+  /* um tom acima da tinta pra não sumir nas telas escuras */
+  background: var(--color-ink-2);
+  box-shadow:
+    inset var(--rule-bar) 0 0 var(--toast-tone),
+    0 24px 48px -16px rgb(0 0 0 / 0.6);
+  color: var(--color-paper);
+  font-size: var(--text-sm);
+  font-stretch: 100%;
+  line-height: 1.4;
+  --toast-tone: var(--color-muted-on-ink);
+}
+.toast[data-type='success'] {
+  --toast-tone: var(--color-accent);
+}
+.toast[data-type='error'] {
+  --toast-tone: var(--color-danger);
+}
+.toast[data-type='warning'] {
+  --toast-tone: var(--color-amber);
+}
+.toast [data-icon] {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--toast-tone);
+}
+.toast [data-content] {
+  display: grid;
+  gap: var(--space-3xs);
+}
+.toast [data-title] {
+  font-weight: 600;
+}
+.toast [data-description] {
+  color: var(--color-muted-on-ink);
+}
+/* na pilha recolhida, os de trás mostram só a borda */
+.toast[data-expanded='false'][data-front='false'] > * {
+  opacity: 0;
+}

@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/auth-context';
 import { LocaleProvider } from '@/contexts/locale-context';
 import { Toaster } from 'sonner';
 import GoogleMapsLoader from '@/components/google-maps-loader/google-maps-loader';
+import { archivo } from './fonts';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -63,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <GoogleMapsLoader>{children}</GoogleMapsLoader>
           </AuthProvider>
-          <Toaster richColors />
+          <Toaster position="top-center" className={`toaster ${archivo.variable}`} toastOptions={{ unstyled: true, className: 'toast' }} />
         </LocaleProvider>
       </body>
     </html>

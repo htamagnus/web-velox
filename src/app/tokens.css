@@ -1,4 +1,5 @@
-.landing {
+.landing,
+.toaster {
   color-scheme: light;
   --color-paper: oklch(98% 0.005 250);
   --color-paper-2: oklch(95% 0.006 250);

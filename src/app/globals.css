@@ -7,6 +7,7 @@
 @import "./home.css";
 @import "./planner.css";
 @import "./profile.css";
+@import "./toast.css";
 
 :root {
   /* primary brand colors */
