@@ -138,7 +138,14 @@ export default function SavedRoutesPage() {
                     aria-pressed={i === selected}
                     onClick={() => setSelected(i)}
                   >
-                    <span className="archive__time">{hm(Math.round(route.estimatedTimeMinutes))}</span>
+                    {/* o tempo e a média que gerou ele, juntos, como no relógio do planejador */}
+                    <span className="archive__figure">
+                      <span className="archive__time">{hm(Math.round(route.estimatedTimeMinutes))}</span>
+                      <span className="archive__speed num">
+                        {fmt.format(route.averageSpeedUsed)} <small>km/h</small>
+                      </span>
+                      <span className="archive__bike">{tApp(`speedModal.options.${route.modality}.label`)}</span>
+                    </span>
                     <span className="archive__text">
                       <span className="archive__ends">
                         {route.origin} <span aria-hidden="true">→</span> {route.destination}
@@ -146,8 +153,6 @@ export default function SavedRoutesPage() {
                       <span className="archive__meta num">
                         {fmt.format(route.distanceKm)} km · +{fmtInt.format(route.elevationGain)} m ·{' '}
                         {fmtInt.format(route.estimatedCalories)} kcal
-                        <br />
-                        {tApp(`speedModal.options.${route.modality}.label`)} · {fmt.format(route.averageSpeedUsed)} km/h
                       </span>
                     </span>
                     <svg className="archive__trace" viewBox="-4 -4 108 108" aria-hidden="true">
