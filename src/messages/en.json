@@ -60,7 +60,8 @@
       "personal": "Personal data",
       "metrics": "Physical metrics",
       "speeds": "Speed by bike type",
-      "speedsDescription": "Used to calculate route times for each bike type"
+      "speedsDescription": "Used to calculate route times for each bike type",
+      "metricsDescription": "Weight, height and age go into each route's calorie estimate."
     },
     "name": {
       "label": "name"
@@ -105,7 +106,8 @@
       "loadError": "error loading profile. try again later.",
       "updateSuccess": "changes saved successfully!",
       "updateError": "error saving changes. try again later."
-    }
+    },
+    "unsaved": "You have unsaved changes."
   },
   "planner": {
     "loadingProfile": "Loading profile...",

@@ -1,0 +1,324 @@
+/* Perfil: o pôster em tinta com o nome e as três médias editáveis; no papel, a ficha do corpo e a conta. */
+
+.profile__poster {
+  color-scheme: dark;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-bottom: var(--space-2xl);
+  background:
+    radial-gradient(90% 70% at 78% 30%, var(--color-ink-3), transparent 70%),
+    var(--color-ink);
+  color: var(--color-paper);
+}
+.profile__poster > .container {
+  position: relative;
+  z-index: 2;
+}
+.profile__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-block: var(--space-md);
+}
+.profile :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.profile :is(h1, .btn) {
+  word-spacing: 0.08em;
+}
+/* as legendas de seção são h2 por acessibilidade, mas leem como a placa expandida da landing */
+.profile h2.eyebrow {
+  max-width: none;
+  margin: 0;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+}
+
+.profile__head {
+  display: grid;
+  gap: var(--space-md);
+  padding-block: var(--space-2xl) var(--space-3xl);
+}
+.profile__head .eyebrow {
+  margin: 0;
+}
+.profile h1 {
+  max-width: none;
+  font-size: var(--text-hero);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+.profile h1 .hero__line:nth-child(2) {
+  color: var(--color-accent);
+}
+.profile__email {
+  font-size: var(--text-lg);
+  color: var(--color-muted-on-ink);
+}
+
+/* as médias: a faixa de segmentos do hero em tamanho de pôster; a bike em edição acende o traço */
+.profile__speeds {
+  display: grid;
+  gap: var(--space-xl);
+}
+.profile__speeds-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.profile__speeds-head p {
+  max-width: 44ch;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.profile__bikes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xl);
+}
+.profile__bike {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'bar bar'
+    'name unit'
+    'speed speed'
+    'tag tag';
+  align-content: start;
+  align-items: baseline;
+  column-gap: var(--space-sm);
+  row-gap: var(--space-xs);
+  cursor: text;
+}
+.profile__bike::before {
+  content: '';
+  grid-area: bar;
+  height: var(--rule-bar);
+  margin-bottom: var(--space-xs);
+  background: var(--color-rule-on-ink);
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out);
+}
+.profile__bike:focus-within::before {
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+}
+.profile__bike-name {
+  grid-area: name;
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+  transition: color var(--dur-short) var(--ease-out);
+}
+.profile__bike:focus-within .profile__bike-name {
+  color: var(--color-paper);
+}
+.profile__speed {
+  grid-area: speed;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-accent);
+  font: var(--display-weight) clamp(4rem, 8vw, 8rem) / 0.9 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  /* text-shadow seria recortado pela caixa do input; o filtro brilha por fora dela */
+  filter: drop-shadow(0 0 28px color-mix(in oklab, var(--color-accent) 45%, transparent));
+  caret-color: var(--color-paper);
+}
+.profile__speed:focus,
+.profile__speed:focus-visible {
+  outline: none;
+}
+/* média do Strava não se edita aqui: o número fica, só não aceita cursor */
+.profile__speed:disabled {
+  opacity: 1;
+  -webkit-text-fill-color: var(--color-accent);
+  cursor: not-allowed;
+}
+.profile__unit {
+  grid-area: unit;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+}
+.profile__bike .strava-tag {
+  grid-area: tag;
+}
+
+/* ---- no papel: a ficha do corpo e a conta, índice à esquerda e conteúdo à direita ---- */
+.profile__body {
+  display: grid;
+  gap: var(--space-3xl);
+  padding-block: var(--section-gap-s) calc(var(--section-gap-s) + 72px);
+}
+.profile__section {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap-columns);
+  row-gap: var(--space-lg);
+}
+.profile__index {
+  grid-column: 1 / span 4;
+  display: grid;
+  align-content: start;
+  gap: var(--space-sm);
+}
+.profile__index p {
+  max-width: 32ch;
+  color: var(--color-ink-2);
+}
+.profile__sheet,
+.profile__account {
+  grid-column: 6 / -1;
+}
+.profile__sheet {
+  border-top: var(--rule-bar) solid var(--color-ink);
+}
+.profile__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  cursor: text;
+  transition: border-color var(--dur-short) var(--ease-out);
+}
+.profile__row:focus-within {
+  border-bottom-color: var(--color-ink);
+}
+.profile__row-label {
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color var(--dur-short) var(--ease-out);
+}
+.profile__row:focus-within .profile__row-label {
+  color: var(--color-accent-deep);
+}
+.profile__row-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  color: var(--color-muted);
+}
+.profile__num {
+  width: 3.2ch;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: var(--display-weight) var(--text-display-s) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-display);
+  text-align: right;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.profile__num:focus,
+.profile__num:focus-visible {
+  outline: none;
+  color: var(--color-accent-deep);
+}
+.profile__account {
+  display: grid;
+  gap: var(--space-lg);
+}
+/* os campos do login vivem na tinta; no papel trocam a cor do texto e do fio */
+.profile__body .field__label {
+  color: var(--color-muted);
+}
+.profile__body .field:focus-within .field__label {
+  color: var(--color-accent-deep);
+}
+.profile__body .field__input {
+  border-bottom-color: color-mix(in oklab, var(--color-ink) 25%, transparent);
+  color: var(--color-ink);
+}
+.profile__body .field__input:hover {
+  border-bottom-color: color-mix(in oklab, var(--color-ink) 50%, transparent);
+}
+.profile__body .field__input:focus {
+  border-bottom-color: var(--color-ink);
+  box-shadow: 0 1px 0 var(--color-ink);
+}
+.profile__body .field__input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-ink);
+  caret-color: var(--color-ink);
+}
+.profile__body :focus-visible {
+  outline-color: var(--color-focus);
+}
+
+/* a barra de salvar: fina, em tinta, sobe só quando há alteração */
+.profile__bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: var(--z-sticky-nav);
+  border-top: var(--rule-hair) solid var(--color-rule-on-ink);
+  background: color-mix(in oklab, var(--color-ink) 96%, transparent);
+  color: var(--color-paper);
+}
+.profile__bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: 72px;
+  padding-block: var(--space-sm);
+}
+.profile__bar p {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+
+@media (max-width: 60rem) {
+  .profile .hero__lines {
+    background-size: calc(100% / 3) 100%;
+    background-position: calc(100% / 3) 0;
+  }
+  .profile__head {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+  .profile h1 {
+    font-size: clamp(3rem, 15vw, 5.5rem);
+  }
+  .profile__bikes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+  }
+  .profile__speed {
+    font-size: clamp(3.5rem, 20vw, 5rem);
+  }
+  .profile__section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .profile__section > * {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 40rem) {
+  .profile__bar p {
+    display: none;
+  }
+  .profile__bar .btn {
+    flex: 1;
+  }
+}

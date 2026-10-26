@@ -143,7 +143,7 @@ export default function HomePage() {
               {athlete && (
                 <motion.div className="home__aside" {...rise(0.7)}>
                   {athlete.averageSpeedGeneralIsFromStrava ? (
-                    <p className="home__strava">{t('strava.synced')}</p>
+                    <p className="strava-tag">{t('strava.synced')}</p>
                   ) : (
                     <>
                       <button

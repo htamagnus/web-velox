@@ -60,7 +60,8 @@
       "personal": "Dados pessoais",
       "metrics": "Métricas físicas",
       "speeds": "Velocidades das modalidades",
-      "speedsDescription": "Usadas para calcular o tempo das suas rotas em cada modalidade"
+      "speedsDescription": "Usadas para calcular o tempo das suas rotas em cada modalidade",
+      "metricsDescription": "Peso, altura e idade entram no cálculo de calorias de cada rota."
     },
     "name": {
       "label": "nome"
@@ -105,7 +106,8 @@
       "loadError": "erro ao carregar perfil. tente novamente mais tarde.",
       "updateSuccess": "alterações salvas com sucesso!",
       "updateError": "erro ao salvar alterações. tente novamente mais tarde."
-    }
+    },
+    "unsaved": "Você tem alterações não salvas."
   },
   "planner": {
     "loadingProfile": "Carregando perfil...",

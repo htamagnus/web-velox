@@ -229,7 +229,7 @@ export default function CalculateRoutePage() {
     <MotionConfig reducedMotion="user">
       <div className={`landing planner ${archivo.variable}`}>
         <header className="planner__nav">
-          <Link href="/home" className="planner__back">
+          <Link href="/home" className="back-link">
             <ArrowLeft size={18} aria-hidden="true" />
             {tPanel('backButton')}
           </Link>

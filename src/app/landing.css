@@ -438,6 +438,39 @@
 }
 
 /* ---- compartilhado entre as seções ---- */
+/* o voltar das telas do app: legenda expandida com a seta */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-muted-on-ink);
+  transition: color var(--dur-short) var(--ease-out);
+}
+.back-link:hover {
+  color: var(--color-paper);
+}
+/* a etiqueta de média vinda do Strava: o quadrado laranja e a legenda expandida */
+.strava-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font: 700 var(--text-xs) / 1.4 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.strava-tag::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--color-strava);
+}
 /* a legenda de cada seção, expandida como placa de telemetria */
 .eyebrow {
   display: block;

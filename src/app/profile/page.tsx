@@ -1,40 +1,53 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
-import { ArrowLeft, User, Mail, Ruler, Weight, Calendar, Bike, Zap, Mountain } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { motion, MotionConfig } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
 
 import ApiVeloxService from '@/providers/api-velox.provider';
 import { Athlete, UpdateAthleteDto } from '@/interfaces/athlete.interface';
 import { useTexts } from '@/helpers/use-texts';
 
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
-import Button from '@/components/ui/button/button';
+import LanguageSelector from '@/components/language-selector/language-selector';
+import SpeedField from '@/components/landing/speed-field';
+import { EASE } from '@/components/landing/reveal';
 import { useProtectedRoute } from '@/hooks/use-protected-route';
+import { archivo } from '../fonts';
 
+type Numeric = number | '';
+type FormState = {
+  name: string;
+  email: string;
+  age: Numeric;
+  weight: Numeric;
+  height: Numeric;
+  speedGeneral: Numeric;
+  speedRoad: Numeric;
+  speedMtb: Numeric;
+  isGeneralSpeedFromStrava: boolean;
+};
+
+const BIKES = ['speedRoad', 'speedMtb', 'speedGeneral'] as const;
+const BODY = ['age', 'weight', 'height'] as const;
+
+const rise = (delay: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, delay, ease: EASE },
+});
+
+// o perfil como o pôster: o nome gigante e as três médias em volt em cima; o corpo e a conta no papel
 export default function ProfilePage() {
   useProtectedRoute()
   const api = useMemo(() => new ApiVeloxService(), []);
   const { t } = useTexts('profile');
-  const router = useRouter();
+  const { t: tApp } = useTexts();
 
   const [userData, setUserData] = useState<Athlete | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-
-  type Numeric = number | '';
-  type FormState = {
-    name: string;
-    email: string;
-    age: Numeric;
-    weight: Numeric;
-    height: Numeric;
-    speedGeneral: Numeric;
-    speedRoad: Numeric;
-    speedMtb: Numeric;
-    isGeneralSpeedFromStrava: boolean;
-  };
 
   const [form, setForm] = useState<FormState>({
     name: '',
@@ -110,6 +123,8 @@ export default function ProfilePage() {
     try {
       setIsSaving(true);
       await api.updateProfile(payload);
+      // o salvo vira a nova base de comparação, senão a barra de salvar nunca some
+      setUserData((prev) => (prev ? { ...prev, ...payload } : prev));
       toast.success(t('errors.updateSuccess'));
     } catch {
       toast.error(t('errors.updateError'));
@@ -124,229 +139,160 @@ export default function ProfilePage() {
     return <PageTransitionOverlay visible={true} message={t('loadingMessage')} />;
   }
 
-  return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between pt-4">
-          <button
-            onClick={() => router.back()}
-            className="text-copy-lighter hover:text-copy flex items-center gap-2 transition-all duration-300 ease-out p-3 -m-2 rounded-xl hover:bg-white/10 hover:scale-105 active:scale-95"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          
-          <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary-light/10 to-primary/10">
-            <User size={20} className="text-primary-light" />
-            <h1 className="text-xl font-bold text-gray-100 tracking-tight">{t('title')}</h1>
-          </div>
-          
-          <div className="w-20"></div>
-        </div>
+  const [firstName, ...rest] = (form.name || userData.name).trim().split(/\s+/);
+  const nameLines = rest.length ? [firstName, rest.join(' ')] : [firstName];
 
-        {/* Dados Pessoais */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] rounded-2xl border border-copy/10 p-6 shadow-xl"
-        >
-          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <User size={20} className="text-primary-light" />
-            {t('sections.personal')}
-          </h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm text-gray-400 mb-2 block">nome</label>
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 hover:border-white/20 focus-within:border-primary-light/50 px-4 py-3 rounded-xl transition-all">
-                <User size={18} className="text-primary-light" />
+  return (
+    <MotionConfig reducedMotion="user">
+      <form
+        className={`landing profile ${archivo.variable}`}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSave();
+        }}
+      >
+        <section className="profile__poster grain">
+          <SpeedField speed={Number(form.speedGeneral) || 0} />
+          <div className="hero__lines" aria-hidden="true" />
+
+          <header className="container profile__nav">
+            <Link href="/home" className="back-link">
+              <ArrowLeft size={18} aria-hidden="true" />
+              {tApp('plannerPanel.backButton')}
+            </Link>
+            <div className="lang">
+              <LanguageSelector />
+            </div>
+          </header>
+
+          <div className="container profile__head">
+            <motion.p className="eyebrow eyebrow--ink" {...rise(0.2)}>
+              {t('title')}
+            </motion.p>
+            <h1>
+              {nameLines.map((line, i) => (
+                <span key={i} className="hero__line">
+                  <motion.span
+                    initial={{ y: '110%' }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.3 + i * 0.12, ease: EASE }}
+                  >
+                    {line}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+            <motion.p className="profile__email" {...rise(0.6)}>
+              {userData.email}
+            </motion.p>
+          </div>
+
+          <motion.div className="container profile__speeds" {...rise(0.75)}>
+            <div className="profile__speeds-head">
+              <h2 className="eyebrow eyebrow--ink">01 · {t('sections.speeds')}</h2>
+              <p>{t('sections.speedsDescription')}</p>
+            </div>
+            <div className="profile__bikes">
+              {BIKES.map((field) => {
+                const locked = field === 'speedGeneral' && form.isGeneralSpeedFromStrava;
+                return (
+                  <label key={field} className="profile__bike">
+                    <span className="profile__bike-name">{t(`${field}.label`)}</span>
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      inputMode="decimal"
+                      className="profile__speed"
+                      value={form[field]}
+                      onChange={(e) => handleNumericChange(field, e.target.value)}
+                      disabled={locked}
+                    />
+                    <span className="profile__unit">{t(`${field}.unit`)}</span>
+                    {locked && <span className="strava-tag">{tApp('home.strava.synced')}</span>}
+                  </label>
+                );
+              })}
+            </div>
+          </motion.div>
+        </section>
+
+        <main className="container profile__body">
+          <section className="profile__section">
+            <div className="profile__index">
+              <h2 className="eyebrow">02 · {t('sections.metrics')}</h2>
+              <p>{t('sections.metricsDescription')}</p>
+            </div>
+            <div className="profile__sheet">
+              {BODY.map((field) => (
+                <label key={field} className="profile__row">
+                  <span className="profile__row-label">{t(`${field}.label`)}</span>
+                  <span className="profile__row-value">
+                    <input
+                      type="number"
+                      min="0"
+                      inputMode="numeric"
+                      className="profile__num"
+                      value={form[field]}
+                      onChange={(e) => handleNumericChange(field, e.target.value)}
+                    />
+                    <span>{t(`${field}.unit`)}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </section>
+
+          <section className="profile__section">
+            <div className="profile__index">
+              <h2 className="eyebrow">03 · {t('sections.personal')}</h2>
+            </div>
+            <div className="profile__account">
+              <div className="field">
+                <label htmlFor="profile-name" className="field__label">
+                  {t('name.label')}
+                </label>
                 <input
+                  id="profile-name"
                   type="text"
+                  autoComplete="name"
+                  className="field__input"
                   value={form.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
-                  className="bg-transparent outline-none w-full text-white font-medium"
                 />
               </div>
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-400 mb-2 block">{t('email.label')}</label>
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 hover:border-white/20 focus-within:border-primary-light/50 px-4 py-3 rounded-xl transition-all">
-                <Mail size={18} className="text-primary-light" />
+              <div className="field">
+                <label htmlFor="profile-email" className="field__label">
+                  {t('email.label')}
+                </label>
                 <input
+                  id="profile-email"
                   type="email"
+                  autoComplete="email"
+                  className="field__input"
                   value={form.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="bg-transparent outline-none w-full text-white font-medium"
                 />
               </div>
             </div>
-          </div>
-        </motion.section>
+          </section>
+        </main>
 
-        {/* Métricas Físicas */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] rounded-2xl border border-copy/10 p-6 shadow-xl"
-        >
-          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <Ruler size={20} className="text-primary-light" />
-            {t('sections.metrics')}
-          </h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="text-sm text-gray-400 mb-2 block">{t('age.label')}</label>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 hover:border-white/20 focus-within:border-primary-light/50 px-4 py-3 rounded-xl transition-all">
-                <Calendar size={18} className="text-primary-light flex-shrink-0" />
-                <input
-                  type="number"
-                  value={form.age}
-                  onChange={(e) => handleNumericChange('age', e.target.value)}
-                  className="bg-transparent outline-none w-full text-white font-bold text-lg"
-                />
-                <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('age.unit')}</span>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-400 mb-2 block">{t('weight.label')}</label>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 hover:border-white/20 focus-within:border-primary-light/50 px-4 py-3 rounded-xl transition-all">
-                <Weight size={18} className="text-primary-light flex-shrink-0" />
-                <input
-                  type="number"
-                  value={form.weight}
-                  onChange={(e) => handleNumericChange('weight', e.target.value)}
-                  className="bg-transparent outline-none w-full text-white font-bold text-lg"
-                />
-                <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('weight.unit')}</span>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-400 mb-2 block">{t('height.label')}</label>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 hover:border-white/20 focus-within:border-primary-light/50 px-4 py-3 rounded-xl transition-all">
-                <Ruler size={18} className="text-primary-light flex-shrink-0" />
-                <input
-                  type="number"
-                  value={form.height}
-                  onChange={(e) => handleNumericChange('height', e.target.value)}
-                  className="bg-transparent outline-none w-full text-white font-bold text-lg"
-                />
-                <span className="text-xs font-semibold text-primary-light px-2 py-1 rounded">{t('height.unit')}</span>
-              </div>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Velocidades das Modalidades */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-gradient-to-br from-[#1a2234] to-[#0f1419] rounded-2xl border border-copy/10 p-6 shadow-xl"
-        >
-          <h2 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-            <Bike size={20} className="text-primary-light" />
-            {t('sections.speeds')}
-          </h2>
-          <p className="text-sm text-gray-400 mb-4">
-            {t('sections.speedsDescription')}
-          </p>
-          
-          <div className="space-y-4">
-            <div className="bg-[#92a848]/10 border-2 border-[#92a848]/30 rounded-xl p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 rounded-lg bg-[#92a848]/20">
-                  <Bike size={20} className="text-[#92a848]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">{t('speedGeneral.label')}</h3>
-                  <p className="text-xs text-gray-300">{t('speedGeneral.description')}</p>
-                  {form.isGeneralSpeedFromStrava && (
-                    <p className="text-xs text-[#92a848] mt-1">{t('speedGeneral.stravaSync')}</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-2 bg-black/20 border border-[#92a848]/20 px-4 py-3 rounded-lg">
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.speedGeneral}
-                  onChange={(e) => handleNumericChange('speedGeneral', e.target.value)}
-                  disabled={form.isGeneralSpeedFromStrava}
-                  className="bg-transparent outline-none w-full text-white font-bold text-2xl disabled:opacity-50"
-                />
-                <span className="text-xs font-bold text-[#92a848] bg-[#92a848]/20 px-2.5 py-1.5 rounded whitespace-nowrap">{t('speedGeneral.unit')}</span>
-              </div>
-            </div>
-
-            <div className="bg-[#4a9eff]/10 border-2 border-[#4a9eff]/30 rounded-xl p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 rounded-lg bg-[#4a9eff]/20">
-                  <Zap size={20} className="text-[#4a9eff]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">{t('speedRoad.label')}</h3>
-                  <p className="text-xs text-gray-300">{t('speedRoad.description')}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 bg-black/20 border border-[#4a9eff]/20 px-4 py-3 rounded-lg">
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.speedRoad}
-                  onChange={(e) => handleNumericChange('speedRoad', e.target.value)}
-                  className="bg-transparent outline-none w-full text-white font-bold text-2xl"
-                />
-                <span className="text-xs font-bold text-[#4a9eff] bg-[#4a9eff]/20 px-2.5 py-1.5 rounded whitespace-nowrap">{t('speedRoad.unit')}</span>
-              </div>
-            </div>
-
-            <div className="bg-[#ff8c42]/10 border-2 border-[#ff8c42]/30 rounded-xl p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 rounded-lg bg-[#ff8c42]/20">
-                  <Mountain size={20} className="text-[#ff8c42]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">{t('speedMtb.label')}</h3>
-                  <p className="text-xs text-gray-300">{t('speedMtb.description')}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 bg-black/20 border border-[#ff8c42]/20 px-4 py-3 rounded-lg">
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.speedMtb}
-                  onChange={(e) => handleNumericChange('speedMtb', e.target.value)}
-                  className="bg-transparent outline-none w-full text-white font-bold text-2xl"
-                />
-                <span className="text-xs font-bold text-[#ff8c42] bg-[#ff8c42]/20 px-2.5 py-1.5 rounded whitespace-nowrap">{t('speedMtb.unit')}</span>
-              </div>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Botão Salvar */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          className="profile__bar"
+          initial={false}
+          animate={{ y: hasChanges ? 0 : '100%' }}
+          transition={{ duration: 0.5, ease: EASE }}
+          inert={!hasChanges}
         >
-          <Button
-            onClick={handleSave}
-            disabled={isSaving || !hasChanges}
-            loading={isSaving}
-            variant="confirm"
-            className="w-full"
-          >
-            {t('button.save')}
-          </Button>
+          <div className="container profile__bar-inner">
+            <p>{t('unsaved')}</p>
+            <button type="submit" className="btn btn--primary" disabled={isSaving} aria-busy={isSaving}>
+              {isSaving ? t('button.saving') : t('button.save')}
+            </button>
+          </div>
         </motion.div>
-      </div>
-    </div>
+      </form>
+    </MotionConfig>
   );
 }

@@ -56,21 +56,6 @@
   gap: var(--space-sm);
   text-align: right;
 }
-.home__strava {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  font: 700 var(--text-xs) / 1.4 var(--font-outlier);
-  font-stretch: var(--stretch-wide);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.home__strava::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  background: var(--color-strava);
-}
 .home__note {
   max-width: 26ch;
   font-size: var(--text-sm);
