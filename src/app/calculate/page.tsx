@@ -71,33 +71,30 @@ export default function CalculateRoutePage() {
     }
   }, [originLabel, destinationLabel]);
 
+  // o trânsito só depende de origem e destino: uma busca por cálculo, não a cada troca de alternativa (gasta cota do google)
   useEffect(() => {
-    const loadTrafficAndWeatherData = async () => {
-      if (!routeOptions.length || !userData || !routeData) {
-        return;
-      }
+    if (!userData || !routeData) return;
 
-      setIsLoadingTraffic(true);
-      setIsLoadingWeather(true);
-      const selectedRoute = routeOptions[selectedRouteIndex];
-      const midpoint = Math.floor(selectedRoute.polyline.length / 2);
-      const [latitude, longitude] = selectedRoute.polyline[midpoint];
+    setIsLoadingTraffic(true);
+    api
+      .getTraffic(userData.id, routeData.polyline, originLabel!, destinationLabel!)
+      .then(setTrafficData, () => setTrafficData(null))
+      .finally(() => setIsLoadingTraffic(false));
+  }, [userData, routeData, originLabel, destinationLabel, api]);
 
-      // um não derruba o outro: sem cota do google pro trânsito, o clima (openweather) ainda aparece
-      await Promise.allSettled([
-        api
-          .getTraffic(userData.id, polyline.encode(selectedRoute.polyline), originLabel!, destinationLabel!)
-          .then(setTrafficData, () => setTrafficData(null))
-          .finally(() => setIsLoadingTraffic(false)),
-        api
-          .getWeather(userData.id, latitude, longitude)
-          .then(setWeatherData, () => setWeatherData(null))
-          .finally(() => setIsLoadingWeather(false)),
-      ]);
-    };
+  // o clima usa o meio da rota escolhida, então acompanha a alternativa; é openweather, não gasta cota do google
+  useEffect(() => {
+    if (!routeOptions.length || !userData) return;
 
-    loadTrafficAndWeatherData();
-  }, [routeOptions, userData, routeData, selectedRouteIndex, originLabel, destinationLabel, api]);
+    const selectedRoute = routeOptions[selectedRouteIndex];
+    const [latitude, longitude] = selectedRoute.polyline[Math.floor(selectedRoute.polyline.length / 2)];
+
+    setIsLoadingWeather(true);
+    api
+      .getWeather(userData.id, latitude, longitude)
+      .then(setWeatherData, () => setWeatherData(null))
+      .finally(() => setIsLoadingWeather(false));
+  }, [routeOptions, selectedRouteIndex, userData, api]);
 
   // o ponto clicado só vale com endereço: é o texto que vai pro cálculo, então sem ele o ponto nem entra
   const handleMapClick = async (e: google.maps.MapMouseEvent) => {
