@@ -1663,3 +1663,25 @@
     height: 160px;
   }
 }
+/* o carregamento entre telas: o mesmo pôster em tinta, só a logo e a legenda */
+.loading {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.loading > :not(.hero__lines) {
+  position: relative;
+  z-index: 2;
+}
+.loading__spin {
+  width: 32px;
+  height: 32px;
+  margin-top: var(--space-lg);
+  border: var(--rule-bar) solid var(--color-rule-on-ink);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+}
+.loading .loading__msg {
+  margin: var(--space-lg) 0 0;
+  padding-inline: var(--space-lg);
+  text-align: center;
+}
