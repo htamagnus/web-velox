@@ -4,13 +4,11 @@ import React, { useState } from 'react'
 import ApiVeloxService from '@/providers/api-velox.provider'
 import { registerSchema } from '@/validations/register-schema'
 import { ApiError } from '@/errors/api-errors'
-import Button from '../ui/button/button'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import InputField from '../ui/input-field/input-field'
-import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
 import { toast } from 'sonner'
-import LogoVelox from '../ui/logo-velox/logo-velox'
+import AuthShell from '../auth/auth-shell'
 import Link from 'next/link'
 import { useTexts } from '@/helpers/use-texts'
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay'
@@ -21,6 +19,7 @@ export default function RegisterForm() {
   const { login } = useAuth()
   const { t } = useTexts('register')
   const tForm = useTexts('registerForm').t
+  const tLanding = useTexts('landing.hero').t
 
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string }>({})
   const [loading, setLoading] = useState(false)
@@ -96,84 +95,79 @@ export default function RegisterForm() {
   )
 
   return (
-    <FormWrapper onSubmit={handleSubmit}>
-      {loading && <PageTransitionOverlay visible={true} message={tForm('sendingButton')} />}
-      <div className="text-center space-y-2">
-      <LogoVelox size="md" /> 
-      {/* <div className="relative w-full flex items-center justify-center">
-        <div className="absolute w-62 h-0.5 bg-primary" />
-      </div> */}
+    <AuthShell title={[t('headline1'), t('headline2')]} lead={tLanding('subtitle')}>
+      <form onSubmit={handleSubmit} className="auth__form">
+        {loading && <PageTransitionOverlay visible={true} message={tForm('sendingButton')} />}
+        <h2>{tForm('createAccountTitle')}</h2>
+        <InputField
+          label={t('name.label')}
+          name="name"
+          autoComplete="name"
+          placeholder={t('name.placeholder')}
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value)
+            if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }))
+          }}
+          error={fieldErrors.name}
+          required
+          maxLength={255}
+        />
+        <InputField
+          label={t('email.label')}
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder={t('email.placeholder')}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+            if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }))
+          }}
+          error={fieldErrors.email}
+          required
+          maxLength={255}
+        />
+        <InputField
+          label={t('password.label')}
+          name="password"
+          type="password"
+          autoComplete="new-password"
+          value={password}
+          placeholder={t('password.placeholder')}
+          onChange={(e) => {
+            setPassword(e.target.value)
+            if (fieldErrors.password) {
+              setFieldErrors((prev) => ({ ...prev, password: undefined }))
+            }
+          }}
+          error={fieldErrors.password}
+          required
+          maxLength={255}
+        />
 
-        <h2 className="text-2xl font-bold text-primary-light mt-8">{tForm('createAccountTitle')}</h2>
-        <p className="text-s text-copy-light">{tForm('createAccountSubtitle')}</p>
-      </div>
+        {/* a faixa de segmentos do hero: cada regra cumprida acende o seu traço */}
+        <ul className="auth__checks">
+          {(Object.keys(passwordChecks) as (keyof typeof passwordChecks)[]).map((key) => (
+            <li key={key} data-ok={passwordChecks[key]}>
+              {t(`password.requirements.${key}`)}
+            </li>
+          ))}
+        </ul>
 
-      <InputField 
-        label={t('name.label')}
-        name="name"
-        placeholder={t('name.placeholder')}
-        value={name}
-        onChange={(e) => {
-          setName(e.target.value)
-          if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }))
-        }}
-        error={fieldErrors.name}
-        required
-        maxLength={255}
-      />
-      <InputField 
-        label={t('email.label')}
-        name="email"
-        type="email"
-        placeholder={t('email.placeholder')}
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value)
-          if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }))
-        }}
-        error={fieldErrors.email}
-        required
-        maxLength={255}
-      />
-      <InputField
-        label={t('password.label')}
-        name="password"
-        type="password"
-        value={password}
-        placeholder={t('password.placeholder')}
-        onChange={(e) => {
-          setPassword(e.target.value)
-          if (fieldErrors.password) {
-            setFieldErrors((prev) => ({ ...prev, password: undefined }))
-          }
-        }}
-        error={fieldErrors.password}
-        required
-        maxLength={255}
-      />
-
-      <div className="mt-4 space-y-1 text-sm text-copy-lighter">
-        <p className={passwordChecks.length ? 'text-green-500' : 'text-muted'}>{t('password.requirements.length')}</p>
-        <p className={passwordChecks.uppercase ? 'text-green-500' : 'text-muted'}>{t('password.requirements.uppercase')}</p>
-        <p className={passwordChecks.number ? 'text-green-500' : 'text-muted'}>{t('password.requirements.number')}</p>
-        <p className={passwordChecks.specialChar ? 'text-green-500' : 'text-muted'}>{t('password.requirements.specialChar')}</p>
-      </div>
-
-      <Button
-        type="submit"
-        loading={loading}
-        variant="confirm"
-        disabled={isRegisterDisabled}
-        className="transition-transform active:scale-95 hover:brightness-110 mt-2 w-full"
-      >
-        {loading ? tForm('sendingButton') : tForm('registerButton')}
-      </Button>
-      <div className="mt-2 text-center text-sm text-copy-light">
-      {t('link.alreadyAccount')}
-        <Link href="/login" className="text-primary hover:underline font-medium">
-        {t('link.login')}
-        </Link>
-      </div>
-    </FormWrapper>
+        <button
+          type="submit"
+          className="btn btn--primary btn--big auth__submit"
+          disabled={isRegisterDisabled}
+          aria-busy={loading}
+        >
+          {loading ? tForm('sendingButton') : tForm('registerButton')}
+        </button>
+        <p className="auth__switch">
+          {t('link.alreadyAccount')}
+          <Link href="/login">{t('link.login')}</Link>
+        </p>
+      </form>
+    </AuthShell>
   )
 }

@@ -33,6 +33,24 @@
       "title": "Velocidade média no MTB",
       "subtitle": "Informe sua média nos pedais de mountain bike.",
       "note": "*usada pra estimar o tempo das rotas quando você escolher MTB"
+    },
+    "progress": {
+      "height": "Altura",
+      "weight": "Peso",
+      "age": "Idade",
+      "averageSpeedGeneral": "Geral",
+      "averageSpeedRoad": "Speed",
+      "averageSpeedMtb": "MTB"
+    },
+    "actions": {
+      "continue": "Continuar",
+      "skip": "Pular",
+      "back": "Voltar",
+      "decrease": "Diminuir",
+      "increase": "Aumentar",
+      "strava": "Importar do Strava",
+      "stravaLoading": "Redirecionando...",
+      "fromStrava": "Importado do Strava"
     }
   },
   "profile": {
@@ -42,7 +60,8 @@
       "personal": "Dados pessoais",
       "metrics": "Métricas físicas",
       "speeds": "Velocidades das modalidades",
-      "speedsDescription": "Usadas para calcular o tempo das suas rotas em cada modalidade"
+      "speedsDescription": "Usadas para calcular o tempo das suas rotas em cada modalidade",
+      "metricsDescription": "Peso, altura e idade entram no cálculo de calorias de cada rota."
     },
     "name": {
       "label": "nome"
@@ -83,11 +102,18 @@
       "saving": "salvando alterações..."
     },
     "errors": {
-      "noChanges": "nenhuma alteração foi feita.",
-      "loadError": "erro ao carregar perfil. tente novamente mais tarde.",
-      "updateSuccess": "alterações salvas com sucesso!",
-      "updateError": "erro ao salvar alterações. tente novamente mais tarde."
-    }
+      "noChanges": "Nenhuma alteração foi feita.",
+      "loadError": "Erro ao carregar perfil. Tente novamente mais tarde.",
+      "updateSuccess": "Alterações salvas com sucesso!",
+      "updateError": "Erro ao salvar alterações. Tente novamente mais tarde.",
+      "range": "Entre {{min}} e {{max}} {{unit}}.",
+      "fixRange": "Corrija os valores fora da faixa."
+    },
+    "unsaved": "Você tem alterações não salvas.",
+    "unset": "Não configurada",
+    "logout": "Sair da conta",
+    "decrease": "Diminuir {{label}}",
+    "increase": "Aumentar {{label}}"
   },
   "planner": {
     "loadingProfile": "Carregando perfil...",
@@ -111,6 +137,8 @@
     }
   },
   "login": {
+    "headline1": "De volta",
+    "headline2": "ao pedal.",
     "title": "Entrar no Velox",
     "subtitle": "Acesse sua conta para começar a planejar rotas.",
     "email": {
@@ -130,9 +158,15 @@
       "unexpected": "Erro inesperado. Tente novamente.",
       "email": "E-mail inválido.",
       "password": "Senha inválida."
+    },
+    "link": {
+      "noAccount": "Ainda não tem conta? ",
+      "register": "Criar conta"
     }
   },
   "register": {
+    "headline1": "Seu tempo",
+    "headline2": "começa aqui.",
     "title": "Criar conta",
     "subtitle": "Preencha os dados abaixo para começar a usar o Velox",
     "name": {
@@ -147,10 +181,10 @@
       "label": "Senha",
       "placeholder": "Digite sua senha",
       "requirements": {
-        "length": "• Pelo menos 8 caracteres",
-        "uppercase": "• Uma letra maiúscula",
-        "number": "• Um número",
-        "specialChar": "• Um caractere especial"
+        "length": "Pelo menos 8 caracteres",
+        "uppercase": "Uma letra maiúscula",
+        "number": "Um número",
+        "specialChar": "Um caractere especial"
       }
     },
     "button": {
@@ -175,6 +209,15 @@
     "emptyTitle": "Você ainda não criou nenhuma rota",
     "emptyDescription": "Planeje um percurso e salve para consultar depois.",
     "ctaCreate": "Planejar agora",
+    "count": "{{count}} rotas",
+    "countOne": "1 rota",
+    "planned": "{{km}} km planejados",
+    "delete": "Excluir rota",
+    "confirmDelete": "Excluir esta rota?",
+    "confirm": "Excluir",
+    "cancel": "Cancelar",
+    "deleted": "Rota excluída.",
+    "deleteError": "Não foi possível excluir a rota. Tente novamente.",
     "error": "Erro ao carregar rotas.",
     "routeTitle": "Percurso de {{origin}} para {{destination}}",
     "modalityLabel": "Modalidade:",
@@ -193,17 +236,26 @@
     "destinationPlaceholder": "Escolher destino",
     "save": "salvar",
     "plan": "Planejar",
-    "planning": "calculando rota..."
+    "planning": "calculando rota...",
+    "title1": "De onde,",
+    "title2": "pra onde?",
+    "originLabel": "Saída",
+    "destinationLabel": "Chegada",
+    "searchPlaceholder": "Endereço ou lugar",
+    "clear": "Limpar"
   },
   "calculate": {
     "geolocationError": "não foi possível pegar localização",
-    "profileError": "erro ao buscar perfil",
+    "profileError": "Erro ao buscar perfil.",
     "loadingProfile": "carregando perfil...",
-    "requireOriginDestination": "defina origem e destino antes de calcular a rota.",
+    "requireOriginDestination": "Defina origem e destino antes de calcular a rota.",
     "fastestRoute": "Mais rápida",
-    "routeError": "erro ao calcular rota",
-    "routeSaved": "rota salva com sucesso!",
-    "routeSaveError": "erro ao salvar rota",
+    "quotaError": "O limite diário de buscas do Google Maps acabou. Tente de novo amanhã.",
+    "routeError": "Erro ao calcular rota.",
+    "routeSaved": "Rota salva com sucesso!",
+    "saved": "Rota salva",
+    "mapPointError": "Não achamos um endereço nesse ponto. Digite no campo.",
+    "routeSaveError": "Erro ao salvar rota.",
     "calculating": {
       "title": "Calculando rota",
       "subtitle": "encontrando o melhor caminho para você..."
@@ -216,6 +268,7 @@
     "buttons": {
       "save": "Salvar rota",
       "saving": "salvando...",
+      "seeSaved": "Ver em Minhas rotas",
       "newSearch": "Nova busca"
     },
     "traffic": {
@@ -233,7 +286,8 @@
         "normal": "Tráfego normal na sua rota. É um bom momento para sair.",
         "intense": "Tráfego intenso na sua rota. Considere sair em outro horário.",
         "congested": "Rota congestionada. Recomendamos adiar a pedalada."
-      }
+      },
+      "label": "Trânsito"
     },
     "weather": {
       "title": "Previsão de clima",
@@ -268,8 +322,11 @@
           "title": "Vento forte",
           "message": "{{speed}}km/h. Tenha cuidado em descidas."
         }
-      }
-    }
+      },
+      "label": "Clima"
+    },
+    "routes": "Rotas",
+    "conditions": "Condições agora"
   },
   "speedModal": {
     "title": "Modalidade",
@@ -304,26 +361,26 @@
     "title": "Perfil de elevação"
   },
   "home": {
-    "title": "Bem-vindo ao velox",
-    "subtitle": "planeje suas rotas de bike com precisão",
-    "lastRoutes": "Últimas rotas",
-    "newRoute": "Nova rota",
-    "newRouteDesc": "planeje seu percurso",
-    "myRoutes": "Minhas rotas",
-    "myRoutesDesc": "veja rotas salvas",
-    "profile": "Perfil",
-    "profileDesc": "edite suas informações",
-    "comingSoon": "Em breve",
-    "comingSoonDesc": "novidades chegando",
-    "stravaImport": {
-      "title": "Strava",
-      "description": "importar velocidade média"
+    "greeting": "Olá, {{name}}",
+    "title1": "Pra onde",
+    "title2": "hoje?",
+    "speedLabel": "Sua média",
+    "bikes": "Tipo de bike",
+    "facts": {
+      "routes": "Rotas salvas",
+      "distance": "Planejados",
+      "climb": "Subida somada"
     },
-    "footer": {
-      "routes": "Rotas",
-      "createRoute": "Criar rota",
-      "profile": "Perfil"
-    }
+    "strava": {
+      "synced": "Média geral do Strava",
+      "import": "Importar do Strava",
+      "note": "Troque a média que você informou pela média real das suas pedaladas."
+    },
+    "newRoute": "Nova rota",
+    "myRoutes": "Minhas rotas",
+    "profile": "Perfil",
+    "lastRoutes": "Últimas rotas",
+    "seeAll": "Ver todas"
   },
   "savedRoutesPage": {
     "routeFrom": "Percurso de"
@@ -342,29 +399,39 @@
   },
   "landing": {
     "hero": {
-      "title1": "Pedale no seu ritmo.",
-      "title2": "Planeje com precisão.",
-      "subtitle": "O Velox calcula o tempo do percurso com a sua velocidade média real, separada por tipo de bike.",
-      "cta": "Começar"
+      "title1": "O tempo da rota",
+      "title2": "na sua velocidade.",
+      "subtitle": "O Velox usa a sua velocidade média real, separada por tipo de bike.",
+      "cta": "Criar conta",
+      "sample": "Rota de exemplo",
+      "climbLabel": "Subida",
+      "speedLabel": "Sua média",
+      "genericLabel": "Previsão genérica"
+    },
+    "race": {
+      "title": "Mesma rota. Dois relógios.",
+      "lead": "{{km}} km e {{climb}} m de subida. Role pra pedalar.",
+      "generic": "Previsão genérica",
+      "velox": "Velox",
+      "finished": "Chegou",
+      "note": "{{diff}} min antes."
     },
     "problem": {
       "title": "A previsão te",
       "titleHighlight": "deixou na mão?",
-      "timeExample": "2h10",
-      "timeReal": "1h20",
-      "description1": "O Google estimou mais de 2 horas para pedalar 30 km.",
-      "description2": "Na prática, foram",
-      "description3": "1h20.",
       "cards": {
         "prediction": {
+          "unit": "min",
           "title": "Previsão furada",
-          "desc": "O app disse 2h e você chegou em 1h20. Errar pra mais ou pra menos bagunça tudo o que vem depois."
+          "desc": "Errar pra mais ou pra menos bagunça tudo o que vem depois."
         },
         "time": {
-          "title": "Sem tempo pra erro",
-          "desc": "Quando o treino precisa caber na rotina, não dá pra confiar numa velocidade média chutada."
+          "unit": "km/h",
+          "title": "Média chutada",
+          "desc": "Quando o treino precisa caber na rotina, não dá pra planejar em cima de um chute."
         },
         "bike": {
+          "unit": "ritmos",
           "title": "Não é qualquer bike",
           "desc": "MTB, Speed e urbana têm ritmos diferentes, mas os apps usam a mesma base pra todas."
         }
@@ -378,26 +445,71 @@
     },
     "features": {
       "prediction": {
-        "title": "Previsão real",
-        "desc": "O tempo de cada rota é calculado com a sua velocidade média."
+        "title": "Tempo estimado",
+        "desc": "Cada rota sai com o tempo calculado pela sua velocidade média."
       },
       "modality": {
-        "title": "Velocidade por modalidade",
-        "desc": "Escolha MTB, Speed ou urbano e o tempo é calculado com a velocidade daquela bike."
+        "title": "Uma média por bike",
+        "desc": "Escolha MTB, Speed ou urbano e o tempo usa a velocidade daquela bike."
       },
       "strava": {
-        "title": "Integração com o Strava",
-        "desc": "Importe sua velocidade média direto do Strava."
+        "title": "Direto do Strava",
+        "desc": "Importe sua velocidade média dos treinos que você já registrou lá."
       },
       "elevation": {
-        "title": "Calorias e altimetria",
-        "desc": "Veja as calorias gastas e o ganho de elevação de cada trajeto."
+        "title": "O perfil da rota",
+        "desc": "Quanto você sobe e as calorias pelo seu peso, altura e idade."
       }
+    },
+    "mock": {
+      "destination": "Parque da cidade"
+    },
+    "routes": {
+      "title": "Compare as rotas pelo seu tempo",
+      "lead": "A mais rápida e as alternativas, cada uma com o seu tempo. Salve a que escolher.",
+      "colRoute": "Rota",
+      "colDistance": "Distância",
+      "colClimb": "Subida",
+      "lessClimbing": "Menos subidas",
+      "longer": "Mais longa",
+      "caption": "Exemplo com média de {{speed}} km/h na {{mode}}.",
+      "mapNote": "Mapa ilustrativo; no app, as rotas vêm do Google Maps."
+    },
+    "conditions": {
+      "title": "Clima e trânsito antes de sair",
+      "lead": "O Velox confere o clima no meio da rota e o trânsito do trajeto, e avisa quando é melhor esperar.",
+      "slotsLabel": "Horário de saída",
+      "delay": "Atraso no trajeto",
+      "go": "Boa hora pra sair",
+      "wait": "Melhor esperar",
+      "clear": "Nada acima dos limites.",
+      "sampleNote": "Um dia de exemplo. Na hora de sair, o app confere o clima no meio da rota e o trânsito do trajeto.",
+      "weatherTitle": "Alertas de clima",
+      "trafficTitle": "Níveis de trânsito",
+      "rainRule": "acima de 70% de chance",
+      "temperatureRule": "abaixo de 10 °C ou acima de 30 °C",
+      "windRule": "acima de 25 km/h",
+      "normalRule": "menos de 5 min de atraso",
+      "intenseRule": "de 5 a 15 min de atraso",
+      "congestedRule": "15 min ou mais, e o app sugere adiar"
+    },
+    "footer": {
+      "install": "Funciona no navegador e instala no celular como app."
     },
     "cta": {
       "title": "Quanto tempo você leva de verdade?",
       "subtitle": "Crie sua conta, informe sua velocidade e descubra na primeira rota.",
       "button": "Criar conta"
+    },
+    "index": {
+      "pains": "O problema",
+      "race": "A corrida",
+      "product": "O app",
+      "routes": "As rotas",
+      "conditions": "Antes de sair"
+    },
+    "product": {
+      "strava": "via Strava"
     }
   }
 }

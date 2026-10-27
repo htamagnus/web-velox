@@ -1,0 +1,211 @@
+/* Home: o pôster do hero com os dados da pessoa; embaixo, no papel, as últimas rotas em lista. */
+
+.home .nav__link {
+  display: inline-flex;
+  align-items: center;
+}
+/* os botões aqui são links: o `.landing a` herdaria a cor do papel por cima do volt */
+.home a.btn--primary {
+  color: var(--color-accent-ink);
+}
+.home :is(h1, h2, h3, .btn) {
+  word-spacing: 0.08em;
+}
+
+/* a foto de dia é clara: apagada em cinza e tinta pra o volt ler por cima */
+.home__poster {
+  min-height: 92svh;
+}
+.home__poster .hero__photo img {
+  object-position: 50% 45%;
+  filter: grayscale(1) contrast(1.1);
+}
+.home__poster .hero__photo::after {
+  background:
+    radial-gradient(
+      70% 60% at 50% 42%,
+      color-mix(in oklab, var(--color-ink) 62%, transparent),
+      color-mix(in oklab, var(--color-ink) 78%, transparent)
+    ),
+    linear-gradient(180deg, transparent 55%, color-mix(in oklab, var(--color-ink) 92%, transparent));
+}
+.home__poster :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* a média gigante, com a unidade encostada na linha de base como no onboarding */
+.home__speed {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin: 0;
+}
+.home__unit {
+  font: 700 var(--text-lg) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.home__aside {
+  grid-area: aside;
+  display: grid;
+  justify-items: end;
+  gap: var(--space-sm);
+  text-align: right;
+}
+.home__note {
+  max-width: 26ch;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.home__poster .eyebrow {
+  margin-bottom: var(--space-md);
+}
+.home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.home__actions .btn {
+  min-height: 60px;
+}
+
+/* ---- as últimas rotas: o tempo grande à esquerda, o traçado desenhado à direita ---- */
+.home__routes {
+  padding-block: var(--section-gap-s);
+}
+.home__routes-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.home__routes h2 {
+  text-transform: uppercase;
+}
+.home__all {
+  font-weight: 600;
+  text-decoration: underline var(--color-accent-deep);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+.home__all:hover {
+  color: var(--color-accent-deep);
+}
+.home__list {
+  display: grid;
+  margin: var(--space-2xl) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule-bar) solid var(--color-ink);
+}
+.home__list li {
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+.home__route {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr) 7rem;
+  align-items: center;
+  column-gap: var(--space-xl);
+  padding-block: var(--space-lg);
+  text-decoration: none;
+}
+.home__route-time {
+  font: var(--display-weight) clamp(3rem, 5vw, 4.5rem) / 0.9 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.home__route-text {
+  display: grid;
+  gap: var(--space-xs);
+}
+.home__route h3 {
+  max-width: none;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--text-xl);
+  text-transform: uppercase;
+}
+.home__route-meta {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+.home__route-trace {
+  width: 100%;
+  aspect-ratio: 1;
+}
+.home__route-trace polyline {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--dur-short) var(--ease-out);
+}
+.home__route:hover .home__route-time,
+.home__route:focus-visible .home__route-time {
+  color: var(--color-accent-deep);
+}
+.home__route:hover polyline,
+.home__route:focus-visible polyline {
+  stroke: var(--color-accent-deep);
+}
+.home__empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-md);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  border-top: var(--rule-bar) solid var(--color-ink);
+}
+.home__empty h3 {
+  text-transform: uppercase;
+}
+.home__empty p {
+  color: var(--color-ink-2);
+}
+
+@media (max-width: 60rem) {
+  .home__poster .hero__poster {
+    grid-template-areas:
+      'figure'
+      'facts'
+      'type'
+      'modes'
+      'aside';
+  }
+  .home__aside {
+    justify-items: start;
+    text-align: left;
+  }
+  .home__actions {
+    width: 100%;
+  }
+  .home__actions .btn--primary {
+    flex: 1;
+    padding-inline: var(--space-lg);
+  }
+}
+@media (max-width: 40rem) {
+  .home__route {
+    grid-template-columns: minmax(0, 1fr) 4.5rem;
+    row-gap: var(--space-sm);
+  }
+  .home__route-text {
+    grid-column: 1;
+  }
+  .home__route-trace {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}

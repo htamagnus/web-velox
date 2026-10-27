@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import LogoVelox from '@/components/ui/logo-velox/logo-velox';
-import Loader from '@/components/ui/loader/loader';
+import { archivo } from '@/app/fonts';
 
 export default function PageTransitionOverlay({ visible, message }: { visible: boolean; message?: string }) {
   return (
@@ -12,9 +12,11 @@ export default function PageTransitionOverlay({ visible, message }: { visible: b
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-background z-[1000] flex flex-col items-center justify-center"
+          className={`landing loading ${archivo.variable} fixed inset-0 z-[1000] flex flex-col items-center justify-center`}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
         >
+          <div className="hero__lines" aria-hidden="true" />
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -23,21 +25,21 @@ export default function PageTransitionOverlay({ visible, message }: { visible: b
             <LogoVelox size="md" />
           </motion.div>
 
-          <motion.div
+          <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="mt-6"
-          >
-            <Loader size={38} />
-          </motion.div>
+            className="loading__spin animate-spin"
+            aria-hidden="true"
+          />
 
           {message && (
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="mt-6 text-md text-copy text-center px-6"
+              className="eyebrow eyebrow--ink loading__msg"
+              role="status"
             >
               {message}
             </motion.p>

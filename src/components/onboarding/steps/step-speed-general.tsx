@@ -1,9 +1,7 @@
 'use client';
 
-import Button from '@/components/ui/button/button';
 import StepNumericSelector from '../step-numeric-selector';
 import { useTexts } from '@/helpers/use-texts';
-import { Flame, Gauge } from 'lucide-react';
 import { useStravaAuth } from '@/hooks/use-strava-auth';
 
 interface StepSpeedGeneralProps {
@@ -22,13 +20,13 @@ export default function StepSpeedGeneral({
   isFromStrava = false,
 }: StepSpeedGeneralProps) {
   const { t } = useTexts('onboarding.speedGeneral');
+  const { t: tActions } = useTexts('onboarding.actions');
   const { redirectToStrava, loading: loadingStrava } = useStravaAuth();
 
   return (
     <StepNumericSelector
       title={t('title')}
       subtitle={t('subtitle')}
-      iconTitle={<Gauge />}
       value={value}
       min={0}
       max={200}
@@ -38,15 +36,15 @@ export default function StepSpeedGeneral({
       onBack={onBack}
       disabled={isFromStrava}
       extraActions={
-        <Button
+        <button
+          type="button"
+          className="btn btn--strava"
           onClick={redirectToStrava}
           disabled={loadingStrava || isFromStrava}
-          variant="strava"
-          className="mt-4"
+          aria-busy={loadingStrava}
         >
-          <Flame className="w-6 h-6 mx-auto" stroke="#fc4c02aa" />
-          {loadingStrava ? 'Redirecionando...' : 'Importar do Strava'}
-        </Button>
+          {loadingStrava ? tActions('stravaLoading') : tActions('strava')}
+        </button>
       }
       note={t('note')}
     />

@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/auth-context';
 import { LocaleProvider } from '@/contexts/locale-context';
 import { Toaster } from 'sonner';
 import GoogleMapsLoader from '@/components/google-maps-loader/google-maps-loader';
+import { archivo } from './fonts';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,6 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://web-velox.vercel.app'),
   title: 'Velox - Planejador de Rotas de Bike',
   description: 'Planeje suas rotas de bike com precisão, calculando tempo, calorias e elevação personalizada.',
   manifest: '/manifest.json',
@@ -36,11 +38,13 @@ export const metadata: Metadata = {
     siteName: 'Velox',
     title: 'Velox - Planejador de Rotas de Bike',
     description: 'Planeje suas rotas de bike com precisão, calculando tempo, calorias e elevação personalizada.',
+    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Velox: o tempo da rota na sua velocidade' }],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Velox - Planejador de Rotas de Bike',
     description: 'Planeje suas rotas de bike com precisão, calculando tempo, calorias e elevação personalizada.',
+    images: ['/og.jpg'],
   },
 };
 
@@ -60,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <GoogleMapsLoader>{children}</GoogleMapsLoader>
           </AuthProvider>
-          <Toaster richColors />
+          <Toaster position="top-center" className={`toaster ${archivo.variable}`} toastOptions={{ unstyled: true, className: 'toast' }} />
         </LocaleProvider>
       </body>
     </html>

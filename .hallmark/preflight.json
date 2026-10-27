@@ -1,0 +1,14 @@
+{
+  "scanned": "2026-10-24",
+  "findings": {
+    "fonts": "Geist + Geist Mono via next/font/google (src/app/layout.tsx:2, :9-17), the create-next-app default, not a brand face",
+    "palette": "hex custom properties in src/app/globals.css:3-58; brand lime #bfd572 and olive #92a847/#92a848 and mint #d3e8d8 come from the logo (public/svg/velox-logo.svg:6-16); ground #111827 is Tailwind gray-900, a framework default",
+    "motion": "framer-motion ^12.6.2 (package.json:17)",
+    "spacing": "Tailwind v4 defaults (globals.css:1 @import tailwindcss); tailwind.config.ts is v3-style and not loaded by v4 (no @config)",
+    "framework": "Next.js 15.5 app router, React 19, Tailwind 4, next-pwa; landing is src/app/page.tsx ('use client'), copy in src/messages/{pt,en}.json via useTexts('landing')",
+    "product": "app screens (/home, /calculate, /saved-routes) sit behind login against the production API on Render; not captured without an account",
+    "material": "public/images/hero-bike.jpg (night panning shot, kept), public/images/cta-bike.jpg (= unsplash guillaume-techer), ../aditya-wardhana unsplash (unused), logo SVG (kept)"
+  },
+  "preserve": ["logo (LogoVelox, public/svg/velox-logo.svg)", "brand lime, olive and mint from the logo", "hero photograph", "copy in messages/*.json (pt and en)", "wiring: handleStart -> /register, LanguageSelector, PageTransitionOverlay, useTexts"],
+  "introduce": ["type system", "ground and surfaces", "shape and composition", "hero", "chrome", "gates", "slots"]
+}

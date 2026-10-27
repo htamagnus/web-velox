@@ -1,0 +1,1687 @@
+/* Landing do Velox. Tokens em tokens.css, base compartilhada em base.css. */
+
+.nav {
+  position: absolute;
+  inset-inline: 0;
+  top: var(--space-md);
+  z-index: var(--z-sticky-nav);
+  color: var(--color-paper);
+}
+.nav__bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-lg);
+  min-height: 44px;
+}
+.nav__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.nav__link {
+  min-height: 44px;
+  padding: 0 var(--space-xs);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: 500 var(--text-md) / 1 var(--font-body);
+  text-decoration: underline transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  transition: text-decoration-color var(--dur-short) var(--ease-out);
+}
+.nav__link:hover {
+  text-decoration-color: var(--color-accent);
+}
+.nav__link:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+/* a barra fixa: fina, colada no topo, só depois do hero */
+.bar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: var(--z-sticky-nav);
+  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+  background: color-mix(in oklab, var(--color-ink) 94%, transparent);
+  color: var(--color-paper);
+}
+.bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  min-height: 56px;
+}
+.bar__brand {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.bar__brand img {
+  width: 40px;
+  height: auto;
+}
+.lang > div {
+  padding-block: 0;
+  border-color: transparent;
+  background: transparent;
+}
+.lang button {
+  min-height: 44px;
+  padding-inline: var(--space-xs);
+}
+.lang [class*='inactive'] {
+  color: var(--color-muted-on-ink);
+}
+.lang [class*='inactive']:hover {
+  color: var(--color-paper);
+}
+
+@property --mx {
+  syntax: '<length-percentage>';
+  inherits: true;
+  initial-value: 72%;
+}
+@property --my {
+  syntax: '<length-percentage>';
+  inherits: true;
+  initial-value: 45%;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 48px;
+  padding: 0 var(--space-lg);
+  border: var(--rule-bar) solid transparent;
+  border-radius: var(--radius-card);
+  font: var(--display-weight) var(--text-lg)/1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
+}
+.btn--primary {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+.btn--primary:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 12px 32px -10px color-mix(in oklab, var(--color-accent) 70%, transparent);
+  transform: translateY(-1px);
+}
+.btn--small {
+  min-height: 36px;
+  padding-inline: var(--space-md);
+  font-size: var(--text-sm);
+}
+.btn--line {
+  border-color: var(--color-paper);
+  background: transparent;
+  color: var(--color-paper);
+}
+.btn--line:hover {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn[aria-busy='true'] {
+  cursor: progress;
+}
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100svh;
+  padding-block: calc(var(--space-md) + 44px + var(--space-lg)) var(--space-lg);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  transition:
+    --mx var(--dur-long) var(--ease-out),
+    --my var(--dur-long) var(--ease-out);
+}
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  margin: 0;
+  overflow: hidden;
+}
+.hero__photo img {
+  object-fit: cover;
+  object-position: 50% 62%;
+}
+/* a foto manda: o scrim só fecha embaixo, onde ficam o título e a faixa, e abre em volta do mouse */
+.hero__photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      620px circle at var(--mx) var(--my),
+      transparent,
+      color-mix(in oklab, var(--color-ink) 38%, transparent) 70%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-ink) 45%, transparent),
+      color-mix(in oklab, var(--color-ink) 22%, transparent) 45%,
+      color-mix(in oklab, var(--color-ink) 88%, transparent)
+    );
+}
+.hero__streaks {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+/* grão de filme sobre as bandas escuras */
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px;
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+}
+/* a grade: fios verticais como num pôster de corrida */
+.hero__lines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--color-paper) 9%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: calc(100% / 6) 100%;
+  background-position: calc(100% / 6) 0;
+}
+.hero__poster {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    'facts figure aside'
+    'type type type'
+    'modes modes modes';
+  align-items: center;
+  column-gap: var(--space-xl);
+  row-gap: var(--space-2xl);
+}
+.hero__facts {
+  grid-area: facts;
+  display: grid;
+  gap: var(--space-lg);
+  margin: 0;
+}
+.hero__facts div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-3xs);
+}
+.hero__facts dt {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.hero__facts dd {
+  margin: 0;
+  font: 600 var(--text-2xl) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+}
+.hero__figure {
+  grid-area: figure;
+  text-align: center;
+}
+.hero__logo {
+  width: 120px;
+  height: auto;
+  margin: 0 auto var(--space-md);
+}
+.hero__time {
+  margin: 0;
+  font: var(--display-weight) clamp(5.5rem, 20vw, 19rem) / 0.85 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-shadow: 0 0 80px color-mix(in oklab, var(--color-accent) 45%, transparent);
+}
+.hero__figure-label {
+  max-width: 34ch;
+  margin: var(--space-md) auto 0;
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  color: var(--color-paper);
+  text-wrap: balance;
+}
+.hero__generic {
+  display: grid;
+  gap: var(--space-3xs);
+  justify-items: end;
+  margin: 0;
+  text-align: right;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.hero__generic span {
+  font: 600 var(--text-2xl) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-amber);
+}
+.hero__type {
+  grid-area: type;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+.hero h1 {
+  max-width: none;
+  font-size: var(--text-display-s);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.hero__line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.06em;
+  margin-block: -0.06em;
+}
+.hero__line > span {
+  display: block;
+}
+/* a faixa de segmentos: a bike escolhida acende o seu traço */
+.hero__modes {
+  grid-area: modes;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+.hero__mode {
+  display: grid;
+  gap: var(--space-xs);
+  padding: 0 0 var(--space-2xs);
+  border: 0;
+  background: none;
+  color: var(--color-muted-on-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.hero__mode:hover,
+.hero__mode[aria-pressed='true'] {
+  color: var(--color-paper);
+}
+.hero__mode-bar {
+  position: relative;
+  height: var(--rule-bar);
+  overflow: hidden;
+  background: var(--color-rule-on-ink);
+}
+.hero__mode-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+}
+.hero__mode-name {
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.hero__mode-speed {
+  font: 600 var(--text-xs) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+}
+.hero :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 60rem) {
+  .hero {
+    padding-top: calc(var(--space-md) + 44px + var(--space-md));
+  }
+  .hero__photo::after {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-ink) 55%, transparent),
+      color-mix(in oklab, var(--color-ink) 40%, transparent) 40%,
+      color-mix(in oklab, var(--color-ink) 90%, transparent)
+    );
+  }
+  .hero__lines {
+    background-size: calc(100% / 3) 100%;
+    background-position: calc(100% / 3) 0;
+  }
+  .hero__poster {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      'figure'
+      'facts'
+      'type'
+      'modes';
+    row-gap: var(--space-xl);
+  }
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-xl);
+  }
+  .hero__facts dd {
+    font-size: var(--text-xl);
+  }
+  .hero__type {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+  }
+  .hero__generic {
+    justify-items: start;
+    text-align: left;
+  }
+  .hero__logo {
+    width: 88px;
+  }
+  .hero__modes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm);
+  }
+  .hero__time {
+    font-size: clamp(5rem, 26vw, 8rem);
+  }
+}
+
+/* ---- compartilhado entre as seções ---- */
+/* o voltar das telas do app: legenda expandida com a seta */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-muted-on-ink);
+  transition: color var(--dur-short) var(--ease-out);
+}
+.back-link:hover {
+  color: var(--color-paper);
+}
+/* a etiqueta de média vinda do Strava: o quadrado laranja e a legenda expandida */
+.strava-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font: 700 var(--text-xs) / 1.4 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.strava-tag::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--color-strava);
+}
+/* a legenda de cada seção, expandida como placa de telemetria */
+.eyebrow {
+  display: block;
+  margin: 0 0 var(--space-lg);
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.eyebrow--ink {
+  color: var(--color-muted-on-ink);
+}
+.label {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+.num {
+  font-family: var(--font-outlier);
+  font-weight: 600;
+  font-stretch: 100%;
+  font-variant-numeric: tabular-nums;
+}
+/* título que sobe palavra por palavra de dentro da máscara */
+.split__word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.split__word > span {
+  display: inline-block;
+}
+/* a faixa de segmentos: a bike escolhida acende o seu traço (app e rotas; o hero tem a sua) */
+.modes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+.modes__item {
+  display: grid;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 0 0 var(--space-2xs);
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.modes__item:hover,
+.modes__item[aria-pressed='true'] {
+  color: var(--color-ink);
+}
+.modes__bar {
+  position: relative;
+  height: var(--rule-bar);
+  overflow: hidden;
+  background: var(--color-rule);
+}
+.modes__bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--color-accent-deep);
+  transition: transform var(--dur-long) var(--ease-out);
+}
+.modes__item[aria-pressed='true'] .modes__bar::after {
+  transform: scaleX(1);
+}
+.modes__name {
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+.modes__speed {
+  font-size: var(--text-xs);
+}
+.modes--ink .modes__item {
+  color: var(--color-muted-on-ink);
+}
+.modes--ink .modes__item:hover,
+.modes--ink .modes__item[aria-pressed='true'] {
+  color: var(--color-paper);
+}
+.modes--ink .modes__bar {
+  background: var(--color-rule-on-ink);
+}
+.modes--ink .modes__bar::after {
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+}
+
+.ticker {
+  overflow: hidden;
+  border-block: var(--rule-hair) solid var(--color-rule-on-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker 42s linear infinite;
+}
+.ticker:hover .ticker__track {
+  animation-play-state: paused;
+}
+.ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-sm) 0 var(--space-sm) var(--space-lg);
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ticker__item::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-amber);
+}
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---- as dores: a lista à esquerda, a foto de estúdio impressa no papel à direita ---- */
+.pains {
+  position: relative;
+  padding-top: var(--section-gap);
+  overflow: clip;
+}
+.pains__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 46rem;
+}
+.pains h2 {
+  text-transform: uppercase;
+}
+.pains__list {
+  display: grid;
+  margin: var(--space-2xl) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule-bar) solid var(--color-ink);
+}
+.pains__list li {
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+.pains__item {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  column-gap: var(--space-xl);
+  align-items: start;
+  padding-block: var(--space-xl);
+}
+.pains__item .pains__figure {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  font: var(--display-weight) clamp(3.5rem, 6vw, 5.5rem) / 0.9 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-display);
+  color: var(--color-ink);
+}
+.pains__figure span:last-child {
+  font: 500 var(--text-md) / 1 var(--font-body);
+  color: var(--color-muted);
+}
+.pains__item h3 {
+  font-size: var(--text-xl);
+  text-transform: uppercase;
+}
+.pains__item p:not(.pains__figure) {
+  max-width: 36ch;
+  margin-top: var(--space-xs);
+  color: var(--color-ink-2);
+}
+/* a foto multiplica sobre o papel e some nas bordas: parece impressa, não colada */
+.pains__photo {
+  position: absolute;
+  top: var(--section-gap);
+  right: 0;
+  bottom: 0;
+  width: min(56vw, 980px);
+  margin: 0;
+  mask-image:
+    linear-gradient(90deg, transparent, #000 28%),
+    linear-gradient(180deg, transparent, #000 24%, #000 86%, transparent);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+.pains__photo img {
+  object-fit: cover;
+  object-position: 62% 50%;
+  mix-blend-mode: multiply;
+  filter: grayscale(1) contrast(1.04);
+}
+
+/* a corrida: a seção é alta e o palco fica preso enquanto a rolagem faz o tempo passar */
+.race {
+  position: relative;
+  height: 260svh;
+  margin-top: var(--section-gap-l);
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.race__stage {
+  position: sticky;
+  top: 0;
+  display: grid;
+  align-items: center;
+  height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      900px 520px at 50% 110%,
+      color-mix(in oklab, var(--color-accent) 16%, transparent),
+      transparent 70%
+    ),
+    var(--color-ink);
+}
+.race__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-2xl);
+}
+.race__head {
+  display: grid;
+  gap: var(--space-md);
+}
+.race h2 {
+  text-transform: uppercase;
+}
+.race .lead {
+  color: var(--color-muted-on-ink);
+}
+.race__lanes {
+  display: grid;
+  gap: var(--space-xl);
+}
+.race__lane {
+  display: grid;
+  gap: var(--space-md);
+}
+.race__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+.race__name {
+  color: var(--color-paper);
+  font: var(--display-weight) var(--text-lg) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.race__km {
+  white-space: nowrap;
+  font: 600 var(--text-sm) / 1 var(--font-outlier);
+  color: var(--color-muted-on-ink);
+}
+.race__clock {
+  margin-left: auto;
+  font: 600 var(--text-3xl) / 1 var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+}
+.race__track {
+  position: relative;
+  height: var(--rule-bar);
+  margin-block: var(--space-md);
+  background: var(--color-rule-on-ink);
+}
+.race__fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: currentColor;
+  box-shadow: 0 0 16px currentColor;
+}
+.race__rider {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: var(--color-ink);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 24px color-mix(in oklab, currentColor 50%, transparent);
+}
+.race__lane.is-generic {
+  color: var(--color-amber);
+}
+.race__lane.is-velox {
+  color: var(--color-accent);
+}
+.race__flag {
+  position: absolute;
+  top: var(--space-md);
+  right: 0;
+  padding: var(--space-3xs) var(--space-xs);
+  border-radius: var(--radius-card);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font: 700 var(--text-xs) / 1.4 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* a régua de quilômetros sob as pistas: a rolagem é o tempo, a régua é a distância */
+.race__scale {
+  position: relative;
+  height: 1.75rem;
+  margin: calc(-1 * var(--space-lg)) 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-muted-on-ink);
+}
+.race__scale span {
+  position: absolute;
+  top: 0;
+  padding-top: var(--space-sm);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.race__scale span::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 8px;
+  background: var(--color-rule-on-ink);
+}
+.race__scale span:first-child {
+  transform: none;
+}
+.race__scale span:first-child::before {
+  left: 0;
+}
+.race__scale span:last-child {
+  transform: translateX(-100%);
+}
+.race__scale span:last-child::before {
+  left: auto;
+  right: 0;
+}
+.race__note {
+  font: var(--display-weight) var(--text-section) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.race__ghost {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.14em;
+  z-index: 0;
+  margin: 0;
+  font: var(--display-weight) clamp(9rem, 30vw, 28rem) / 0.8 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  pointer-events: none;
+}
+
+/* ---- o app como folha técnica: o perfil atravessa a página, os dados ficam nas bordas ---- */
+.product {
+  position: relative;
+  padding-top: var(--section-gap-l);
+}
+.product__head,
+.routes__head,
+.cond__head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap-columns);
+  row-gap: var(--space-lg);
+  align-items: end;
+}
+.product__head > :first-child,
+.routes__head > :first-child,
+.cond__head > :first-child {
+  grid-column: 1 / span 7;
+}
+.product h2,
+.routes h2,
+.conditions h2 {
+  text-transform: uppercase;
+}
+.product__aside {
+  grid-column: 9 / -1;
+  display: grid;
+  gap: var(--space-md);
+  color: var(--color-ink-2);
+}
+.product__note {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+.sheet {
+  margin: var(--space-2xl) 0 0;
+}
+.sheet__top {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  column-gap: var(--gap-columns);
+  align-items: end;
+  padding-top: var(--space-lg);
+  border-top: var(--rule-bar) solid var(--color-ink);
+}
+.sheet__clock {
+  margin: var(--space-xs) 0 0;
+  font: var(--display-weight) var(--text-figure) / 0.85 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.sheet__speed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  color: var(--color-ink-2);
+}
+.sheet__strava {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-xs);
+  border: var(--rule-hair) solid var(--color-rule-2);
+  border-radius: var(--radius-pill);
+  font: 700 var(--text-xs) / 1.4 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.sheet__strava::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--color-strava);
+}
+.sheet__modes {
+  max-width: 36rem;
+  margin-top: var(--space-xl);
+}
+.sheet__facts {
+  display: grid;
+  margin: 0;
+}
+.sheet__facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+.sheet__facts dt {
+  color: var(--color-muted);
+}
+.sheet__facts dd {
+  margin: 0;
+  font-size: var(--text-lg);
+}
+.sheet__profile {
+  position: relative;
+  margin-top: calc(var(--space-2xl) + 3rem);
+}
+.sheet__profile svg {
+  display: block;
+  width: 100%;
+  height: clamp(180px, 24vw, 340px);
+}
+.sheet__profile polygon {
+  fill: var(--color-ink);
+}
+.sheet__profile polyline {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+/* a anotação do cume: o número, a legenda e um fio descendo até o ponto mais alto */
+.sheet__summit {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2xs);
+  transform: translate(-50%, -100%);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  text-align: center;
+  white-space: nowrap;
+}
+.sheet__summit b {
+  font-size: var(--text-xl);
+  color: var(--color-ink);
+}
+.sheet__summit::after {
+  content: '';
+  width: var(--rule-hair);
+  height: var(--space-xl);
+  margin-top: var(--space-2xs);
+  background: var(--color-ink);
+}
+.sheet__axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+.features {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: var(--space-2xl) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule-hair) solid var(--color-rule);
+  counter-reset: feature;
+}
+.features li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg) 0;
+  border-left: var(--rule-hair) solid var(--color-rule);
+  counter-increment: feature;
+}
+.features li:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.features li::before {
+  content: counter(feature, decimal-leading-zero);
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  color: var(--color-accent-deep);
+}
+.features h3 {
+  font-size: var(--text-xl);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.features p {
+  max-width: 32ch;
+  color: var(--color-ink-2);
+}
+
+/* ---- as rotas como mapa noturno: três traçados entre os mesmos dois pontos ---- */
+.routes {
+  position: relative;
+  margin-top: var(--section-gap-l);
+  padding-block: var(--section-gap-s);
+  overflow: clip;
+  background:
+    radial-gradient(
+      900px 520px at 85% 40%,
+      color-mix(in oklab, var(--color-accent) 12%, transparent),
+      transparent 70%
+    ),
+    var(--color-ink);
+  color: var(--color-paper);
+}
+.routes .container {
+  position: relative;
+  z-index: 2;
+}
+.routes__head .lead {
+  margin-top: var(--space-md);
+  color: var(--color-muted-on-ink);
+}
+.routes__modes {
+  grid-column: 9 / -1;
+}
+.map {
+  position: relative;
+  aspect-ratio: 1200 / 600;
+  margin-top: var(--space-2xl);
+  border-block: var(--rule-hair) solid var(--color-rule-on-ink);
+  background-image:
+    linear-gradient(90deg, color-mix(in oklab, var(--color-paper) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-paper) 7%, transparent) 1px, transparent 1px);
+  background-size: calc(100% / 12) calc(100% / 6);
+}
+.map svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.map__path {
+  fill: none;
+  stroke: color-mix(in oklab, var(--color-paper) 34%, transparent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.map__path.is-main {
+  stroke: var(--color-accent);
+  stroke-width: 4;
+  filter: drop-shadow(0 0 10px color-mix(in oklab, var(--color-accent) 70%, transparent));
+}
+/* os ciclistas: um ponto percorre cada traçado no tempo daquela rota; o da recomendada chega antes */
+.map__dot {
+  fill: color-mix(in oklab, var(--color-paper) 75%, transparent);
+  offset-rotate: 0deg;
+  animation-name: ride;
+  animation-timing-function: linear;
+  animation-delay: 1.6s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+}
+.map__dot.is-main {
+  fill: var(--color-accent);
+  filter: drop-shadow(0 0 8px var(--color-accent));
+}
+@keyframes ride {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+.map__pin {
+  position: absolute;
+  display: grid;
+  gap: var(--space-3xs);
+  transform: translate(-6px, -6px);
+  font-size: var(--text-xs);
+  color: var(--color-muted-on-ink);
+  white-space: nowrap;
+}
+.map__pin::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  margin-bottom: var(--space-2xs);
+  border: 2px solid var(--color-paper);
+  border-radius: 50%;
+  background: var(--color-ink);
+}
+.map__pin b {
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--color-paper);
+}
+.map__pin--end {
+  justify-items: end;
+  transform: translate(calc(-100% + 6px), -6px);
+  text-align: right;
+}
+.map__tag {
+  position: absolute;
+  display: grid;
+  gap: var(--space-3xs);
+  padding: var(--space-xs) var(--space-sm);
+  border: var(--rule-hair) solid var(--color-rule-on-ink);
+  border-radius: var(--radius-card);
+  background: color-mix(in oklab, var(--color-ink) 90%, transparent);
+  transform: translate(-50%, -50%);
+  font-size: var(--text-xs);
+  color: var(--color-muted-on-ink);
+  white-space: nowrap;
+}
+.map__tag b {
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--color-paper);
+}
+.map__tag .num {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  font-size: var(--text-xl);
+  color: var(--color-paper);
+}
+.map__tag.is-main {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 24px color-mix(in oklab, var(--color-accent) 35%, transparent);
+}
+.map__tag.is-main .num {
+  color: var(--color-accent);
+}
+.map__diff {
+  font-size: var(--text-xs);
+  color: var(--color-amber);
+}
+.routes__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.routes__generic {
+  color: var(--color-amber);
+}
+/* a lista só aparece quando as etiquetas do mapa não cabem */
+.routes__list {
+  display: none;
+  margin: var(--space-xl) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule-hair) solid var(--color-rule-on-ink);
+}
+.routes__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2xs) var(--space-md);
+  padding-block: var(--space-md);
+  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+}
+.routes__name {
+  font: var(--display-weight) var(--text-lg) / 1.1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.routes__summary {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.routes__time {
+  grid-row: 1 / span 2;
+  align-self: center;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  font-size: var(--text-2xl);
+}
+.routes__row.is-main .routes__time {
+  color: var(--color-accent);
+}
+.routes__diff {
+  font-size: var(--text-sm);
+  color: var(--color-amber);
+}
+
+/* ---- o dia em faixas: temperatura, chuva, vento e trânsito na mesma régua de horas ---- */
+.conditions {
+  padding-top: var(--section-gap-l);
+}
+.cond__head .lead {
+  margin-top: var(--space-md);
+  color: var(--color-ink-2);
+}
+.cond__pick {
+  grid-column: 9 / -1;
+  display: grid;
+  gap: var(--space-xs);
+  justify-items: end;
+  text-align: right;
+}
+.cond__hour {
+  font: var(--display-weight) var(--text-display-s) / 0.9 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-display);
+}
+.day {
+  --label-w: 12rem;
+  position: relative;
+  margin-top: var(--space-2xl);
+  border-top: var(--rule-bar) solid var(--color-ink);
+}
+.day__lane,
+.day__axis {
+  display: grid;
+  grid-template-columns: var(--label-w) minmax(0, 1fr);
+  column-gap: var(--space-lg);
+}
+.day__lane {
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+.day__meta {
+  display: grid;
+  align-content: center;
+  gap: var(--space-2xs);
+  padding-block: var(--space-md);
+}
+.day__meta > span:first-child {
+  font-weight: 500;
+}
+.day__value {
+  font-size: var(--text-xl);
+  transition: color var(--dur-short) var(--ease-out);
+}
+.day__lane[data-alert] .day__value {
+  color: var(--color-amber-deep);
+}
+.day__limit {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+.day__plot {
+  position: relative;
+  height: 104px;
+}
+.day__plot svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.day__line {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.day__area {
+  fill: color-mix(in oklab, var(--color-ink) 7%, transparent);
+}
+.day__bar {
+  fill: var(--color-rule);
+}
+.day__bar.is-mid {
+  fill: color-mix(in oklab, var(--color-amber) 55%, var(--color-paper));
+}
+.day__bar.is-alert {
+  fill: var(--color-amber);
+}
+/* o limite do app é um fio âmbar; passou dele, a barra ou o valor ficam âmbar */
+.day__thr {
+  stroke: var(--color-amber-deep);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.day__thr-label {
+  position: absolute;
+  right: 0;
+  transform: translateY(calc(-100% - 2px));
+  font-size: var(--text-xs);
+  color: var(--color-amber-deep);
+}
+.day__mark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--color-paper);
+  border-radius: 50%;
+  background: var(--color-ink);
+  transform: translate(-50%, -50%);
+  transition:
+    left var(--dur-long) var(--ease-out),
+    top var(--dur-long) var(--ease-out);
+}
+.day__lane[data-alert] .day__mark {
+  background: var(--color-amber-deep);
+}
+.day__cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--label-w) + var(--space-lg));
+  right: 0;
+  pointer-events: none;
+}
+.day__cursor i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--x);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--color-ink);
+  transition: left var(--dur-long) var(--ease-out);
+}
+.day__axis {
+  align-items: center;
+  padding-block: var(--space-sm);
+}
+.day__hours {
+  position: relative;
+  height: 44px;
+}
+.day__hours span {
+  position: absolute;
+  top: 100%;
+  transform: translate(-50%, -4px);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+.day__range {
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: calc(100% + 20px);
+  height: 44px;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.day__range::-webkit-slider-runnable-track {
+  height: var(--rule-bar);
+  background: var(--color-rule);
+}
+.day__range::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  margin-top: -9px;
+  border: 3px solid var(--color-paper);
+  border-radius: 50%;
+  background: var(--color-ink);
+  box-shadow: 0 0 0 1px var(--color-ink);
+  appearance: none;
+}
+.day__range::-moz-range-track {
+  height: var(--rule-bar);
+  background: var(--color-rule);
+}
+.day__range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--color-paper);
+  border-radius: 50%;
+  background: var(--color-ink);
+  box-shadow: 0 0 0 1px var(--color-ink);
+}
+.day__range:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+}
+.cond__verdict {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap-columns);
+  row-gap: var(--space-md);
+  align-items: baseline;
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  border-top: var(--rule-bar) solid var(--color-ink);
+}
+.cond__verdict-title {
+  grid-column: 1 / span 7;
+  font: var(--display-weight) var(--text-display-s) / 0.95 var(--font-display);
+  font-stretch: var(--stretch-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  color: var(--color-accent-deep);
+}
+.cond__verdict.is-wait .cond__verdict-title {
+  color: var(--color-amber-deep);
+}
+.cond__verdict-note {
+  grid-column: 9 / -1;
+  color: var(--color-ink-2);
+}
+.cond__note {
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.close {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  min-height: 84svh;
+  margin-top: var(--section-gap-l);
+  overflow: hidden;
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.close__photo {
+  position: absolute;
+  inset: 0;
+}
+.close__photo img {
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+.close__over {
+  position: relative;
+  z-index: 2;
+  align-self: stretch;
+  display: grid;
+  align-content: center;
+  padding-block: var(--section-gap-s);
+  background: linear-gradient(
+    90deg,
+    var(--color-ink) 0%,
+    color-mix(in oklab, var(--color-ink) 90%, transparent) 42%,
+    transparent 80%
+  );
+}
+.close__inner {
+  display: grid;
+  gap: var(--space-lg);
+  justify-items: start;
+}
+.close__eyebrow {
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.close h2 {
+  max-width: 12ch;
+  font-size: var(--text-hero);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.close .lead {
+  max-width: 36ch;
+  color: var(--color-muted-on-ink);
+}
+@media (max-width: 60rem) {
+  .close__over {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-ink) 72%, transparent),
+      color-mix(in oklab, var(--color-ink) 92%, transparent)
+    );
+  }
+}
+.btn--big {
+  min-height: 60px;
+  padding-inline: var(--space-2xl);
+  font-size: var(--text-xl);
+  box-shadow: 0 0 48px color-mix(in oklab, var(--color-accent) 45%, transparent);
+}
+
+.foot {
+  padding-block: var(--space-xl);
+  border-top: var(--rule-hair) solid var(--color-rule-on-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.foot__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+.foot img {
+  width: 64px;
+}
+.foot__end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg);
+}
+.foot__legal,
+.foot__note {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+
+@media (max-width: 60rem) {
+  .pains__copy {
+    max-width: none;
+  }
+  .pains__photo {
+    position: relative;
+    inset: auto;
+    width: auto;
+    aspect-ratio: 4 / 3;
+    margin-top: var(--space-xl);
+    mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .product__head,
+  .routes__head,
+  .cond__head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .product__head > *,
+  .routes__head > *,
+  .cond__head > * {
+    grid-column: 1 / -1;
+  }
+  .cond__pick {
+    justify-items: start;
+    text-align: left;
+  }
+  .sheet__top {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-xl);
+  }
+  .features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .features li:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .features li:nth-child(n + 3) {
+    margin-top: var(--space-xl);
+    border-top: var(--rule-hair) solid var(--color-rule);
+  }
+  .map__tag {
+    display: none;
+  }
+  .routes__list {
+    display: grid;
+  }
+  .day {
+    --label-w: 0px;
+  }
+  .day__lane,
+  .day__axis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .day__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs) var(--space-sm);
+    padding-block: var(--space-sm) var(--space-xs);
+  }
+  .day__limit {
+    flex-basis: 100%;
+  }
+  .day__axis > .day__meta {
+    display: none;
+  }
+  .day__cursor {
+    left: 0;
+  }
+  .cond__verdict {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cond__verdict > * {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 40rem) {
+  .pains__item {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-sm);
+  }
+  .features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .features li {
+    padding-inline: 0;
+    border-left: 0;
+  }
+  .features li + li {
+    margin-top: var(--space-xl);
+    border-top: var(--rule-hair) solid var(--color-rule);
+  }
+  .day__hours span:nth-child(even) {
+    display: none;
+  }
+  .sheet__profile svg {
+    height: 160px;
+  }
+}
+/* o carregamento entre telas: o mesmo pôster em tinta, só a logo e a legenda */
+.loading {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.loading > :not(.hero__lines) {
+  position: relative;
+  z-index: 2;
+}
+.loading__spin {
+  width: 32px;
+  height: 32px;
+  margin-top: var(--space-lg);
+  border: var(--rule-bar) solid var(--color-rule-on-ink);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+}
+.loading .loading__msg {
+  margin: var(--space-lg) 0 0;
+  padding-inline: var(--space-lg);
+  text-align: center;
+}

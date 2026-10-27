@@ -5,11 +5,10 @@ import ApiVeloxService from '@/providers/api-velox.provider'
 import { ApiError } from '@/errors/api-errors'
 import { loginSchema } from '@/validations/login-schema'
 import { useAuth } from '@/contexts/auth-context'
-import Button from '../ui/button/button'
 import { useRouter } from 'next/navigation'
 import InputField from '../ui/input-field/input-field'
-import { FormWrapper } from '../ui/form-wrapper/form-wrapper'
-import LogoVelox from '../ui/logo-velox/logo-velox'
+import AuthShell from '../auth/auth-shell'
+import Link from 'next/link'
 import { useTexts } from '@/helpers/use-texts'
 import { toast } from 'sonner'
 import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay'
@@ -71,42 +70,51 @@ export default function LoginForm() {
   }
 
   return (
-    <FormWrapper onSubmit={handleSubmit}>
-      {loading && <PageTransitionOverlay visible={true} message={tForm('enteringButton')} />}
-      <LogoVelox className="mb-8" size="md" /> 
-    <div className="text-center space-y-2">
-      <h2 className="text-2xl font-bold text-primary-light">{t('title')}</h2>
-      <p className="text-s text-copy-light">{t('subtitle')}</p>
-    </div>
-    <InputField
-      label={t('email.label')}
-      name="email"
-      type="email"
-      placeholder={tForm('emailPlaceholder')}
-      value={email}
-      onChange={(e) => {
-        setEmail(e.target.value)
-        if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }))
-      }}
-      error={fieldErrors.email}
-      required
-    />
-    <InputField
-      label={t('password.label')}
-      name="password"
-      type="password"
-      placeholder={tForm('passwordPlaceholder')}
-      value={password}
-      onChange={(e) => {
-        setPassword(e.target.value)
-        if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: undefined }))
-      }}
-      error={fieldErrors.password}
-      required
-    />
-    <Button type="submit" variant="confirm" className='w-full mt-4 mb-4' loading={loading} disabled={loading || email.trim() === '' || password.trim() === ''}>
-      {loading ? tForm('enteringButton') : tForm('enterButton')}
-    </Button>
-  </FormWrapper>
+    <AuthShell title={[t('headline1'), t('headline2')]} lead={t('subtitle')}>
+      <form onSubmit={handleSubmit} className="auth__form">
+        {loading && <PageTransitionOverlay visible={true} message={tForm('enteringButton')} />}
+        <h2>{t('title')}</h2>
+        <InputField
+          label={t('email.label')}
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder={tForm('emailPlaceholder')}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+            if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }))
+          }}
+          error={fieldErrors.email}
+          required
+        />
+        <InputField
+          label={t('password.label')}
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          placeholder={tForm('passwordPlaceholder')}
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value)
+            if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: undefined }))
+          }}
+          error={fieldErrors.password}
+          required
+        />
+        <button
+          type="submit"
+          className="btn btn--primary btn--big auth__submit"
+          disabled={loading || email.trim() === '' || password.trim() === ''}
+          aria-busy={loading}
+        >
+          {loading ? tForm('enteringButton') : tForm('enterButton')}
+        </button>
+        <p className="auth__switch">
+          {t('link.noAccount')}
+          <Link href="/register">{t('link.register')}</Link>
+        </p>
+      </form>
+    </AuthShell>
   )
 }

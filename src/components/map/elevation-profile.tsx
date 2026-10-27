@@ -1,166 +1,67 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useTexts } from '@/helpers/use-texts';
+import { useLocale } from '@/contexts/locale-context';
+import { EASE } from '@/components/landing/reveal';
 
 export type ElevationPoint = {
   distance: number;
   elevation: number;
 };
 
-type ElevationProfileProps = {
-  elevationData: ElevationPoint[];
-  elevationGain: number;
-  elevationLoss: number;
-  className?: string;
-};
+const W = 300;
+const H = 100;
 
-export default function ElevationProfile({
-  elevationData,
-  elevationGain,
-  elevationLoss,
-  className = '',
-}: ElevationProfileProps) {
+// o perfil como na folha técnica da landing: área em tinta clara, linha volt e o cume anotado
+export default function ElevationProfile({ data }: { data: ElevationPoint[] }) {
   const { t } = useTexts('elevationProfile');
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { locale } = useLocale();
+  if (data.length < 2) return null;
 
-  useEffect(() => {
-    if (!canvasRef.current || elevationData.length === 0) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    
-    ctx.scale(dpr, dpr);
-    
-    const width = rect.width;
-    const height = rect.height;
-    const padding = { top: 20, right: 20, bottom: 30, left: 40 };
-    const chartWidth = width - padding.left - padding.right;
-    const chartHeight = height - padding.top - padding.bottom;
-
-    const minElevation = Math.min(...elevationData.map(p => p.elevation));
-    const maxElevation = Math.max(...elevationData.map(p => p.elevation));
-    const elevationRange = maxElevation - minElevation || 1;
-    const maxDistance = elevationData[elevationData.length - 1]?.distance || 1;
-
-    ctx.clearRect(0, 0, width, height);
-
-    ctx.fillStyle = 'rgba(146, 168, 72, 0.1)';
-    ctx.strokeStyle = '#92a848';
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    
-    for (const [index, point] of elevationData.entries()) {
-      const x = padding.left + (point.distance / maxDistance) * chartWidth;
-      const y = padding.top + chartHeight - ((point.elevation - minElevation) / elevationRange) * chartHeight;
-      
-      if (index === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-
-    ctx.lineTo(padding.left + chartWidth, padding.top + chartHeight);
-    ctx.lineTo(padding.left, padding.top + chartHeight);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.beginPath();
-    for (const [index, point] of elevationData.entries()) {
-      const x = padding.left + (point.distance / maxDistance) * chartWidth;
-      const y = padding.top + chartHeight - ((point.elevation - minElevation) / elevationRange) * chartHeight;
-      
-      if (index === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.stroke();
-
-    ctx.strokeStyle = 'rgba(251, 252, 251, 0.15)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([2, 2]);
-    
-    const gridLines = 4;
-    for (let i = 0; i <= gridLines; i++) {
-      const y = padding.top + (chartHeight / gridLines) * i;
-      ctx.beginPath();
-      ctx.moveTo(padding.left, y);
-      ctx.lineTo(padding.left + chartWidth, y);
-      ctx.stroke();
-    }
-    
-    ctx.setLineDash([]);
-    ctx.strokeStyle = 'rgba(251, 252, 251, 0.3)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(padding.left, padding.top + chartHeight);
-    ctx.lineTo(padding.left + chartWidth, padding.top + chartHeight);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(padding.left, padding.top);
-    ctx.lineTo(padding.left, padding.top + chartHeight);
-    ctx.stroke();
-
-    ctx.fillStyle = 'rgba(251, 252, 251, 0.7)';
-    ctx.font = '11px system-ui, -apple-system, sans-serif';
-    ctx.textAlign = 'right';
-    
-    const yLabels = [minElevation, (minElevation + maxElevation) / 2, maxElevation];
-    for (const label of yLabels) {
-      const y = padding.top + chartHeight - ((label - minElevation) / elevationRange) * chartHeight;
-      ctx.fillText(`${Math.round(label)}m`, padding.left - 8, y + 4);
-    }
-
-    ctx.textAlign = 'center';
-    const xLabels = [0, maxDistance / 2, maxDistance];
-    for (const label of xLabels) {
-      const x = padding.left + (label / maxDistance) * chartWidth;
-      ctx.fillText(`${(label / 1000).toFixed(1)}km`, x, padding.top + chartHeight + 18);
-    }
-
-  }, [elevationData]);
-
-  if (elevationData.length === 0) return null;
+  const fmt = new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en', { maximumFractionDigits: 1 });
+  const elevations = data.map((p) => p.elevation);
+  const min = Math.min(...elevations);
+  const max = Math.max(...elevations);
+  const range = max - min || 1;
+  const total = data[data.length - 1].distance || 1;
+  const x = (d: number) => (d / total) * W;
+  const y = (e: number) => H - 6 - ((e - min) / range) * (H - 30);
+  const points = data.map((p) => `${x(p.distance).toFixed(1)},${y(p.elevation).toFixed(1)}`).join(' ');
+  const summit = data[elevations.indexOf(max)];
+  const km = (m: number) => `${fmt.format(m / 1000)} km`;
 
   return (
-    <div className={`bg-gradient-to-br from-[#1a2234] to-[#0f1419] p-4 rounded-lg border border-[#92a848] shadow-lg ${className}`}>
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#92a848] animate-pulse" />
-          <h3 className="text-xs font-semibold text-[#92a848] uppercase tracking-wide">{t('title')}</h3>
-        </div>
+    <figure className="plan__profile">
+      <figcaption className="field__label">{t('title')}</figcaption>
+      <div className="plan__plot">
+        <p
+          className="plan__summit"
+          style={{
+            left: `${Math.min(90, Math.max(10, (x(summit.distance) / W) * 100))}%`,
+            top: `${(y(max) / H) * 100}%`,
+          }}
+        >
+          <b className="num">{Math.round(max)} m</b>
+        </p>
+        <motion.svg
+          viewBox={`0 0 ${W} ${H}`}
+          preserveAspectRatio="none"
+          role="img"
+          aria-label={t('title')}
+          initial={{ clipPath: 'inset(0 100% 0 0)' }}
+          animate={{ clipPath: 'inset(0 0% 0 0)' }}
+          transition={{ duration: 1.4, ease: EASE }}
+        >
+          <polygon points={`0,${H} ${points} ${W},${H}`} />
+          <polyline points={points} />
+        </motion.svg>
       </div>
-
-      <div className="flex items-center gap-4 text-xs text-copy mt-3">
-        <div className="flex items-center gap-1.5 bg-[#92a848]/10 px-2 py-1 rounded-md">
-          <TrendingUp size={14} className="text-[#92a848]" />
-          <span className="font-medium">{elevationGain}m</span>
-        </div>
-        <div className="flex items-center gap-1.5 bg-[#92a848]/10 px-2 py-1 rounded-md">
-          <TrendingDown size={14} className="text-[#92a848]" />
-          <span className="font-medium">{elevationLoss}m</span>
-        </div>
-      </div>
-      
-      <canvas
-        ref={canvasRef}
-        className="w-full rounded"
-        style={{ height: '150px' }}
-      />
-    </div>
+      <p className="plan__axis num">
+        <span>0 km</span>
+        <span>{km(total / 2)}</span>
+        <span>{km(total)}</span>
+      </p>
+    </figure>
   );
 }
-

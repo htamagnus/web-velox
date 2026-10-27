@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ReactNode } from 'react';
+import { EASE } from '@/components/landing/reveal';
 
 interface StepContainerProps {
   step: number;
@@ -11,14 +12,14 @@ export function StepContainer({ step, children }: StepContainerProps) {
     <AnimatePresence mode="wait">
       <motion.div
         key={`step-${step}`}
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -50 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-xl mx-auto bg-gradient-to-br from-[#1a2234] to-[#0f1419] rounded-2xl border border-copy/10 p-6 shadow-xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.3, ease: EASE }}
+        className="onb__stage"
       >
         {children}
       </motion.div>
     </AnimatePresence>
   );
-} 
+}

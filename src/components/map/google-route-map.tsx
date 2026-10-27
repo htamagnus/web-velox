@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { GoogleMap, Polyline, Marker, DirectionsRenderer } from '@react-google-maps/api';
 
 type RouteOption = {
@@ -29,24 +29,35 @@ const mapContainerStyle = {
   height: '100%',
 };
 
+// o mapa noturno da landing: chão em tinta, ruas um tom acima, sem pontos de interesse
+const NIGHT: google.maps.MapTypeStyle[] = [
+  { elementType: 'geometry', stylers: [{ color: '#071a36' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#b4bfca' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#00082e' }] },
+  { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#00082e' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#102441' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#7d8a9a' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#273952' }] },
+  { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#273952' }] },
+];
+
 const mapOptions: google.maps.MapOptions = {
-  disableDefaultUI: false,
+  disableDefaultUI: true,
   zoomControl: true,
-  mapTypeControl: true,
-  scaleControl: true,
-  streetViewControl: false,
-  rotateControl: false,
-  fullscreenControl: true,
-  mapTypeId: 'terrain',
   clickableIcons: false,
-  styles: [
-    {
-      featureType: 'poi',
-      elementType: 'labels',
-      stylers: [{ visibility: 'off' }],
-    },
-  ],
+  backgroundColor: '#00082e',
+  styles: NIGHT,
 };
+
+const ACCENT = '#bfd572';
+const PAPER = '#f6f9fc';
+const INK = '#00082e';
+// uma cor por traçado (volt, ciano, rosa), longe do azul do chão; a faixa de rotas da folha usa as mesmas
+export const ROUTE_COLORS = [ACCENT, '#58d1e5', '#ec81c0'];
 
 export default function GoogleRouteMap({
   origin,
@@ -55,20 +66,16 @@ export default function GoogleRouteMap({
   selectedRouteIndex,
   onRouteSelect,
   onMapClick,
-  className = 'h-[70vh] w-full rounded-xl shadow-lg',
+  className,
 }: GoogleRouteMapProps) {
-  const mapRef = useRef<google.maps.Map | null>(null);
+  // em estado e não em ref: o mapa remonta quando as rotas chegam e o enquadramento precisa rodar de novo
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: -28.678, lng: -49.369 });
   const [previewDirections, setPreviewDirections] = useState<google.maps.DirectionsResult | null>(null);
   const routesLengthRef = useRef(routes.length);
 
-  const onLoad = useCallback((map: google.maps.Map) => {
-    mapRef.current = map;
-  }, []);
-
-  const onUnmount = useCallback(() => {
-    mapRef.current = null;
-  }, []);
+  const onLoad = useCallback((loaded: google.maps.Map) => setMap(loaded), []);
+  const onUnmount = useCallback(() => setMap(null), []);
 
   useEffect(() => {
     if (origin) {
@@ -114,7 +121,7 @@ export default function GoogleRouteMap({
   }, [origin, destination, routes.length]);
 
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!map) return;
 
     const bounds = new google.maps.LatLngBounds();
     
@@ -128,28 +135,9 @@ export default function GoogleRouteMap({
     if (destination) bounds.extend({ lat: destination[0], lng: destination[1] });
 
     if (origin || destination || routes.length > 0) {
-      mapRef.current.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
+      map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
     }
-  }, [routes, selectedRouteIndex, origin, destination]);
-
-  const getRouteColor = (index: number, isSelected: boolean) => {
-    const colors = [
-      '#92a848', // verde principal
-      '#4a9eff', // azul
-      '#ff8c42', // laranja
-    ];
-    
-    const color = colors[index] || colors[0];
-    return isSelected ? color : color;
-  };
-
-  const getRouteOpacity = (isSelected: boolean) => {
-    return isSelected ? 1.0 : 0.4;
-  };
-
-  const getRouteWeight = (isSelected: boolean) => {
-    return isSelected ? 7 : 4;
-  };
+  }, [map, routes, selectedRouteIndex, origin, destination]);
 
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     if (onMapClick && e.latLng) {
@@ -175,7 +163,7 @@ export default function GoogleRouteMap({
             options={{
               suppressMarkers: true,
               polylineOptions: {
-                strokeColor: '#92a848',
+                strokeColor: ACCENT,
                 strokeOpacity: 0.5,
                 strokeWeight: 4,
               },
@@ -186,20 +174,30 @@ export default function GoogleRouteMap({
         {routes.map((route, index) => {
           const isSelected = index === selectedRouteIndex;
           const routeKey = `route-${index}-${route.polyline[0]?.[0]}-${route.polyline[0]?.[1]}-${route.polyline[route.polyline.length - 1]?.[0]}-${route.polyline[route.polyline.length - 1]?.[1]}`;
-          
+          const path = route.polyline.map(([lat, lng]) => ({ lat, lng }));
+          const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
+
           return (
-            <Polyline
-              key={routeKey}
-              path={route.polyline.map(([lat, lng]) => ({ lat, lng }))}
-              options={{
-                strokeColor: getRouteColor(index, isSelected),
-                strokeOpacity: getRouteOpacity(isSelected),
-                strokeWeight: getRouteWeight(isSelected),
-                clickable: true,
-                zIndex: isSelected ? 100 : 50 - index,
-              }}
-              onClick={() => onRouteSelect(index)}
-            />
+            <Fragment key={routeKey}>
+              {/* o brilho do traçado escolhido: uma linha larga e apagada por baixo */}
+              {isSelected && (
+                <Polyline
+                  path={path}
+                  options={{ strokeColor: color, strokeOpacity: 0.22, strokeWeight: 16, clickable: false, zIndex: 99 }}
+                />
+              )}
+              <Polyline
+                path={path}
+                options={{
+                  strokeColor: color,
+                  strokeOpacity: isSelected ? 1 : 0.5,
+                  strokeWeight: isSelected ? 5 : 4,
+                  clickable: true,
+                  zIndex: isSelected ? 100 : 50 - index,
+                }}
+                onClick={() => onRouteSelect(index)}
+              />
+            </Fragment>
           );
         })}
 
@@ -207,9 +205,12 @@ export default function GoogleRouteMap({
           <Marker
             position={{ lat: origin[0], lng: origin[1] }}
             icon={{
-              url: '/icons/marker-origin.svg',
-              scaledSize: new google.maps.Size(30, 30),
-              anchor: new google.maps.Point(15, 30),
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 7,
+              fillColor: INK,
+              fillOpacity: 1,
+              strokeColor: PAPER,
+              strokeWeight: 3,
             }}
             title="origem"
             zIndex={200}
@@ -220,9 +221,12 @@ export default function GoogleRouteMap({
           <Marker
             position={{ lat: destination[0], lng: destination[1] }}
             icon={{
-              url: '/icons/marker-destination.svg',
-              scaledSize: new google.maps.Size(30, 30),
-              anchor: new google.maps.Point(15, 30),
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 8,
+              fillColor: ACCENT,
+              fillOpacity: 1,
+              strokeColor: INK,
+              strokeWeight: 3,
             }}
             title="destino"
             zIndex={200}

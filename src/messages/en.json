@@ -33,6 +33,24 @@
       "title": "Average speed on an MTB",
       "subtitle": "Enter your average on mountain bike rides.",
       "note": "*used to estimate route time when you choose MTB"
+    },
+    "progress": {
+      "height": "Height",
+      "weight": "Weight",
+      "age": "Age",
+      "averageSpeedGeneral": "Overall",
+      "averageSpeedRoad": "Road",
+      "averageSpeedMtb": "MTB"
+    },
+    "actions": {
+      "continue": "Continue",
+      "skip": "Skip",
+      "back": "Back",
+      "decrease": "Decrease",
+      "increase": "Increase",
+      "strava": "Import from Strava",
+      "stravaLoading": "Redirecting...",
+      "fromStrava": "Imported from Strava"
     }
   },
   "profile": {
@@ -42,7 +60,8 @@
       "personal": "Personal data",
       "metrics": "Physical metrics",
       "speeds": "Speed by bike type",
-      "speedsDescription": "Used to calculate route times for each bike type"
+      "speedsDescription": "Used to calculate route times for each bike type",
+      "metricsDescription": "Weight, height and age go into each route's calorie estimate."
     },
     "name": {
       "label": "name"
@@ -83,11 +102,18 @@
       "saving": "saving changes..."
     },
     "errors": {
-      "noChanges": "no changes were made.",
-      "loadError": "error loading profile. try again later.",
-      "updateSuccess": "changes saved successfully!",
-      "updateError": "error saving changes. try again later."
-    }
+      "noChanges": "No changes were made.",
+      "loadError": "Error loading profile. Try again later.",
+      "updateSuccess": "Changes saved successfully!",
+      "updateError": "Error saving changes. Try again later.",
+      "range": "Between {{min}} and {{max}} {{unit}}.",
+      "fixRange": "Fix the values out of range."
+    },
+    "unsaved": "You have unsaved changes.",
+    "unset": "Not set",
+    "logout": "Log out",
+    "decrease": "Decrease {{label}}",
+    "increase": "Increase {{label}}"
   },
   "planner": {
     "loadingProfile": "Loading profile...",
@@ -111,6 +137,8 @@
     }
   },
   "login": {
+    "headline1": "Back",
+    "headline2": "in the saddle.",
     "title": "Sign in to Velox",
     "subtitle": "Access your account to start planning routes.",
     "email": {
@@ -130,9 +158,15 @@
       "unexpected": "Unexpected error. Try again.",
       "email": "Invalid email.",
       "password": "Invalid password."
+    },
+    "link": {
+      "noAccount": "Don't have an account? ",
+      "register": "Create account"
     }
   },
   "register": {
+    "headline1": "Your time",
+    "headline2": "starts here.",
     "title": "Create account",
     "subtitle": "Fill in the fields below to start using Velox",
     "name": {
@@ -147,10 +181,10 @@
       "label": "Password",
       "placeholder": "Enter your password",
       "requirements": {
-        "length": "• At least 8 characters",
-        "uppercase": "• One uppercase letter",
-        "number": "• One number",
-        "specialChar": "• One special character"
+        "length": "At least 8 characters",
+        "uppercase": "One uppercase letter",
+        "number": "One number",
+        "specialChar": "One special character"
       }
     },
     "button": {
@@ -175,6 +209,15 @@
     "emptyTitle": "You haven't created any routes yet",
     "emptyDescription": "Plan a route and save it to check later.",
     "ctaCreate": "Plan now",
+    "count": "{{count}} routes",
+    "countOne": "1 route",
+    "planned": "{{km}} km planned",
+    "delete": "Delete route",
+    "confirmDelete": "Delete this route?",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "deleted": "Route deleted.",
+    "deleteError": "Couldn't delete the route. Try again.",
     "error": "Error loading routes.",
     "routeTitle": "Route from {{origin}} to {{destination}}",
     "modalityLabel": "Bike type:",
@@ -193,17 +236,26 @@
     "destinationPlaceholder": "Choose destination",
     "save": "save",
     "plan": "Plan",
-    "planning": "calculating route..."
+    "planning": "calculating route...",
+    "title1": "From where,",
+    "title2": "to where?",
+    "originLabel": "Start",
+    "destinationLabel": "Finish",
+    "searchPlaceholder": "Address or place",
+    "clear": "Clear"
   },
   "calculate": {
     "geolocationError": "could not get location",
-    "profileError": "error fetching profile",
+    "profileError": "Error fetching profile.",
     "loadingProfile": "loading profile...",
-    "requireOriginDestination": "set origin and destination before calculating the route.",
+    "requireOriginDestination": "Set origin and destination before calculating the route.",
     "fastestRoute": "Fastest",
-    "routeError": "error calculating route",
-    "routeSaved": "route saved successfully!",
-    "routeSaveError": "error saving route",
+    "quotaError": "The daily Google Maps search limit ran out. Try again tomorrow.",
+    "routeError": "Error calculating route.",
+    "routeSaved": "Route saved successfully!",
+    "saved": "Route saved",
+    "mapPointError": "Couldn't find an address at that point. Type it in the field.",
+    "routeSaveError": "Error saving route.",
     "calculating": {
       "title": "Calculating route",
       "subtitle": "finding the best path for you..."
@@ -216,6 +268,7 @@
     "buttons": {
       "save": "Save route",
       "saving": "saving...",
+      "seeSaved": "See in My routes",
       "newSearch": "New search"
     },
     "traffic": {
@@ -233,7 +286,8 @@
         "normal": "Normal traffic on your route. It's a good time to go.",
         "intense": "Heavy traffic on your route. Consider leaving at another time.",
         "congested": "Your route is congested. We recommend postponing your ride."
-      }
+      },
+      "label": "Traffic"
     },
     "weather": {
       "title": "Weather forecast",
@@ -268,8 +322,11 @@
           "title": "Strong wind",
           "message": "{{speed}}km/h. Be careful on descents."
         }
-      }
-    }
+      },
+      "label": "Weather"
+    },
+    "routes": "Routes",
+    "conditions": "Conditions now"
   },
   "speedModal": {
     "title": "Bike type",
@@ -304,26 +361,26 @@
     "title": "Elevation profile"
   },
   "home": {
-    "title": "Welcome to velox",
-    "subtitle": "plan your bike routes with precision",
-    "lastRoutes": "Recent routes",
-    "newRoute": "New route",
-    "newRouteDesc": "plan your route",
-    "myRoutes": "My routes",
-    "myRoutesDesc": "see saved routes",
-    "profile": "Profile",
-    "profileDesc": "edit your information",
-    "comingSoon": "Coming soon",
-    "comingSoonDesc": "new features on the way",
-    "stravaImport": {
-      "title": "Strava",
-      "description": "import average speed"
+    "greeting": "Hi, {{name}}",
+    "title1": "Where to",
+    "title2": "today?",
+    "speedLabel": "Your average",
+    "bikes": "Bike type",
+    "facts": {
+      "routes": "Saved routes",
+      "distance": "Planned",
+      "climb": "Total climb"
     },
-    "footer": {
-      "routes": "Routes",
-      "createRoute": "Create route",
-      "profile": "Profile"
-    }
+    "strava": {
+      "synced": "Overall average from Strava",
+      "import": "Import from Strava",
+      "note": "Swap the average you entered for the real average of your rides."
+    },
+    "newRoute": "New route",
+    "myRoutes": "My routes",
+    "profile": "Profile",
+    "lastRoutes": "Recent routes",
+    "seeAll": "See all"
   },
   "savedRoutesPage": {
     "routeFrom": "Route from"
@@ -342,29 +399,39 @@
   },
   "landing": {
     "hero": {
-      "title1": "Ride at your pace.",
-      "title2": "Plan with precision.",
-      "subtitle": "Velox calculates ride time from your real average speed, tracked separately for each bike type.",
-      "cta": "Get started"
+      "title1": "Ride time",
+      "title2": "at your own speed.",
+      "subtitle": "Velox uses your real average speed, tracked separately for each bike type.",
+      "cta": "Create account",
+      "sample": "Sample route",
+      "climbLabel": "Climb",
+      "speedLabel": "Your average",
+      "genericLabel": "Generic estimate"
+    },
+    "race": {
+      "title": "Same route. Two clocks.",
+      "lead": "{{km}} km and {{climb}} m of climbing. Scroll to ride.",
+      "generic": "Generic estimate",
+      "velox": "Velox",
+      "finished": "Finished",
+      "note": "{{diff}} min earlier."
     },
     "problem": {
       "title": "Did the prediction",
       "titleHighlight": "let you down?",
-      "timeExample": "2h10",
-      "timeReal": "1h20",
-      "description1": "Google estimated over 2 hours to ride 30 km.",
-      "description2": "In practice, it took",
-      "description3": "1h20.",
       "cards": {
         "prediction": {
+          "unit": "min",
           "title": "Wrong estimate",
-          "desc": "The app said 2h and you got there in 1h20. Being off in either direction throws off everything that comes after."
+          "desc": "Being off in either direction throws off everything that comes after."
         },
         "time": {
-          "title": "No room for error",
-          "desc": "When your training has to fit into your routine, you can't rely on a guessed average speed."
+          "unit": "km/h",
+          "title": "A guessed average",
+          "desc": "When your training has to fit into your routine, you can't plan around a guess."
         },
         "bike": {
+          "unit": "paces",
           "title": "Not just any bike",
           "desc": "MTB, road and urban bikes have different paces, but apps use the same baseline for all of them."
         }
@@ -378,26 +445,71 @@
     },
     "features": {
       "prediction": {
-        "title": "Real estimates",
-        "desc": "Each route's time is calculated from your average speed."
+        "title": "Estimated time",
+        "desc": "Every route comes with a time calculated from your average speed."
       },
       "modality": {
-        "title": "Speed per bike type",
-        "desc": "Choose MTB, road or urban and the time is calculated with that bike's speed."
+        "title": "One average per bike",
+        "desc": "Choose MTB, road or urban and the time uses that bike's speed."
       },
       "strava": {
-        "title": "Strava integration",
-        "desc": "Import your average speed straight from Strava."
+        "title": "Straight from Strava",
+        "desc": "Import your average speed from the rides you've already logged there."
       },
       "elevation": {
-        "title": "Calories and elevation",
-        "desc": "See calories burned and elevation gain for each route."
+        "title": "The route profile",
+        "desc": "How much you'll climb, and calories from your weight, height and age."
       }
+    },
+    "mock": {
+      "destination": "City park"
+    },
+    "routes": {
+      "title": "Compare routes by your own time",
+      "lead": "The fastest route and the alternatives, each with your time. Save the one you pick.",
+      "colRoute": "Route",
+      "colDistance": "Distance",
+      "colClimb": "Climb",
+      "lessClimbing": "Less climbing",
+      "longer": "Longer",
+      "caption": "Example at a {{speed}} km/h average on {{mode}}.",
+      "mapNote": "Illustrative map; in the app, routes come from Google Maps."
+    },
+    "conditions": {
+      "title": "Weather and traffic before you go",
+      "lead": "Velox checks the weather at the middle of the route and the traffic along it, and tells you when it's better to wait.",
+      "slotsLabel": "Departure time",
+      "delay": "Delay on the route",
+      "go": "Good time to go",
+      "wait": "Better wait",
+      "clear": "Nothing above the limits.",
+      "sampleNote": "A sample day. When you leave, the app checks the weather mid-route and the traffic along the way.",
+      "weatherTitle": "Weather alerts",
+      "trafficTitle": "Traffic levels",
+      "rainRule": "over 70% chance",
+      "temperatureRule": "below 10 °C or above 30 °C",
+      "windRule": "over 25 km/h",
+      "normalRule": "under 5 min of delay",
+      "intenseRule": "5 to 15 min of delay",
+      "congestedRule": "15 min or more, and the app suggests waiting"
+    },
+    "footer": {
+      "install": "Works in the browser and installs on your phone like an app."
     },
     "cta": {
       "title": "How long does it really take you?",
       "subtitle": "Create your account, enter your speed and find out on your first route.",
       "button": "Create account"
+    },
+    "index": {
+      "pains": "The problem",
+      "race": "The race",
+      "product": "The app",
+      "routes": "The routes",
+      "conditions": "Before you go"
+    },
+    "product": {
+      "strava": "via Strava"
     }
   }
 }
