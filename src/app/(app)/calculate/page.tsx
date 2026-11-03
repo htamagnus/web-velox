@@ -1,34 +1,28 @@
 'use client';
 
-import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import polyline from '@mapbox/polyline';
-import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { ArrowLeft } from 'lucide-react';
-import ApiVeloxService from '@/providers/api-velox.provider';
 import { ApiError } from '@/errors/api-errors';
 import GoogleRouteMap from '@/components/map/google-route-map';
 import RoutePlannerPanel from '@/components/planner/route-planner-panel';
 import RouteSheet, { RouteOption } from '@/components/planner/route-sheet';
-import LanguageSelector from '@/components/language-selector/language-selector';
-import PageTransitionOverlay from '@/components/ui/page-transition/page-transition-overlay';
 import { EASE } from '@/components/landing/reveal';
-import { Athlete } from '@/interfaces/athlete.interface';
-import { useProtectedRoute } from '@/hooks/use-protected-route';
+import { useAppData } from '@/components/app/app-shell';
+import Sheet, { useWide } from '@/components/app/sheet';
+import Skeleton from '@/components/app/skeleton';
 import { useTexts } from '@/helpers/use-texts';
 import { GetPlannedRouteInputDto, GetPlannedRouteResponseDto, Modality, GetTrafficOutputDto, GetWeatherOutputDto } from '@/interfaces/routes.interface';
-import { archivo } from '../fonts';
 
 type RouteData = GetPlannedRouteResponseDto & {
   decodedPolyline: [number, number][];
 };
 
 export default function CalculateRoutePage() {
-  useProtectedRoute();
-  const api = useMemo(() => new ApiVeloxService(), []);
+  const { api, athlete: userData, refreshRoutes } = useAppData();
+  const wide = useWide();
   const { t } = useTexts('calculate');
-  const tPanel = useTexts('plannerPanel').t;
 
   const [origin, setOrigin] = useState<[number, number] | null>(null);
   const [destination, setDestination] = useState<[number, number] | null>(null);
@@ -41,24 +35,11 @@ export default function CalculateRoutePage() {
   // as rotas desta busca que já foram salvas: o botão vira link pra não duplicar na lista
   const [savedIndexes, setSavedIndexes] = useState<number[]>([]);
   const [selectedModality, setSelectedModality] = useState<Modality>('general');
-  const [userData, setUserData] = useState<Athlete | null>(null);
   const [isCalculatingRoute, setIsCalculatingRoute] = useState(false);
   const [trafficData, setTrafficData] = useState<GetTrafficOutputDto | null>(null);
   const [isLoadingTraffic, setIsLoadingTraffic] = useState(false);
   const [weatherData, setWeatherData] = useState<GetWeatherOutputDto | null>(null);
   const [isLoadingWeather, setIsLoadingWeather] = useState(false);
-
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const profile = await api.getProfile();
-        setUserData(profile);
-      } catch {
-        toast.error(t('profileError'));
-      }
-    }
-    fetchProfile();
-  }, [api, t]);
 
   // limpa qualquer rota desenhada quando um dos inputs é limpo
   useEffect(() => {
@@ -175,8 +156,7 @@ export default function CalculateRoutePage() {
       setRouteOptions([mainRoute, ...alternatives]);
       setSelectedRouteIndex(0);
       setSavedIndexes([]);
-      window.scrollTo({ top: 0 });
-      
+
     } catch (error) {
       const quota = error instanceof ApiError && error.code === 'GOOGLE_QUOTA_EXCEEDED';
       toast.error(t(quota ? 'quotaError' : 'routeError'));
@@ -206,6 +186,7 @@ export default function CalculateRoutePage() {
       });
       setSavedIndexes((prev) => [...prev, selectedRouteIndex]);
       toast.success(t('routeSaved'));
+      refreshRoutes().catch(() => {});
     } catch (error) {
       toast.error(t('routeSaveError'));
       console.error('erro ao salvar rota:', error);
@@ -225,96 +206,80 @@ export default function CalculateRoutePage() {
     setTrafficData(null);
   };
 
-  if (!userData) {
-    return <PageTransitionOverlay visible={true} message={t('loadingProfile')} />;
-  }
-
-  // a folha em tinta à esquerda e o mapa noturno no resto; no celular o mapa fica preso em cima
+  // o mapa ocupa a tela; o formulário e o resultado moram na folha por cima dele
   return (
-    <MotionConfig reducedMotion="user">
-      <div className={`landing planner ${archivo.variable}`}>
-        <header className="planner__nav">
-          <Link href="/home" className="back-link">
-            <ArrowLeft size={18} aria-hidden="true" />
-            {tPanel('backButton')}
-          </Link>
-          <div className="lang">
-            <LanguageSelector />
-          </div>
-        </header>
+    <div className="mapview">
+      <GoogleRouteMap
+        className="mapview__map"
+        origin={origin}
+        destination={destination}
+        routes={routeOptions}
+        selectedRouteIndex={selectedRouteIndex}
+        onRouteSelect={setSelectedRouteIndex}
+        onMapClick={handleMapClick}
+        panel={wide ? 'side' : 'bottom'}
+      />
 
-        <div className="planner__map">
-          <GoogleRouteMap
-            className="planner__canvas"
-            origin={origin}
-            destination={destination}
-            routes={routeOptions}
-            selectedRouteIndex={selectedRouteIndex}
-            onRouteSelect={setSelectedRouteIndex}
-            onMapClick={handleMapClick}
-          />
-          <div className="hero__lines" aria-hidden="true" />
-        </div>
-
-        <main className="planner__panel">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={routeOptions.length > 0 ? 'sheet' : 'form'}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.5, ease: EASE }}
-            >
-              {routeOptions.length > 0 ? (
-                <RouteSheet
-                  routes={routeOptions}
-                  selectedIndex={selectedRouteIndex}
-                  onSelect={setSelectedRouteIndex}
-                  origin={originLabel!}
-                  destination={destinationLabel!}
-                  modality={selectedModality}
-                  weather={isLoadingWeather ? undefined : weatherData?.weather}
-                  traffic={isLoadingTraffic ? undefined : trafficData?.traffic}
-                  onSave={handleSaveRoute}
-                  saving={isSaving}
-                  saved={savedIndexes.includes(selectedRouteIndex)}
-                  onReset={handleReset}
-                />
-              ) : (
-                <RoutePlannerPanel
-                  originLabel={originLabel}
-                  destinationLabel={destinationLabel}
-                  onSetOrigin={(coords, label) => {
-                    setOrigin(coords);
-                    setOriginLabel(label);
-                  }}
-                  onSetDestination={(coords, label) => {
-                    setDestination(coords);
-                    setDestinationLabel(label);
-                  }}
-                  onClearOrigin={() => {
-                    setOrigin(null);
-                    setOriginLabel(null);
-                  }}
-                  onClearDestination={() => {
-                    setDestination(null);
-                    setDestinationLabel(null);
-                  }}
-                  onStart={handleCalculate}
-                  modality={selectedModality}
-                  onSelectModality={setSelectedModality}
-                  speeds={{
-                    general: userData.averageSpeedGeneral,
-                    road: userData.averageSpeedRoad,
-                    mtb: userData.averageSpeedMtb,
-                  }}
-                  isCalculatingRoute={isCalculatingRoute}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      </div>
-    </MotionConfig>
+      <Sheet expandable={routeOptions.length > 0}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={!userData ? 'loading' : routeOptions.length > 0 ? 'sheet' : 'form'}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.35, ease: EASE }}
+          >
+            {!userData ? (
+              <Skeleton rows={3} hero={false} />
+            ) : routeOptions.length > 0 ? (
+              <RouteSheet
+                routes={routeOptions}
+                selectedIndex={selectedRouteIndex}
+                onSelect={setSelectedRouteIndex}
+                origin={originLabel!}
+                destination={destinationLabel!}
+                modality={selectedModality}
+                weather={isLoadingWeather ? undefined : weatherData?.weather}
+                traffic={isLoadingTraffic ? undefined : trafficData?.traffic}
+                onSave={handleSaveRoute}
+                saving={isSaving}
+                saved={savedIndexes.includes(selectedRouteIndex)}
+                onReset={handleReset}
+              />
+            ) : (
+              <RoutePlannerPanel
+                originLabel={originLabel}
+                destinationLabel={destinationLabel}
+                onSetOrigin={(coords, label) => {
+                  setOrigin(coords);
+                  setOriginLabel(label);
+                }}
+                onSetDestination={(coords, label) => {
+                  setDestination(coords);
+                  setDestinationLabel(label);
+                }}
+                onClearOrigin={() => {
+                  setOrigin(null);
+                  setOriginLabel(null);
+                }}
+                onClearDestination={() => {
+                  setDestination(null);
+                  setDestinationLabel(null);
+                }}
+                onStart={handleCalculate}
+                modality={selectedModality}
+                onSelectModality={setSelectedModality}
+                speeds={{
+                  general: userData.averageSpeedGeneral,
+                  road: userData.averageSpeedRoad,
+                  mtb: userData.averageSpeedMtb,
+                }}
+                isCalculatingRoute={isCalculatingRoute}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </Sheet>
+    </div>
   );
 }

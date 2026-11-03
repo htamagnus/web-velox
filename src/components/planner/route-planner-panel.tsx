@@ -1,11 +1,13 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { ArrowRight, MousePointerClick } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { Modality } from '@/interfaces/routes.interface';
 import { EASE } from '@/components/landing/reveal';
+import { SPRING, shortLabel } from '@/components/app/motion';
+import Segmented from '@/components/app/segmented';
 import AutocompleteInput from '../route-input/route-input';
 
 const BIKES: Modality[] = ['road', 'mtb', 'general'];
@@ -24,7 +26,7 @@ type Props = {
   isCalculatingRoute: boolean;
 };
 
-// o formulário como o pôster: título condensado, os dois campos em fio e a faixa de bikes
+// o formulário da folha: a saída e a chegada ligadas por um fio, a bike em segmentos e o botão grande embaixo
 export default function RoutePlannerPanel({
   originLabel,
   destinationLabel,
@@ -46,19 +48,19 @@ export default function RoutePlannerPanel({
 
   return (
     <form
-      className="plan__form"
+      className="plan"
       onSubmit={(e) => {
         e.preventDefault();
         onStart();
       }}
     >
-      <h1>
+      <h1 className="drawer__title">
         {['title1', 'title2'].map((key, i) => (
           <span key={key} className="hero__line">
             <motion.span
               initial={{ y: '110%' }}
               animate={{ y: 0 }}
-              transition={{ duration: 0.9, delay: 0.2 + i * 0.12, ease: EASE }}
+              transition={{ duration: 0.8, delay: 0.15 + i * 0.1, ease: EASE }}
             >
               {t(key)}
             </motion.span>
@@ -66,7 +68,7 @@ export default function RoutePlannerPanel({
         ))}
       </h1>
 
-      <div className="plan__fields">
+      <div className="stops">
         <AutocompleteInput
           label={t('originLabel')}
           placeholder={t('searchPlaceholder')}
@@ -82,43 +84,42 @@ export default function RoutePlannerPanel({
           onClear={onClearDestination}
         />
       </div>
+      {!(originLabel && destinationLabel) && (
+        <p className="plan__hint">
+          <MousePointerClick size={16} aria-hidden="true" />
+          {t('mapHint')}
+        </p>
+      )}
 
-      <fieldset className="plan__bikes">
-        <legend className="field__label">{tApp('speedModal.title')}</legend>
-        <div className="modes modes--ink">
-          {BIKES.map((m) =>
-            speeds[m] > 0 ? (
-              <button
-                key={m}
-                type="button"
-                className="modes__item"
-                aria-pressed={modality === m}
-                onClick={() => onSelectModality(m)}
-              >
-                <span className="modes__bar" aria-hidden="true" />
-                <span className="modes__name">{tApp(`speedModal.options.${m}.label`)}</span>
-                <span className="modes__speed num">{fmt.format(speeds[m])} km/h</span>
-              </button>
-            ) : (
-              // sem média nessa bike não dá pra calcular: o segmento leva pro perfil
-              <Link key={m} href="/profile" className="modes__item plan__configure">
-                <span className="modes__bar" aria-hidden="true" />
-                <span className="modes__name">{tApp(`speedModal.options.${m}.label`)}</span>
-                <span className="modes__speed">{tApp('speedModal.configure')} →</span>
-              </Link>
-            ),
-          )}
-        </div>
-      </fieldset>
+      <div className="plan__bikes">
+        <span className="section__label">{tApp('speedModal.title')}</span>
+        <Segmented
+          id="plan-bike"
+          label={tApp('speedModal.title')}
+          value={modality}
+          onChange={onSelectModality}
+          options={BIKES.map((m) => ({
+            value: m,
+            label: shortLabel(tApp(`speedModal.options.${m}.label`)),
+            // sem média nessa bike não dá pra calcular: o segmento leva pro perfil
+            ...(speeds[m] > 0
+              ? { meta: `${fmt.format(speeds[m])} km/h` }
+              : { meta: `${tApp('speedModal.configure')} →`, href: '/profile' }),
+          }))}
+        />
+      </div>
 
-      <button
+      <motion.button
         type="submit"
         className="btn btn--primary btn--big plan__submit"
         disabled={!canCalculate || isCalculatingRoute}
         aria-busy={isCalculatingRoute}
+        whileTap={{ scale: 0.97 }}
+        transition={SPRING}
       >
         {isCalculatingRoute ? t('planning') : t('plan')}
-      </button>
+        {!isCalculatingRoute && <ArrowRight size={22} strokeWidth={2.6} aria-hidden="true" />}
+      </motion.button>
     </form>
   );
 }

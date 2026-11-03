@@ -61,7 +61,8 @@
       "metrics": "Métricas físicas",
       "speeds": "Velocidades das modalidades",
       "speedsDescription": "Usadas para calcular o tempo das suas rotas em cada modalidade",
-      "metricsDescription": "Peso, altura e idade entram no cálculo de calorias de cada rota."
+      "metricsDescription": "Peso, altura e idade entram no cálculo de calorias de cada rota.",
+      "preferences": "Preferências"
     },
     "name": {
       "label": "nome"
@@ -113,7 +114,8 @@
     "unset": "Não configurada",
     "logout": "Sair da conta",
     "decrease": "Diminuir {{label}}",
-    "increase": "Aumentar {{label}}"
+    "increase": "Aumentar {{label}}",
+    "language": "Idioma"
   },
   "planner": {
     "loadingProfile": "Carregando perfil...",
@@ -242,7 +244,8 @@
     "originLabel": "Saída",
     "destinationLabel": "Chegada",
     "searchPlaceholder": "Endereço ou lugar",
-    "clear": "Limpar"
+    "clear": "Limpar",
+    "mapHint": "Ou toque no mapa pra marcar a saída e a chegada"
   },
   "calculate": {
     "geolocationError": "não foi possível pegar localização",
@@ -380,7 +383,8 @@
     "myRoutes": "Minhas rotas",
     "profile": "Perfil",
     "lastRoutes": "Últimas rotas",
-    "seeAll": "Ver todas"
+    "seeAll": "Ver todas",
+    "newRouteHint": "Tempo, subida e clima na sua média"
   },
   "savedRoutesPage": {
     "routeFrom": "Percurso de"
@@ -510,6 +514,20 @@
     },
     "product": {
       "strava": "via Strava"
+    }
+  },
+  "app": {
+    "nav": "Navegação principal",
+    "loading": "Carregando…",
+    "tabs": {
+      "home": "Início",
+      "plan": "Planejar",
+      "routes": "Rotas",
+      "profile": "Perfil"
+    },
+    "sheet": {
+      "expand": "Expandir painel",
+      "collapse": "Recolher painel"
     }
   }
 }

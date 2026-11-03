@@ -61,7 +61,8 @@
       "metrics": "Physical metrics",
       "speeds": "Speed by bike type",
       "speedsDescription": "Used to calculate route times for each bike type",
-      "metricsDescription": "Weight, height and age go into each route's calorie estimate."
+      "metricsDescription": "Weight, height and age go into each route's calorie estimate.",
+      "preferences": "Preferences"
     },
     "name": {
       "label": "name"
@@ -113,7 +114,8 @@
     "unset": "Not set",
     "logout": "Log out",
     "decrease": "Decrease {{label}}",
-    "increase": "Increase {{label}}"
+    "increase": "Increase {{label}}",
+    "language": "Language"
   },
   "planner": {
     "loadingProfile": "Loading profile...",
@@ -242,7 +244,8 @@
     "originLabel": "Start",
     "destinationLabel": "Finish",
     "searchPlaceholder": "Address or place",
-    "clear": "Clear"
+    "clear": "Clear",
+    "mapHint": "Or tap the map to drop the start and the finish"
   },
   "calculate": {
     "geolocationError": "could not get location",
@@ -380,7 +383,8 @@
     "myRoutes": "My routes",
     "profile": "Profile",
     "lastRoutes": "Recent routes",
-    "seeAll": "See all"
+    "seeAll": "See all",
+    "newRouteHint": "Time, climb and weather at your pace"
   },
   "savedRoutesPage": {
     "routeFrom": "Route from"
@@ -510,6 +514,20 @@
     },
     "product": {
       "strava": "via Strava"
+    }
+  },
+  "app": {
+    "nav": "Main navigation",
+    "loading": "Loading…",
+    "tabs": {
+      "home": "Home",
+      "plan": "Plan",
+      "routes": "Routes",
+      "profile": "Profile"
+    },
+    "sheet": {
+      "expand": "Expand panel",
+      "collapse": "Collapse panel"
     }
   }
 }

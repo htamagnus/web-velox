@@ -1,8 +1,8 @@
 'use client';
 
-import type { CSSProperties } from 'react';
 import Link from 'next/link';
-import { Check } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Check, Flame, Ruler, TrendingDown, TrendingUp, X } from 'lucide-react';
 import { useTexts } from '@/helpers/use-texts';
 import { useLocale } from '@/contexts/locale-context';
 import { hm } from '@/helpers/format-minutes';
@@ -12,6 +12,8 @@ import ElevationProfile, { ElevationPoint } from '@/components/map/elevation-pro
 import { ROUTE_COLORS } from '@/components/map/google-route-map';
 import WeatherDisplay from '@/components/weather/weather-display';
 import TrafficDisplay from '@/components/traffic/traffic-display';
+import { ITEM, SPRING, STAGGER, shortLabel, shortPlace } from '@/components/app/motion';
+import Segmented from '@/components/app/segmented';
 
 export type RouteOption = {
   polyline: [number, number][];
@@ -41,7 +43,7 @@ type Props = {
   onReset: () => void;
 };
 
-// o resultado como a folha técnica da landing: o tempo gigante, as rotas em faixa, os dados nas bordas
+// o resultado na folha: o tempo gigante, as rotas em segmentos com a cor do traçado, os números em ladrilhos
 export default function RouteSheet({
   routes,
   selectedIndex,
@@ -69,110 +71,169 @@ export default function RouteSheet({
   const route = routes[selectedIndex];
   const diff = minutes(route) - minutes(routes[0]);
   const facts = [
-    [label('planner.summary.distance'), `${fmt.format(route.distanceKm)} km`],
-    [label('planner.summary.elevationGain'), `${fmtInt.format(route.elevationGain)} m`],
-    [label('planner.summary.elevationLoss'), `${fmtInt.format(route.elevationLoss)} m`],
-    [label('planner.summary.calories'), `${fmtInt.format(route.estimatedCalories)} kcal`],
+    { Icon: Ruler, term: label('planner.summary.distance'), value: `${fmt.format(route.distanceKm)} km` },
+    { Icon: Flame, term: label('planner.summary.calories'), value: `${fmtInt.format(route.estimatedCalories)} kcal` },
+    { Icon: TrendingUp, term: label('planner.summary.elevationGain'), value: `${fmtInt.format(route.elevationGain)} m` },
+    { Icon: TrendingDown, term: label('planner.summary.elevationLoss'), value: `${fmtInt.format(route.elevationLoss)} m` },
   ];
 
   return (
-    <div className="plan__sheet">
-      <div className="plan__head">
-        <p className="eyebrow eyebrow--ink">
+    <motion.div className="result" variants={STAGGER} initial="hidden" animate="show">
+      <motion.header className="result__head" variants={ITEM}>
+        <p className="chip chip--accent">
           {name(selectedIndex)}
           {route.summary && ` · ${route.summary}`}
         </p>
-        <ol className="plan__ends">
-          <li>{origin}</li>
-          <li>{destination}</li>
-        </ol>
-      </div>
+        <motion.button
+          type="button"
+          className="icon-btn"
+          onClick={onReset}
+          aria-label={t('buttons.newSearch')}
+          whileTap={{ scale: 0.85 }}
+          transition={SPRING}
+        >
+          <X size={20} aria-hidden="true" />
+        </motion.button>
+      </motion.header>
 
-      <div>
-        <p className="label plan__label">{label('planner.summary.time')}</p>
-        <div className="plan__clock-row">
-          <p className="plan__clock">
+      <motion.ol className="result__ends" variants={ITEM}>
+        <li title={origin}>{shortPlace(origin)}</li>
+        <li title={destination}>{shortPlace(destination)}</li>
+      </motion.ol>
+
+      <motion.div className="result__time" variants={ITEM}>
+        <p className="result__label">{label('planner.summary.time')}</p>
+        <div className="result__clock-row">
+          <p className="result__clock">
             <RollingValue value={minutes(route)} format={hm} />
           </p>
-          {diff > 0 && <span className="plan__diff num">+{diff} min</span>}
+          <AnimatePresence>
+            {diff > 0 && (
+              <motion.span
+                key="diff"
+                className="chip chip--amber num"
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.6 }}
+                transition={SPRING}
+              >
+                +{diff} min
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
-        <p className="plan__speed">
+        <p className="result__speed">
           {tApp('planner.summary.averageSpeedInfo').replace('{{speed}}', fmt.format(route.averageSpeedUsed))}{' '}
-          <span>{tApp(`speedModal.options.${modality}.label`)}</span>
+          <span>{shortLabel(tApp(`speedModal.options.${modality}.label`))}</span>
         </p>
-      </div>
+      </motion.div>
 
       {routes.length > 1 && (
-        <div className="modes modes--ink plan__routes" role="group" aria-label={t('routes')}>
-          {routes.map((r, i) => (
-            <button
-              key={i}
-              type="button"
-              className="modes__item"
-              style={{ '--route': ROUTE_COLORS[i % ROUTE_COLORS.length] } as CSSProperties}
-              aria-pressed={i === selectedIndex}
-              onClick={() => onSelect(i)}
-            >
-              <span className="modes__bar" aria-hidden="true" />
-              <span className="modes__name">{name(i)}</span>
-              <span className="modes__speed num">
-                {hm(minutes(r))}
-                {i > 0 && minutes(r) > minutes(routes[0]) && ` · +${minutes(r) - minutes(routes[0])} min`}
-              </span>
-            </button>
-          ))}
-        </div>
+        <motion.div variants={ITEM}>
+          <Segmented
+            id="plan-route"
+            label={t('routes')}
+            value={selectedIndex}
+            onChange={onSelect}
+            className="seg--routes"
+            options={routes.map((r, i) => ({
+              value: i,
+              label: i === 0 ? name(0) : `${tApp('routeSelector.labels.alt')} ${i}`,
+              meta: hm(minutes(r)),
+              color: ROUTE_COLORS[i % ROUTE_COLORS.length],
+            }))}
+          />
+        </motion.div>
       )}
 
-      <dl className="plan__facts">
-        {facts.map(([term, value]) => (
-          <div key={term}>
-            <dt>{term}</dt>
-            <dd className="num">{value}</dd>
+      <motion.dl className="tiles" variants={ITEM}>
+        {facts.map(({ Icon, term, value }) => (
+          <div key={term} className="tile">
+            <dt>
+              <Icon size={16} aria-hidden="true" />
+              {term}
+            </dt>
+            <dd className="num">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={value}
+                  initial={{ y: 12, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -12, opacity: 0 }}
+                  transition={SPRING}
+                >
+                  {value}
+                </motion.span>
+              </AnimatePresence>
+            </dd>
           </div>
         ))}
-      </dl>
+      </motion.dl>
 
-      {route.elevationProfile && <ElevationProfile key={selectedIndex} data={route.elevationProfile} />}
+      {route.elevationProfile && (
+        <motion.div variants={ITEM}>
+          <ElevationProfile key={selectedIndex} data={route.elevationProfile} />
+        </motion.div>
+      )}
 
       {route.warnings && route.warnings.length > 0 && (
-        <ul className="plan__warnings">
+        <motion.ul className="result__warnings" variants={ITEM}>
           {route.warnings.map((warning, i) => (
             <li key={i}>{warning}</li>
           ))}
-        </ul>
+        </motion.ul>
       )}
 
       {(weather || traffic) && (
-        <section className="plan__conditions">
-          <h2 className="field__label">{t('conditions')}</h2>
+        <motion.section className="result__conditions" variants={ITEM} initial="hidden" animate="show">
+          <h2 className="section__label">{t('conditions')}</h2>
           <dl>
             {weather && <WeatherDisplay weatherData={weather} />}
             {traffic && <TrafficDisplay trafficData={traffic} />}
           </dl>
-        </section>
+        </motion.section>
       )}
 
-      {saved && (
-        <p className="plan__saved" role="status">
-          <Check size={16} aria-hidden="true" />
-          {t('saved')}
-        </p>
-      )}
-      <div className="plan__actions">
+      <div className="result__actions">
+        <AnimatePresence>
+          {saved && (
+            <motion.p
+              className="result__saved"
+              role="status"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={SPRING}
+            >
+              <motion.span
+                initial={{ scale: 0, rotate: -90 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 14 }}
+              >
+                <Check size={16} aria-hidden="true" />
+              </motion.span>
+              {t('saved')}
+            </motion.p>
+          )}
+        </AnimatePresence>
         {saved ? (
           <Link href="/saved-routes" className="btn btn--primary">
             {t('buttons.seeSaved')}
           </Link>
         ) : (
-          <button type="button" className="btn btn--primary" onClick={onSave} disabled={saving} aria-busy={saving}>
+          <motion.button
+            type="button"
+            className="btn btn--primary"
+            onClick={onSave}
+            disabled={saving}
+            aria-busy={saving}
+            whileTap={{ scale: 0.97 }}
+            transition={SPRING}
+          >
             {saving ? t('buttons.saving') : t('buttons.save')}
-          </button>
+          </motion.button>
         )}
-        <button type="button" className="btn btn--line" onClick={onReset}>
-          {t('buttons.newSearch')}
-        </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

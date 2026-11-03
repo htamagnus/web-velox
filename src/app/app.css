@@ -1,0 +1,667 @@
+/* O app logado: chão em tinta, superfícies arredondadas por cima e as abas que ficam. Tokens em tokens.css. */
+
+.app {
+  color-scheme: dark;
+  --surface: oklch(20.5% 0.065 259);
+  --surface-2: oklch(24.5% 0.06 258);
+  --line: oklch(100% 0 0 / 0.08);
+  --line-2: oklch(100% 0 0 / 0.16);
+  --radius-lg: 28px;
+  --radius: 22px;
+  --tabbar: 64px;
+  --rail: 96px;
+  --pad: 16px;
+  /* o que a barra de abas flutuante cobre embaixo */
+  --dock: calc(var(--tabbar) + 24px + env(safe-area-inset-bottom));
+  min-height: 100svh;
+  background:
+    radial-gradient(48rem 32rem at 100% -8%, color-mix(in oklab, var(--color-accent) 10%, transparent), transparent 62%),
+    radial-gradient(40rem 36rem at -12% 105%, oklch(32% 0.1 268 / 0.55), transparent 62%),
+    var(--color-ink);
+  background-attachment: fixed;
+  color: var(--color-paper);
+}
+.app :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.app .btn {
+  border-radius: 999px;
+}
+.app a.btn--primary {
+  color: var(--color-accent-ink);
+}
+.app .btn--line {
+  border-color: var(--line-2);
+}
+/* calculando: listras andando dentro do botão, como barra de progresso */
+.app .btn--primary[aria-busy='true'] {
+  background-image: repeating-linear-gradient(-45deg, transparent 0 10px, oklch(100% 0 0 / 0.3) 10px 20px);
+  background-size: 28px 28px;
+  animation: busy 0.6s linear infinite;
+}
+@keyframes busy {
+  to {
+    background-position: 28px 0;
+  }
+}
+
+/* ---- as abas: pílula de vidro flutuando embaixo no celular, trilho na esquerda no desktop ---- */
+.tabs {
+  position: fixed;
+  inset-inline: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: var(--z-sticky-nav);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  max-width: 28rem;
+  height: var(--tabbar);
+  margin-inline: auto;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface) 72%, transparent);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 oklch(100% 0 0 / 0.06),
+    0 20px 44px -16px rgb(0 0 0 / 0.75);
+}
+.tabs__brand {
+  display: none;
+}
+.app .tabs__item {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  border-radius: 999px;
+  color: var(--color-muted-on-ink);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.app .tabs__item:hover {
+  color: var(--color-paper);
+}
+.app .tabs__item[aria-current='page'] {
+  color: var(--color-accent-ink);
+}
+.tabs__pill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--color-accent);
+  box-shadow: 0 6px 20px -6px color-mix(in oklab, var(--color-accent) 75%, transparent);
+}
+.tabs__icon {
+  display: grid;
+}
+.tabs__label {
+  font: 700 0.6875rem / 1 var(--font-body);
+  letter-spacing: 0.02em;
+}
+
+.app__view {
+  min-width: 0;
+  padding-bottom: var(--dock);
+}
+/* as telas de mapa vão até o chão: a barra flutua por cima do mapa */
+.app__view:has(.mapview) {
+  padding-bottom: 0;
+}
+
+/* ---- a página: cabeçalho com avatar e título curto, conteúdo em superfícies ---- */
+.page {
+  max-width: 76rem;
+  margin-inline: auto;
+  padding: 20px var(--pad) 24px;
+}
+.page__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.page__kicker {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.app .page__title {
+  max-width: none;
+  font: var(--display-weight) clamp(1.75rem, 2vw + 1.1rem, 2.5rem) / 0.95 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.page__title span {
+  color: var(--color-accent);
+}
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, var(--color-accent-hover), var(--color-accent) 45%, var(--color-accent-deep));
+  color: var(--color-accent-ink);
+  font: var(--display-weight) 1.25rem / 1 var(--font-display);
+  font-stretch: 75%;
+  box-shadow:
+    0 0 0 3px var(--color-ink),
+    0 0 0 5px color-mix(in oklab, var(--color-accent) 45%, transparent),
+    0 10px 30px -8px color-mix(in oklab, var(--color-accent) 60%, transparent);
+}
+.avatar--big {
+  width: 96px;
+  height: 96px;
+  font-size: 2.25rem;
+}
+
+.card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, oklch(100% 0 0 / 0.035), transparent 40%),
+    var(--surface);
+  box-shadow:
+    inset 0 1px 0 oklch(100% 0 0 / 0.05),
+    0 24px 48px -28px rgb(0 0 0 / 0.8);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: oklch(100% 0 0 / 0.08);
+  color: var(--color-paper);
+  font: 700 0.75rem / 1 var(--font-body);
+  font-stretch: 100%;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.chip--accent {
+  background: color-mix(in oklab, var(--color-accent) 16%, transparent);
+  color: var(--color-accent);
+}
+.chip--amber {
+  background: color-mix(in oklab, var(--color-amber) 16%, transparent);
+  color: var(--color-amber);
+}
+.chip--strava {
+  background: color-mix(in oklab, var(--color-strava) 20%, transparent);
+  color: oklch(82% 0.12 45);
+}
+.chip--strava::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--color-strava);
+}
+
+.section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-bottom: 14px;
+}
+.section__head--stack {
+  flex-direction: column;
+  align-items: start;
+}
+.app .section__head h2 {
+  max-width: none;
+  font: var(--display-weight) 1.5rem / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.section__head p {
+  max-width: 46ch;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.app .section__label {
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  word-spacing: normal;
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+}
+.app .link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+/* ---- o controle segmentado: a pílula volt desliza por baixo da opção ---- */
+.seg {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: oklch(0% 0 0 / 0.28);
+}
+.app .seg__item {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  min-height: 54px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  color: var(--color-muted-on-ink);
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.app .seg__item:hover {
+  color: var(--color-paper);
+}
+.app .seg__item[aria-pressed='true'] {
+  color: var(--color-accent-ink);
+}
+.seg__pill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--color-accent);
+  box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--color-accent) 80%, transparent);
+}
+.seg__label {
+  font: var(--display-weight) var(--text-sm) / 1 var(--font-display);
+  font-stretch: 75%;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.seg__meta {
+  font: 600 0.75rem / 1 var(--font-body);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+.seg__item--link .seg__meta {
+  color: var(--color-amber);
+  opacity: 1;
+}
+.seg--compact {
+  border-radius: 14px;
+}
+.app .seg--compact .seg__item {
+  min-height: 36px;
+  padding-inline: 16px;
+  border-radius: 10px;
+}
+/* as rotas: cada opção mostra a cor do seu traçado no mapa; a escolhida acende com ela */
+.seg--routes .seg__label::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: 0 auto 6px;
+  border-radius: 50%;
+  background: var(--seg);
+  box-shadow: 0 0 8px var(--seg);
+}
+.seg--routes .seg__pill {
+  background: color-mix(in oklab, var(--seg) 18%, var(--surface-2));
+  box-shadow: inset 0 0 0 1.5px var(--seg);
+}
+.app .seg--routes .seg__item[aria-pressed='true'] {
+  color: var(--color-paper);
+}
+
+/* ---- ladrilhos de número: rótulo com ícone em cima, valor embaixo ---- */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.tile {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: oklch(100% 0 0 / 0.04);
+}
+.tile dt,
+.stat dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--color-muted-on-ink);
+}
+.tile dt svg,
+.stat dt svg {
+  flex: none;
+  color: var(--color-accent);
+}
+.tile dd {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  font-size: 1.375rem;
+  line-height: 1.15;
+}
+.tile dd span {
+  display: block;
+}
+
+/* ---- os grupos de ajuste: linhas separadas por fio dentro de uma superfície só ---- */
+.group {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.app .group__title {
+  padding: 16px 18px 4px;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+}
+.group__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 16px;
+  min-height: 64px;
+  padding: 10px 18px;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out);
+}
+.group__row + .group__row {
+  border-top: 1px solid var(--line);
+}
+.group__label {
+  font-weight: 600;
+  text-transform: capitalize;
+  transition: color var(--dur-short) var(--ease-out);
+}
+.group__row .field-error {
+  grid-column: 1 / -1;
+}
+.group__row--field {
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  cursor: text;
+}
+.group__row--field:focus-within {
+  background: oklch(100% 0 0 / 0.03);
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+.group__row--field:focus-within .group__label {
+  color: var(--color-accent);
+}
+.group__input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-paper);
+  font: 500 var(--text-md) / 1.3 var(--font-body);
+  text-align: right;
+}
+.app .group__input:focus-visible {
+  outline: none;
+}
+.field-error {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
+.icon-btn {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-2);
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.05);
+  color: var(--color-paper);
+  cursor: pointer;
+  transition: border-color var(--dur-short) var(--ease-out);
+}
+.icon-btn:hover {
+  border-color: var(--color-paper);
+}
+
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding: 24px;
+}
+.app .empty :is(h2, h3) {
+  max-width: none;
+  font: var(--display-weight) 1.5rem / 1 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.empty p {
+  color: var(--color-muted-on-ink);
+}
+.empty__art {
+  width: 120px;
+  height: 60px;
+  overflow: visible;
+}
+.empty__art path {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-accent) 60%, transparent));
+}
+.empty__art circle {
+  fill: var(--color-ink);
+  stroke: var(--color-paper);
+  stroke-width: 2.5;
+}
+.empty__art .is-end {
+  fill: var(--color-accent);
+  stroke: var(--color-ink);
+}
+
+/* ---- o cartão de rota: o traçado se desenha em cima, o tempo grande e os lugares embaixo ---- */
+.app .rcard {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  height: 100%;
+  padding: 14px;
+  color: var(--color-paper);
+  text-decoration: none;
+}
+.rcard__trace {
+  width: 100%;
+  height: 128px;
+  padding: 10px;
+  overflow: visible;
+  border-radius: 14px;
+  background:
+    linear-gradient(90deg, oklch(100% 0 0 / 0.04) 1px, transparent 1px) 0 0 / 16px 16px,
+    linear-gradient(0deg, oklch(100% 0 0 / 0.04) 1px, transparent 1px) 0 0 / 16px 16px,
+    oklch(0% 0 0 / 0.25);
+}
+.rcard__trace polyline {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px color-mix(in oklab, var(--color-accent) 60%, transparent));
+  transition: stroke var(--dur-short) var(--ease-out);
+}
+.rcard__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.rcard__time {
+  font: var(--display-weight) 2.25rem / 0.9 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+.rcard__ends {
+  display: -webkit-box;
+  overflow: hidden;
+  font-weight: 700;
+  line-height: 1.25;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.rcard__meta,
+.rcard__date {
+  font-size: 0.8125rem;
+  color: var(--color-muted-on-ink);
+}
+
+/* ---- carregando: os blocos da tela num brilho que corre ---- */
+.skel {
+  display: grid;
+  gap: 12px;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding: 20px var(--pad);
+}
+.skel__block {
+  display: block;
+  height: 72px;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, oklch(100% 0 0 / 0.04) 30%, oklch(100% 0 0 / 0.1) 50%, oklch(100% 0 0 / 0.04) 70%) 0 0 / 300%
+    100%;
+  animation: skel 1.4s var(--ease-in-out) infinite;
+}
+.skel__block--title {
+  width: 60%;
+  height: 52px;
+  border-radius: 999px;
+}
+.skel__block--hero {
+  height: 320px;
+}
+@keyframes skel {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* a barra de salvar: uma pílula que sobe por cima das abas quando há alteração */
+.savebar {
+  position: fixed;
+  inset-inline: 12px;
+  bottom: var(--dock);
+  z-index: var(--z-sticky-nav);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 28rem;
+  margin-inline: auto;
+  padding: 8px 8px 8px 20px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface-2) 88%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 40px -12px rgb(0 0 0 / 0.7);
+}
+.savebar p {
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--color-muted-on-ink);
+}
+.savebar .btn {
+  flex: none;
+  min-height: 44px;
+  padding-inline: 20px;
+  font-size: var(--text-md);
+}
+
+@media (min-width: 64rem) {
+  .app {
+    --pad: 40px;
+    --dock: 0px;
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+  }
+  .tabs {
+    position: sticky;
+    inset: 0 auto auto;
+    grid-template-columns: none;
+    grid-auto-rows: min-content;
+    align-content: start;
+    gap: 8px;
+    max-width: none;
+    height: 100svh;
+    margin: 0;
+    padding: 20px 12px;
+    border: 0;
+    border-right: 1px solid var(--line);
+    border-radius: 0;
+    background: oklch(12% 0.06 262 / 0.55);
+    box-shadow: none;
+  }
+  .tabs__brand {
+    display: grid;
+    place-items: center;
+    height: 56px;
+    margin-bottom: 16px;
+  }
+  .app .tabs__item {
+    height: 72px;
+    gap: 6px;
+    border-radius: 20px;
+  }
+  .page {
+    padding-block: 40px 64px;
+  }
+  .savebar {
+    inset-inline: calc(var(--rail) + 24px) 24px;
+    bottom: 24px;
+  }
+}
+@media (max-width: 22rem) {
+  .tabs__label {
+    display: none;
+  }
+}

@@ -1,5 +1,6 @@
 'use client'
 
+import { TrafficCone } from 'lucide-react'
 import { useTexts } from '@/helpers/use-texts'
 import { TrafficData, TrafficSeverity } from '@/interfaces/routes.interface'
 
@@ -26,7 +27,10 @@ export default function TrafficDisplay({ trafficData }: Props) {
 
   return (
     <div className="plan-cond" data-alert={trafficData.overallSeverity !== TrafficSeverity.NORMAL || undefined}>
-      <dt>{t('label')}</dt>
+      <dt>
+        <TrafficCone size={20} aria-hidden="true" />
+        {t('label')}
+      </dt>
       <dd>
         <b>{getSeverityLabel()}</b>
         <span className="plan-cond__meta num">

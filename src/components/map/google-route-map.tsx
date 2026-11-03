@@ -22,6 +22,8 @@ type GoogleRouteMapProps = {
   onRouteSelect: (index: number) => void;
   onMapClick?: (e: google.maps.MapMouseEvent) => void;
   className?: string;
+  // onde a folha cobre o mapa: o enquadramento da rota desvia dela
+  panel?: 'side' | 'bottom';
 };
 
 const mapContainerStyle = {
@@ -58,6 +60,8 @@ const PAPER = '#f6f9fc';
 const INK = '#00082e';
 // uma cor por traçado (volt, ciano, rosa), longe do azul do chão; a faixa de rotas da folha usa as mesmas
 export const ROUTE_COLORS = [ACCENT, '#58d1e5', '#ec81c0'];
+// o centro só vale na montagem; com pontos na tela, quem manda é o enquadramento
+const CENTER = { lat: -28.678, lng: -49.369 };
 
 export default function GoogleRouteMap({
   origin,
@@ -67,21 +71,15 @@ export default function GoogleRouteMap({
   onRouteSelect,
   onMapClick,
   className,
+  panel = 'side',
 }: GoogleRouteMapProps) {
   // em estado e não em ref: o mapa remonta quando as rotas chegam e o enquadramento precisa rodar de novo
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: -28.678, lng: -49.369 });
   const [previewDirections, setPreviewDirections] = useState<google.maps.DirectionsResult | null>(null);
   const routesLengthRef = useRef(routes.length);
 
   const onLoad = useCallback((loaded: google.maps.Map) => setMap(loaded), []);
   const onUnmount = useCallback(() => setMap(null), []);
-
-  useEffect(() => {
-    if (origin) {
-      setCenter({ lat: origin[0], lng: origin[1] });
-    }
-  }, [origin]);
 
   // limpar preview quando origin ou destination forem removidos
   useEffect(() => {
@@ -134,10 +132,20 @@ export default function GoogleRouteMap({
     if (origin) bounds.extend({ lat: origin[0], lng: origin[1] });
     if (destination) bounds.extend({ lat: destination[0], lng: destination[1] });
 
-    if (origin || destination || routes.length > 0) {
-      map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
+    if (bounds.isEmpty()) return;
+    // um ponto só não tem o que enquadrar: o mapa só vai até ele
+    if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+      map.panTo(bounds.getCenter());
+    } else {
+      const height = map.getDiv().clientHeight;
+      map.fitBounds(
+        bounds,
+        panel === 'side'
+          ? { top: 64, right: 64, bottom: 64, left: 480 }
+          : { top: 72, right: 32, bottom: Math.round(height * 0.5) + 24, left: 32 },
+      );
     }
-  }, [map, routes, selectedRouteIndex, origin, destination]);
+  }, [map, routes, selectedRouteIndex, origin, destination, panel]);
 
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     if (onMapClick && e.latLng) {
@@ -150,11 +158,11 @@ export default function GoogleRouteMap({
       <GoogleMap
         key={`map-${routes.length}-${origin?.[0]}-${origin?.[1]}`}
         mapContainerStyle={mapContainerStyle}
-        center={center}
+        center={CENTER}
         zoom={13}
         onLoad={onLoad}
         onUnmount={onUnmount}
-        options={mapOptions}
+        options={{ ...mapOptions, zoomControl: panel === 'side' }}
         onClick={handleMapClick}
       >
         {previewDirections && routes.length === 0 && (

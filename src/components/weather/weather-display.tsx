@@ -1,7 +1,16 @@
 'use client'
 
+import { Cloud, CloudLightning, CloudRain, Snowflake, Sun } from 'lucide-react'
 import { useTexts } from '@/helpers/use-texts'
 import { WeatherData, WeatherCondition } from '@/interfaces/routes.interface'
+
+const ICONS = {
+  [WeatherCondition.SUNNY]: Sun,
+  [WeatherCondition.CLOUDY]: Cloud,
+  [WeatherCondition.RAINY]: CloudRain,
+  [WeatherCondition.STORMY]: CloudLightning,
+  [WeatherCondition.SNOWY]: Snowflake,
+}
 
 type Props = {
   weatherData: WeatherData
@@ -71,9 +80,14 @@ export default function WeatherDisplay({ weatherData }: Props) {
   // chuva, tempestade ou neve contam como alerta mesmo sem aviso da api
   const isRough = [WeatherCondition.RAINY, WeatherCondition.STORMY, WeatherCondition.SNOWY].includes(weatherData.condition)
 
+  const Icon = ICONS[weatherData.condition] ?? Cloud
+
   return (
     <div className="plan-cond" data-alert={hasAlerts || isRough || undefined}>
-      <dt>{t('label')}</dt>
+      <dt>
+        <Icon size={20} aria-hidden="true" />
+        {t('label')}
+      </dt>
       <dd>
         <b>
           {getConditionLabel()} · {weatherData.temperature}°C

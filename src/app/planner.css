@@ -1,123 +1,164 @@
-/* Planejador: a folha em tinta à esquerda, o mapa noturno no resto; no celular o mapa fica preso em cima. */
+/* Planejador e rotas salvas: o mapa noturno ocupa a tela, a folha flutua por cima (embaixo no celular, à esquerda no desktop). */
 
-.planner {
-  color-scheme: dark;
-  display: grid;
-  grid-template-columns: minmax(22rem, 32rem) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-areas:
-    'nav map'
-    'panel map';
-  height: 100svh;
-  background: var(--color-ink);
-  color: var(--color-paper);
-}
-.planner__nav {
-  grid-area: nav;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
-  padding: var(--space-md) var(--space-xl);
-  border-right: var(--rule-hair) solid var(--color-rule-on-ink);
-}
-.planner__panel {
-  grid-area: panel;
-  overflow-y: auto;
-  padding: var(--space-lg) var(--space-xl) var(--space-2xl);
-  border-right: var(--rule-hair) solid var(--color-rule-on-ink);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-rule-on-ink) transparent;
-}
-.planner__map {
-  grid-area: map;
+.mapview {
   position: relative;
-  min-height: 0;
+  height: 100svh;
+  overflow: hidden;
   background: var(--color-ink);
 }
-.planner__canvas {
+.mapview__map {
   position: absolute;
   inset: 0;
 }
-.planner :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+
+.drawer {
+  --pad: 20px;
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100% - 48px);
+  border-top: 1px solid var(--line-2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+  box-shadow: 0 -24px 48px -20px rgb(0 0 0 / 0.7);
 }
-.planner :is(h1, h2, h3, .btn) {
-  word-spacing: 0.08em;
+.drawer__handle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 100%;
+  height: 28px;
+  border: 0;
+  background: none;
+  cursor: grab;
+  touch-action: none;
 }
-/* .landing a herda a cor e apagaria o texto dos botões que são link */
-.planner a.btn--primary {
-  color: var(--color-accent-ink);
+.drawer__handle span {
+  width: 44px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--line-2);
+}
+/* o fim da rolagem passa da barra de abas, pra nada ficar escondido atrás dela */
+.drawer__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 22px var(--pad) calc(var(--dock) + 8px);
+  scrollbar-width: none;
+}
+.drawer__handle + .drawer__body {
+  padding-top: 2px;
+}
+.drawer .skel {
+  padding: 0;
+}
+.app .drawer__title {
+  max-width: none;
+  font: var(--display-weight) clamp(2.25rem, 4vw + 1rem, 2.75rem) / 0.92 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.drawer__title .hero__line:last-child {
+  color: var(--color-accent);
 }
 
 /* ---- o formulário ---- */
-.plan__form {
+.plan {
   display: grid;
-  gap: var(--space-xl);
+  gap: 20px;
 }
-.planner h1 {
-  max-width: none;
-  font-size: var(--text-display-s);
-  line-height: 0.95;
-  text-transform: uppercase;
-}
-.planner h1 .hero__line:last-child {
-  color: var(--color-accent);
-}
-.plan__fields {
+/* saída e chegada no mesmo bloco, ligadas por um fio pontilhado entre o pino vazado e o volt */
+.stops {
   display: grid;
-  gap: var(--space-lg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: oklch(0% 0 0 / 0.22);
 }
-.place {
+.stops .place {
   position: relative;
+  padding: 10px 14px 6px 46px;
+  transition: background-color var(--dur-short) var(--ease-out);
+}
+.stops .place + .place {
+  border-top: 1px solid var(--line);
+}
+.stops .place:focus-within {
+  background: oklch(100% 0 0 / 0.03);
+}
+.stops .place::before {
+  content: '';
+  position: absolute;
+  top: 42px;
+  left: 18px;
+  width: 13px;
+  height: 13px;
+  border: 2.5px solid var(--color-paper);
+  border-radius: 50%;
+}
+.stops .place:last-child::before {
+  border-color: var(--color-ink);
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent);
+}
+.stops .place:first-child::after {
+  content: '';
+  position: absolute;
+  top: 60px;
+  bottom: -38px;
+  left: 23.5px;
+  border-left: 2px dotted var(--line-2);
+}
+.stops .field__input {
+  min-height: 40px;
+  padding: 4px 40px 4px 0;
+  border-bottom: 0;
+  font-size: var(--text-md);
+}
+.stops .field__input:focus {
+  box-shadow: none;
 }
 .place__box {
   position: relative;
 }
-.place__box .field__input {
-  padding-right: 44px;
-}
 .place__clear {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: -8px;
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   translate: 0 -50%;
   border: 0;
   background: none;
   color: var(--color-muted-on-ink);
   cursor: pointer;
-  transition: color var(--dur-short) var(--ease-out);
 }
 .place__clear:hover {
   color: var(--color-paper);
 }
+/* as sugestões entram no fluxo da folha em vez de flutuar: dentro de algo que rola, nada fica cortado */
 .place__list {
-  position: absolute;
-  top: 100%;
-  inset-inline: 0;
-  z-index: var(--z-dropdown);
-  max-height: 18rem;
-  margin: var(--space-2xs) 0 0;
-  padding: 0;
+  max-height: 15rem;
+  margin: 6px -6px 8px;
+  padding: 4px;
   overflow-y: auto;
   list-style: none;
-  border: var(--rule-hair) solid var(--color-rule-on-ink);
-  border-radius: var(--radius-card);
-  background: var(--color-ink-2);
-  box-shadow: 0 24px 48px -16px rgb(0 0 0 / 0.7);
+  border-radius: 14px;
+  background: var(--surface-2);
 }
 .place__option {
   display: grid;
-  gap: var(--space-3xs);
+  gap: 2px;
   width: 100%;
-  padding: var(--space-sm) var(--space-md);
+  padding: 10px 12px;
   border: 0;
-  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+  border-radius: 10px;
   background: none;
   color: inherit;
   font: inherit;
@@ -125,12 +166,9 @@
   cursor: pointer;
   transition: background-color var(--dur-micro) var(--ease-out);
 }
-.place__list li:last-child .place__option {
-  border-bottom: 0;
-}
 .place__option:hover,
 .place__option:focus-visible {
-  background: var(--color-ink-3);
+  background: oklch(100% 0 0 / 0.07);
 }
 .place__option b {
   font-weight: 600;
@@ -139,142 +177,214 @@
   font-size: var(--text-sm);
   color: var(--color-muted-on-ink);
 }
+.plan__hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -6px;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
 .plan__bikes {
   display: grid;
-  gap: var(--space-sm);
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-.plan__bikes legend {
-  margin-bottom: var(--space-sm);
-  padding: 0;
-}
-/* bike sem média: o segmento vira atalho pro perfil, em âmbar */
-.plan__configure {
-  text-decoration: none;
-}
-.plan__configure .modes__speed {
-  color: var(--color-amber);
+  gap: 10px;
 }
 .plan__submit {
   width: 100%;
 }
 
-/* ---- a folha do resultado ---- */
-.plan__sheet {
+/* ---- o resultado ---- */
+.result {
   display: grid;
-  gap: var(--space-xl);
+  gap: 18px;
 }
-.plan__head .eyebrow {
-  margin-bottom: var(--space-md);
+.result__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
-/* a saída como pino vazado e a chegada em volt, como no mapa */
-.plan__ends {
+.result__head .chip {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.result__ends {
+  position: relative;
   display: grid;
-  gap: var(--space-sm);
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: var(--text-sm);
+  font-weight: 700;
 }
-.plan__ends li {
-  display: grid;
-  grid-template-columns: 12px minmax(0, 1fr);
-  gap: var(--space-sm);
-  align-items: baseline;
-}
-.plan__ends li::before {
+.result__ends::before {
   content: '';
-  width: 12px;
-  height: 12px;
-  border: 2px solid var(--color-paper);
-  border-radius: 50%;
-  translate: 0 1px;
+  position: absolute;
+  top: 1.15em;
+  bottom: 1.15em;
+  left: 5.5px;
+  border-left: 2px dotted var(--line-2);
 }
-.plan__ends li:last-child::before {
+.result__ends li {
+  position: relative;
+  overflow: hidden;
+  padding-left: 26px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.result__ends li::before {
+  content: '';
+  position: absolute;
+  top: 0.32em;
+  left: 0;
+  width: 13px;
+  height: 13px;
+  border: 2.5px solid var(--color-paper);
+  border-radius: 50%;
+}
+.result__ends li:last-child::before {
   border-color: var(--color-ink);
   background: var(--color-accent);
   box-shadow: 0 0 10px var(--color-accent);
 }
-.planner .plan__label {
+.result__label {
+  font-size: var(--text-sm);
   color: var(--color-muted-on-ink);
 }
-.plan__clock-row {
+.result__clock-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-md);
+  align-items: center;
+  gap: 12px;
 }
-.plan__clock {
-  margin: var(--space-xs) 0 0;
-  font: var(--display-weight) clamp(5rem, 8vw, 8rem) / 0.85 var(--font-display);
+.result__clock {
+  font: var(--display-weight) clamp(4.75rem, 22vw, 6.5rem) / 0.85 var(--font-display);
   font-stretch: var(--stretch-display);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--color-accent);
-  text-shadow: 0 0 60px color-mix(in oklab, var(--color-accent) 40%, transparent);
+  text-shadow: 0 0 48px color-mix(in oklab, var(--color-accent) 45%, transparent);
 }
-.plan__diff {
-  font-size: var(--text-xl);
-  color: var(--color-amber);
-}
-.plan__speed {
-  margin-top: var(--space-md);
+.result__speed {
+  margin-top: 6px;
   font-size: var(--text-sm);
   color: var(--color-muted-on-ink);
 }
-.plan__speed span {
+.result__speed span {
+  font-weight: 600;
   color: var(--color-paper);
 }
-/* a faixa de rotas é a legenda do mapa: cada traço já mostra a cor do seu traçado, apagada até ser escolhido */
-.plan__routes .modes__bar {
-  background: color-mix(in oklab, var(--route) 35%, transparent);
-}
-.plan__routes .modes__bar::after {
-  background: var(--route);
-  box-shadow: 0 0 12px var(--route);
-}
-.plan__facts {
+.result__warnings {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: var(--space-lg);
+  gap: 4px;
+  margin: 0;
+  padding: 12px 14px;
+  list-style: none;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--color-amber) 12%, transparent);
+  font-size: var(--text-sm);
+  color: var(--color-amber);
+}
+.result__conditions {
+  display: grid;
+  gap: 10px;
+}
+.result__conditions dl {
+  display: grid;
+  gap: 8px;
   margin: 0;
 }
-.plan__facts div {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: var(--space-3xs);
-  padding-block: var(--space-sm);
-  border-top: var(--rule-hair) solid var(--color-rule-on-ink);
+.plan-cond {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: oklch(100% 0 0 / 0.04);
 }
-.plan__facts dt {
+.plan-cond dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+}
+.plan-cond dt svg {
+  color: var(--color-accent);
+}
+.plan-cond dd {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+.plan-cond b {
+  font: var(--display-weight) 1.5rem / 1.05 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.plan-cond__meta,
+.plan-cond__note {
   font-size: var(--text-sm);
   color: var(--color-muted-on-ink);
 }
-.plan__facts dd {
-  margin: 0;
-  font-size: var(--text-xl);
+.plan-cond[data-alert] {
+  border-color: color-mix(in oklab, var(--color-amber) 40%, transparent);
+  background: color-mix(in oklab, var(--color-amber) 7%, transparent);
 }
+.plan-cond[data-alert] :is(dt svg, b, .plan-cond__note) {
+  color: var(--color-amber);
+}
+/* salvar fica sempre à mão: preso no pé da folha enquanto o resto rola */
+.result__actions {
+  position: sticky;
+  bottom: calc(-1 * var(--dock) - 8px);
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+  margin: 0 calc(-1 * var(--pad)) calc(-1 * var(--dock) - 8px);
+  padding: 16px var(--pad) calc(var(--dock) + 12px);
+  background: linear-gradient(180deg, transparent, var(--surface) 28%);
+}
+.result__actions .btn {
+  width: 100%;
+  min-height: 56px;
+}
+.result__saved {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* o perfil de elevação num ladrilho: área clara, linha volt e o cume anotado */
 .plan__profile {
   display: grid;
-  gap: var(--space-sm);
+  gap: 10px;
   margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: oklch(100% 0 0 / 0.04);
 }
 .plan__plot {
   position: relative;
-  margin-top: var(--space-xl);
+  margin-top: 28px;
 }
 .plan__plot svg {
   display: block;
   width: 100%;
-  height: 120px;
+  height: 110px;
   overflow: visible;
 }
 .plan__plot polygon {
-  fill: color-mix(in oklab, var(--color-accent) 14%, transparent);
+  fill: color-mix(in oklab, var(--color-accent) 16%, transparent);
 }
 .plan__plot polyline {
   fill: none;
@@ -284,8 +394,7 @@
   vector-effect: non-scaling-stroke;
   filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-accent) 60%, transparent));
 }
-/* o cume: o número e um fio descendo até o ponto mais alto */
-.plan__summit {
+.app .plan__summit {
   position: absolute;
   z-index: 1;
   display: grid;
@@ -297,7 +406,7 @@
 }
 .plan__summit::after {
   content: '';
-  width: var(--rule-hair);
+  width: 1px;
   height: var(--space-md);
   margin-top: var(--space-2xs);
   background: color-mix(in oklab, var(--color-paper) 60%, transparent);
@@ -308,281 +417,148 @@
   font-size: var(--text-xs);
   color: var(--color-muted-on-ink);
 }
-.plan__warnings {
-  display: grid;
-  gap: var(--space-2xs);
-  margin: 0;
-  padding: 0 0 0 var(--space-md);
-  list-style: none;
-  border-left: var(--rule-bar) solid var(--color-amber);
-  font-size: var(--text-sm);
-  color: var(--color-amber);
-}
-.plan__conditions {
-  display: grid;
-  gap: var(--space-md);
-}
-.planner .plan__conditions h2 {
-  max-width: none;
-  font: 700 var(--text-xs) / 1 var(--font-outlier);
-  font-stretch: var(--stretch-wide);
-  letter-spacing: 0.1em;
-  word-spacing: normal;
-  text-transform: uppercase;
-  color: var(--color-muted-on-ink);
-}
-.plan__conditions dl {
-  margin: 0;
-  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
-}
-.plan-cond {
-  display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr);
-  gap: var(--space-md);
-  padding-block: var(--space-md);
-  border-top: var(--rule-hair) solid var(--color-rule-on-ink);
-}
-.plan-cond dt {
-  padding-top: 0.3em;
-  font: 700 var(--text-xs) / 1 var(--font-outlier);
-  font-stretch: var(--stretch-wide);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-muted-on-ink);
-}
-.plan-cond dd {
-  display: grid;
-  gap: var(--space-2xs);
-  margin: 0;
-}
-.plan-cond b {
-  font: var(--display-weight) var(--text-xl) / 1.05 var(--font-display);
-  font-stretch: var(--stretch-display);
-  letter-spacing: var(--tracking-display);
-  text-transform: uppercase;
-}
-.plan-cond__meta {
-  font-size: var(--text-sm);
-  color: var(--color-muted-on-ink);
-}
-.plan-cond__note {
-  font-size: var(--text-sm);
-}
-.plan-cond[data-alert] :is(b, .plan-cond__note) {
-  color: var(--color-amber);
-}
-/* depois de salva, a rota avisa em volt e o botão vira o caminho pra lista */
-.plan__saved {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  margin-bottom: calc(var(--space-md) - var(--space-xl));
-  font-weight: 600;
-  font-size: var(--text-sm);
-  color: var(--color-accent);
-}
-.plan__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-md);
-}
-.plan__actions .btn {
-  flex: 1 1 10rem;
-  min-height: 56px;
-}
 
-/* ---- rotas salvas: o mesmo mapa, a lista no lugar do formulário; a escolhida acende em volt ---- */
-.archive {
-  display: grid;
-  align-content: start;
-  gap: var(--space-xl);
-}
+/* ---- rotas salvas: cartões em lista; o escolhido acende e abre as ações ---- */
 .archive__head {
   display: grid;
-  gap: var(--space-md);
+  gap: 12px;
+  margin-bottom: 18px;
 }
-.archive__head .eyebrow {
-  margin: 0;
-}
-.archive__empty {
-  display: grid;
-  justify-items: start;
-  gap: var(--space-lg);
-  color: var(--color-muted-on-ink);
+.archive__sum {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 .archive__list {
+  display: grid;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: var(--rule-bar) solid var(--color-rule-on-ink);
 }
-.archive__list li {
-  border-bottom: var(--rule-hair) solid var(--color-rule-on-ink);
+.archive__item {
+  overflow: hidden;
+  border-radius: 20px;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out);
 }
-.archive__route {
-  display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr) 3.5rem;
-  align-items: center;
-  column-gap: var(--space-md);
+.archive__item[data-active] {
+  border-color: color-mix(in oklab, var(--color-accent) 55%, transparent);
+  box-shadow: 0 18px 40px -22px color-mix(in oklab, var(--color-accent) 55%, transparent);
+}
+.archive__item:not([data-active]) .rcard__trace polyline {
+  stroke: var(--color-muted-on-ink);
+  filter: none;
+}
+.app .rcard--row {
+  grid-template-areas:
+    'trace top top'
+    'trace ends ends'
+    'trace meta date';
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  gap: 4px 14px;
   width: 100%;
-  padding: var(--space-md) 0;
+  height: auto;
+  padding: 12px;
   border: 0;
   background: none;
-  color: var(--color-muted-on-ink);
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: color var(--dur-short) var(--ease-out);
 }
-.archive__route:hover,
-.archive__route[aria-pressed='true'] {
-  color: var(--color-paper);
+.rcard--row .rcard__trace {
+  grid-area: trace;
+  align-self: center;
+  width: 76px;
+  height: 76px;
+  padding: 8px;
 }
-.archive__time {
-  font: var(--display-weight) 2.5rem / 0.9 var(--font-display);
-  font-stretch: var(--stretch-display);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-display);
-  text-transform: uppercase;
-  transition:
-    color var(--dur-short) var(--ease-out),
-    text-shadow var(--dur-short) var(--ease-out);
+.rcard--row .rcard__top {
+  grid-area: top;
 }
-.archive__figure {
-  display: grid;
-  gap: var(--space-2xs);
+.rcard--row .rcard__time {
+  font-size: 1.875rem;
 }
-.archive__speed {
-  margin-top: var(--space-2xs);
-  font: var(--display-weight) var(--text-xl) / 1 var(--font-display);
-  font-stretch: var(--stretch-display);
-  letter-spacing: var(--tracking-display);
-  color: var(--color-paper);
+.rcard--row .rcard__ends {
+  grid-area: ends;
+  -webkit-line-clamp: 1;
 }
-.archive__speed small {
-  font: 700 var(--text-xs) / 1 var(--font-outlier);
-  font-stretch: var(--stretch-wide);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-muted-on-ink);
+.rcard--row .rcard__meta {
+  grid-area: meta;
 }
-.archive__bike {
-  font: var(--display-weight) var(--text-xs) / 1.1 var(--font-display);
-  font-stretch: var(--stretch-display);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--color-muted-on-ink);
+.rcard--row .rcard__date {
+  grid-area: date;
+  align-self: end;
 }
-.archive__text {
-  display: grid;
-  gap: var(--space-2xs);
-  min-width: 0;
-}
-.archive__ends {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  font: var(--display-weight) var(--text-lg) / 1.05 var(--font-display);
-  font-stretch: var(--stretch-display);
-  letter-spacing: var(--tracking-display);
-  word-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.archive__date {
-  font: 700 var(--text-xs) / 1 var(--font-outlier);
-  font-stretch: var(--stretch-wide);
-  letter-spacing: 0.1em;
-  color: var(--color-muted-on-ink);
-}
-/* a faixa da rota escolhida: excluir discreto, e em vermelho só na confirmação */
 .archive__actions {
+  overflow: hidden;
+}
+.archive__actions-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-xs) var(--space-md);
-  padding-bottom: var(--space-sm);
+  gap: 8px 10px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--line);
   font-size: var(--text-sm);
   color: var(--color-muted-on-ink);
+}
+.archive__actions-row > span {
+  margin-right: auto;
 }
 .archive__action {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2xs);
-  min-height: 44px;
-  padding: 0 var(--space-xs);
-  border: 0;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
   background: none;
-  color: var(--color-muted-on-ink);
+  color: var(--color-paper);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: color var(--dur-short) var(--ease-out);
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out);
 }
 .archive__action:hover {
-  color: var(--color-paper);
+  border-color: var(--color-paper);
 }
-.archive__action--danger,
+.archive__action--danger {
+  border-color: transparent;
+  background: var(--color-danger);
+  color: var(--color-ink);
+}
 .archive__action--danger:hover {
-  color: var(--color-danger);
-}
-.archive__meta {
-  font-size: var(--text-xs);
-  line-height: 1.5;
-  color: var(--color-muted-on-ink);
-}
-.archive__trace {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: visible;
-}
-.archive__trace polyline {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-  transition: stroke var(--dur-short) var(--ease-out);
-}
-.archive__route[aria-pressed='true'] .archive__time {
-  color: var(--color-accent);
-  text-shadow: 0 0 32px color-mix(in oklab, var(--color-accent) 45%, transparent);
-}
-.archive__route[aria-pressed='true'] polyline {
-  stroke: var(--color-accent);
-  filter: drop-shadow(0 0 4px var(--color-accent));
+  border-color: transparent;
+  background: color-mix(in oklab, var(--color-danger) 85%, white);
 }
 
-/* no celular: a barra, o mapa preso em cima e a folha rolando por baixo dele */
-@media (max-width: 60rem) {
-  .planner {
-    display: block;
-    height: auto;
-    min-height: 100svh;
+@media (min-width: 64rem) {
+  .drawer {
+    --pad: 28px;
+    inset: 20px auto auto 20px;
+    width: 27rem;
+    max-height: calc(100% - 40px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
   }
-  .planner__nav {
-    padding-inline: var(--gutter);
-    border-right: 0;
+  .drawer__body {
+    padding: 28px var(--pad) 0;
   }
-  .planner__map {
-    position: sticky;
-    top: 0;
-    z-index: var(--z-sticky);
-    height: 40svh;
-    border-block: var(--rule-hair) solid var(--color-rule-on-ink);
+  .result__actions {
+    bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 24px;
   }
-  .planner__map .hero__lines {
-    background-size: calc(100% / 3) 100%;
-    background-position: calc(100% / 3) 0;
+  .archive {
+    padding-bottom: 28px;
   }
-  .planner__panel {
-    overflow: visible;
-    padding: var(--space-xl) var(--gutter) var(--space-2xl);
-    border-right: 0;
-  }
-  .plan__clock {
-    font-size: clamp(4.5rem, 24vw, 7rem);
+  .plan {
+    padding-bottom: 28px;
   }
 }
