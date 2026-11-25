@@ -86,6 +86,7 @@ export type GetPlannedRouteResponseDto = {
   elevationLoss: number
   polyline: string
   averageSpeedUsed: number
+  elevationProfile?: ElevationPoint[]
   alternatives?: RouteAlternative[]
 }
 
@@ -100,4 +101,9 @@ export type SaveRouteDto = {
   elevationLoss: number
   estimatedCalories: number
   averageSpeedUsed: number
+}
+
+export type SavedRoute = SaveRouteDto & {
+  id?: string
+  createdAt?: string
 }

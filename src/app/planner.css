@@ -1,0 +1,564 @@
+/* Planejador e rotas salvas: o mapa noturno ocupa a tela, a folha flutua por cima (embaixo no celular, à esquerda no desktop). */
+
+.mapview {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-ink);
+}
+.mapview__map {
+  position: absolute;
+  inset: 0;
+}
+
+.drawer {
+  --pad: 20px;
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100% - 48px);
+  border-top: 1px solid var(--line-2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+  box-shadow: 0 -24px 48px -20px rgb(0 0 0 / 0.7);
+}
+.drawer__handle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 100%;
+  height: 28px;
+  border: 0;
+  background: none;
+  cursor: grab;
+  touch-action: none;
+}
+.drawer__handle span {
+  width: 44px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--line-2);
+}
+/* o fim da rolagem passa da barra de abas, pra nada ficar escondido atrás dela */
+.drawer__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 22px var(--pad) calc(var(--dock) + 8px);
+  scrollbar-width: none;
+}
+.drawer__handle + .drawer__body {
+  padding-top: 2px;
+}
+.drawer .skel {
+  padding: 0;
+}
+.app .drawer__title {
+  max-width: none;
+  font: var(--display-weight) clamp(2.25rem, 4vw + 1rem, 2.75rem) / 0.92 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.drawer__title .hero__line:last-child {
+  color: var(--color-accent);
+}
+
+/* ---- o formulário ---- */
+.plan {
+  display: grid;
+  gap: 20px;
+}
+/* saída e chegada no mesmo bloco, ligadas por um fio pontilhado entre o pino vazado e o volt */
+.stops {
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: oklch(0% 0 0 / 0.22);
+}
+.stops .place {
+  position: relative;
+  padding: 10px 14px 6px 46px;
+  transition: background-color var(--dur-short) var(--ease-out);
+}
+.stops .place + .place {
+  border-top: 1px solid var(--line);
+}
+.stops .place:focus-within {
+  background: oklch(100% 0 0 / 0.03);
+}
+.stops .place::before {
+  content: '';
+  position: absolute;
+  top: 42px;
+  left: 18px;
+  width: 13px;
+  height: 13px;
+  border: 2.5px solid var(--color-paper);
+  border-radius: 50%;
+}
+.stops .place:last-child::before {
+  border-color: var(--color-ink);
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent);
+}
+.stops .place:first-child::after {
+  content: '';
+  position: absolute;
+  top: 60px;
+  bottom: -38px;
+  left: 23.5px;
+  border-left: 2px dotted var(--line-2);
+}
+.stops .field__input {
+  min-height: 40px;
+  padding: 4px 40px 4px 0;
+  border-bottom: 0;
+  font-size: var(--text-md);
+}
+.stops .field__input:focus {
+  box-shadow: none;
+}
+.place__box {
+  position: relative;
+}
+.place__clear {
+  position: absolute;
+  top: 50%;
+  right: -8px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  translate: 0 -50%;
+  border: 0;
+  background: none;
+  color: var(--color-muted-on-ink);
+  cursor: pointer;
+}
+.place__clear:hover {
+  color: var(--color-paper);
+}
+/* as sugestões entram no fluxo da folha em vez de flutuar: dentro de algo que rola, nada fica cortado */
+.place__list {
+  max-height: 15rem;
+  margin: 6px -6px 8px;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+.place__option {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.place__option:hover,
+.place__option:focus-visible {
+  background: oklch(100% 0 0 / 0.07);
+}
+.place__option b {
+  font-weight: 600;
+}
+.place__option span {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.plan__hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -6px;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.plan__bikes {
+  display: grid;
+  gap: 10px;
+}
+.plan__submit {
+  width: 100%;
+}
+
+/* ---- o resultado ---- */
+.result {
+  display: grid;
+  gap: 18px;
+}
+.result__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.result__head .chip {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.result__ends {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 700;
+}
+.result__ends::before {
+  content: '';
+  position: absolute;
+  top: 1.15em;
+  bottom: 1.15em;
+  left: 5.5px;
+  border-left: 2px dotted var(--line-2);
+}
+.result__ends li {
+  position: relative;
+  overflow: hidden;
+  padding-left: 26px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.result__ends li::before {
+  content: '';
+  position: absolute;
+  top: 0.32em;
+  left: 0;
+  width: 13px;
+  height: 13px;
+  border: 2.5px solid var(--color-paper);
+  border-radius: 50%;
+}
+.result__ends li:last-child::before {
+  border-color: var(--color-ink);
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent);
+}
+.result__label {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.result__clock-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.result__clock {
+  font: var(--display-weight) clamp(4.75rem, 22vw, 6.5rem) / 0.85 var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-shadow: 0 0 48px color-mix(in oklab, var(--color-accent) 45%, transparent);
+}
+.result__speed {
+  margin-top: 6px;
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.result__speed span {
+  font-weight: 600;
+  color: var(--color-paper);
+}
+.result__warnings {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 12px 14px;
+  list-style: none;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--color-amber) 12%, transparent);
+  font-size: var(--text-sm);
+  color: var(--color-amber);
+}
+.result__conditions {
+  display: grid;
+  gap: 10px;
+}
+.result__conditions dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.plan-cond {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: oklch(100% 0 0 / 0.04);
+}
+.plan-cond dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 var(--text-xs) / 1 var(--font-outlier);
+  font-stretch: var(--stretch-wide);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted-on-ink);
+}
+.plan-cond dt svg {
+  color: var(--color-accent);
+}
+.plan-cond dd {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+.plan-cond b {
+  font: var(--display-weight) 1.5rem / 1.05 var(--font-display);
+  font-stretch: var(--stretch-display);
+  text-transform: uppercase;
+}
+.plan-cond__meta,
+.plan-cond__note {
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.plan-cond[data-alert] {
+  border-color: color-mix(in oklab, var(--color-amber) 40%, transparent);
+  background: color-mix(in oklab, var(--color-amber) 7%, transparent);
+}
+.plan-cond[data-alert] :is(dt svg, b, .plan-cond__note) {
+  color: var(--color-amber);
+}
+/* salvar fica sempre à mão: preso no pé da folha enquanto o resto rola */
+.result__actions {
+  position: sticky;
+  bottom: calc(-1 * var(--dock) - 8px);
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+  margin: 0 calc(-1 * var(--pad)) calc(-1 * var(--dock) - 8px);
+  padding: 16px var(--pad) calc(var(--dock) + 12px);
+  background: linear-gradient(180deg, transparent, var(--surface) 28%);
+}
+.result__actions .btn {
+  width: 100%;
+  min-height: 56px;
+}
+.result__saved {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* o perfil de elevação num ladrilho: área clara, linha volt e o cume anotado */
+.plan__profile {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: oklch(100% 0 0 / 0.04);
+}
+.plan__plot {
+  position: relative;
+  margin-top: 28px;
+}
+.plan__plot svg {
+  display: block;
+  width: 100%;
+  height: 110px;
+  overflow: visible;
+}
+.plan__plot polygon {
+  fill: color-mix(in oklab, var(--color-accent) 16%, transparent);
+}
+.plan__plot polyline {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-accent) 60%, transparent));
+}
+.app .plan__summit {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  translate: -50% -100%;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.plan__summit::after {
+  content: '';
+  width: 1px;
+  height: var(--space-md);
+  margin-top: var(--space-2xs);
+  background: color-mix(in oklab, var(--color-paper) 60%, transparent);
+}
+.plan__axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--color-muted-on-ink);
+}
+
+/* ---- rotas salvas: cartões em lista; o escolhido acende e abre as ações ---- */
+.archive__head {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.archive__sum {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.archive__list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.archive__item {
+  overflow: hidden;
+  border-radius: 20px;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out);
+}
+.archive__item[data-active] {
+  border-color: color-mix(in oklab, var(--color-accent) 55%, transparent);
+  box-shadow: 0 18px 40px -22px color-mix(in oklab, var(--color-accent) 55%, transparent);
+}
+.archive__item:not([data-active]) .rcard__trace polyline {
+  stroke: var(--color-muted-on-ink);
+  filter: none;
+}
+.app .rcard--row {
+  grid-template-areas:
+    'trace top top'
+    'trace ends ends'
+    'trace meta date';
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  gap: 4px 14px;
+  width: 100%;
+  height: auto;
+  padding: 12px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.rcard--row .rcard__trace {
+  grid-area: trace;
+  align-self: center;
+  width: 76px;
+  height: 76px;
+  padding: 8px;
+}
+.rcard--row .rcard__top {
+  grid-area: top;
+}
+.rcard--row .rcard__time {
+  font-size: 1.875rem;
+}
+.rcard--row .rcard__ends {
+  grid-area: ends;
+  -webkit-line-clamp: 1;
+}
+.rcard--row .rcard__meta {
+  grid-area: meta;
+}
+.rcard--row .rcard__date {
+  grid-area: date;
+  align-self: end;
+}
+.archive__actions {
+  overflow: hidden;
+}
+.archive__actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 10px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--line);
+  font-size: var(--text-sm);
+  color: var(--color-muted-on-ink);
+}
+.archive__actions-row > span {
+  margin-right: auto;
+}
+.archive__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: none;
+  color: var(--color-paper);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out);
+}
+.archive__action:hover {
+  border-color: var(--color-paper);
+}
+.archive__action--danger {
+  border-color: transparent;
+  background: var(--color-danger);
+  color: var(--color-ink);
+}
+.archive__action--danger:hover {
+  border-color: transparent;
+  background: color-mix(in oklab, var(--color-danger) 85%, white);
+}
+
+@media (min-width: 64rem) {
+  .drawer {
+    --pad: 28px;
+    inset: 20px auto auto 20px;
+    width: 27rem;
+    max-height: calc(100% - 40px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  .drawer__body {
+    padding: 28px var(--pad) 0;
+  }
+  .result__actions {
+    bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 24px;
+  }
+  .archive {
+    padding-bottom: 28px;
+  }
+  .plan {
+    padding-bottom: 28px;
+  }
+}

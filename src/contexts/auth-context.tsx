@@ -32,6 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setUser(null)
     localStorage.removeItem('auth')
+    localStorage.removeItem('velox_token')
     router.push('/login')
   }
 

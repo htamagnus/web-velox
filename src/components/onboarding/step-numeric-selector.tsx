@@ -1,6 +1,11 @@
-import { ArrowDown, ArrowUp, ArrowLeft } from 'lucide-react';
-import Button from '../ui/button/button';
-import { useState } from 'react';
+'use client';
+
+import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Minus, Plus } from 'lucide-react';
+import { useTexts } from '@/helpers/use-texts';
+import { EASE } from '@/components/landing/reveal';
+import RollingValue from '@/components/landing/rolling-value';
 
 interface StepNumericSelectorProps {
   title: string;
@@ -9,19 +14,24 @@ interface StepNumericSelectorProps {
   unit?: string;
   min: number;
   max: number;
-  step?: number;
   onChange: (value: number) => void;
   onNext: () => void;
   onBack?: () => void;
-  iconUp?: React.ReactNode;
-  iconDown?: React.ReactNode;
-  displayMode?: 'list' | 'scroll';
   note?: string;
   extraActions?: React.ReactNode;
-  iconTitle?: React.ReactNode;
   disabled?: boolean;
 }
 
+// px entre dois traços da fita: um traço por unidade, um maior a cada dez
+const TICK = 12;
+
+const rise = (delay: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: EASE },
+});
+
+// o passo como pôster: o valor gigante em volt e, embaixo, uma fita métrica que corre sob o cursor fixo
 export default function StepNumericSelector({
   title,
   subtitle,
@@ -29,194 +39,158 @@ export default function StepNumericSelector({
   unit,
   min,
   max,
-  step = 1,
   onChange,
   onNext,
   onBack,
-  iconUp,
-  iconDown,
-  displayMode = 'list',
   note,
   extraActions,
-  iconTitle,
   disabled = false,
 }: StepNumericSelectorProps) {
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStartY, setDragStartY] = useState(0);
-  const [dragStartValue, setDragStartValue] = useState(value);
+  const { t } = useTexts('onboarding.actions');
+  const drag = useRef<{ x: number; value: number } | null>(null);
+  const [dragging, setDragging] = useState(false);
 
-  const normalizeValue = (val: number) => Number(val.toFixed(step < 1 ? 2 : 0));
-
-  const getDisplayValues = () => {
-    return [
-      normalizeValue(value - 2 * step),
-      normalizeValue(value - step),
-      value,
-      normalizeValue(value + step),
-      normalizeValue(value + 2 * step)
-    ].filter((v) => v >= min && v <= max);
+  const set = (next: number) => {
+    const clamped = Math.min(max, Math.max(min, next));
+    if (!disabled && clamped !== value) onChange(clamped);
   };
-
-  const range = Array.from({ length: Math.floor((max - min) / step) + 1 }, (_, i) => normalizeValue(min + i * step));
-  const visibleTicks = 11;
-  const itemHeight = 24;
-  const centerIndex = range.findIndex((v) => v === value);
-  const offset = (centerIndex - Math.floor(visibleTicks / 2)) * itemHeight;
 
   const isSkippable = (value === 0 || value === min) && unit === 'km/h';
-  const showSkipLabel = isSkippable && (displayMode === 'list' || displayMode === 'scroll');
-  const primaryButtonLabel = showSkipLabel ? 'Pular' : 'Continuar';
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (disabled) return;
-    setIsDragging(true);
-    setDragStartY(e.touches[0].clientY);
-    setDragStartValue(value);
-  };
+  const first = Math.ceil(min / 10) * 10;
+  const majors = Array.from({ length: Math.floor((max - first) / 10) + 1 }, (_, i) => first + i * 10);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging || disabled) return;
-
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const keys: Record<string, number> = {
+      ArrowRight: 1,
+      ArrowUp: 1,
+      ArrowLeft: -1,
+      ArrowDown: -1,
+      PageUp: 10,
+      PageDown: -10,
+      Home: min - value,
+      End: max - value,
+    };
+    if (!(e.key in keys)) return;
     e.preventDefault();
-
-    const currentY = e.touches[0].clientY;
-    const totalDiff = dragStartY - currentY;
-
-    const threshold = 8;
-    const draggedSteps = Math.floor(Math.abs(totalDiff) / threshold);
-
-    let newValue = dragStartValue;
-    if (totalDiff > 0) {
-      newValue = Math.min(normalizeValue(dragStartValue + draggedSteps * step), max);
-    } else {
-      newValue = Math.max(normalizeValue(dragStartValue - draggedSteps * step), min);
-    }
-    onChange(newValue);
+    set(value + keys[e.key]);
   };
 
-  const handleTouchEnd = () => {
-    setIsDragging(false);
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (disabled || e.button !== 0) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    drag.current = { x: e.clientX, value };
+    setDragging(true);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!drag.current) return;
+    set(drag.current.value - Math.round((e.clientX - drag.current.x) / TICK));
+  };
+  const endDrag = () => {
+    drag.current = null;
+    setDragging(false);
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center relative px-4 py-10 lg:py-20">
-      {onBack && (
-        <div className="absolute top-6 left-6 z-50">
-          <Button onClick={onBack} variant="back" aria-label="Voltar">
-            <ArrowLeft />
-          </Button>
-        </div>
-      )}
-
-      <div className="w-full max-w-xl mx-auto text-center">
-        <h2 className="step-heading flex items-center gap-2 justify-center text-2xl md:text-2xl lg:text-2xl whitespace-nowrap">
-          <span>{iconTitle}</span>
-          {title}
-        </h2>
-
-        <p className="step-paragraph mt-4 mb-8 max-w-lg mx-auto text-sm md:text-base lg:text-lg px-4 md:px-8">
+    <div className="onb__step">
+      <div className="onb__copy">
+        <motion.h1 {...rise(0.05)}>{title}</motion.h1>
+        <motion.p className="lead" {...rise(0.15)}>
           {subtitle}
-        </p>
-
-        {displayMode === 'list' ? (
-          <div
-            className="relative max-h-96 flex flex-col items-center justify-center overflow-y-auto touch-none select-none"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchEnd}
-          >
-            <div className="absolute top-[calc(50%+1.5rem)] w-20 h-[1px] bg-gray-400 opacity-60 z-10" />
-            <div className="space-y-2 z-20">
-              {getDisplayValues().map((v) => (
-                <div
-                  key={v}
-                  className={`transition-all flex items-center justify-center ${
-                    v === value
-                      ? 'text-4xl md:text-5xl font-extrabold text-white'
-                      : 'text-lg md:text-xl text-gray-400 opacity-80'
-                  }`}
-                >
-                  {v}
-                  {v === value && unit && (
-                    <span className="ml-1 text-base font-medium text-gray-300">{unit}</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="relative h-[264px] w-20 mx-auto rounded-xl bg-primary overflow-hidden touch-none select-none">
-            <div
-              className="absolute w-full transition-transform duration-200"
-              style={{ transform: `translateY(-${offset}px)` }}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onTouchCancel={handleTouchEnd}
-            >
-              {range.map((v) => (
-                <div
-                  key={v}
-                  className={`h-6 flex items-center justify-center bg-primary-content ${
-                    v === value ? 'text-xl font-extrabold' : 'text-sm opacity-50'
-                  }`}
-                >
-                  {v === value ? (
-                    <div className="flex items-baseline gap-1">
-                      <span>{v}</span>
-                      {unit && <span className="text-xs">{unit}</span>}
-                    </div>
-                  ) : (
-                    v
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div
-              className="absolute left-1/2 w-15 h-0.5 bg-black opacity-80 pointer-events-none"
-              style={{
-                top: `calc(50% + ${itemHeight / 2}px)`,
-                transform: 'translateX(-50%)',
-              }}
-            />
-          </div>
-        )}
-
-        <div className="flex justify-center gap-6 my-6">
-          <Button 
-            variant="round" 
-            onClick={() => onChange(Math.max(normalizeValue(value - step), min))}
-            disabled={disabled}
-          >
-            {iconDown ?? <ArrowDown className="w-5 h-5" color="black" />}
-          </Button>
-          <Button 
-            variant="round" 
-            onClick={() => onChange(Math.min(normalizeValue(value + step), max))}
-            disabled={disabled}
-          >
-            {iconUp ?? <ArrowUp className="w-5 h-5" color="black" />}
-          </Button>
-        </div>
-
-        <div className="flex justify-center">
-          <Button onClick={onNext} variant="confirm">
-            {primaryButtonLabel}
-          </Button>
-        </div>
-
-        {extraActions && (
-          <div className="flex flex-col gap-3 items-center w-full mt-2">{extraActions}</div>
-        )}
-
-        {note && (
-          <div className="w-full flex justify-center mt-8 px-2">
-            <p className="text-sm text-copy-lighter text-center max-w-md italic">{note}</p>
-          </div>
+        </motion.p>
+        {disabled && (
+          <motion.p className="onb__tag" {...rise(0.2)}>
+            {t('fromStrava')}
+          </motion.p>
         )}
       </div>
+
+      <motion.p
+        className="onb__figure"
+        aria-hidden="true"
+        initial={{ opacity: 0, scale: 1.06, filter: 'blur(12px)' }}
+        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
+      >
+        <RollingValue value={value} format={String} duration={0.4} className="onb__value" />
+        {unit && <span className="onb__unit">{unit}</span>}
+      </motion.p>
+
+      <motion.div className="onb__dial" {...rise(0.25)}>
+        <button
+          type="button"
+          className="onb__nudge"
+          onClick={() => set(value - 1)}
+          disabled={disabled || value <= min}
+          aria-label={t('decrease')}
+        >
+          <Minus />
+        </button>
+        <div
+          className="tape"
+          role="slider"
+          tabIndex={disabled ? -1 : 0}
+          aria-label={title}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={value}
+          aria-valuetext={unit ? `${value} ${unit}` : undefined}
+          aria-disabled={disabled || undefined}
+          data-dragging={dragging || undefined}
+          onKeyDown={onKeyDown}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+        >
+          <div className="tape__window">
+            <div
+              className="tape__track"
+              style={
+                {
+                  width: (max - min) * TICK + 1,
+                  transform: `translateX(${-(value - min) * TICK}px)`,
+                  '--tick': `${TICK}px`,
+                  '--offset': `${(first - min) * TICK}px`,
+                } as React.CSSProperties
+              }
+            >
+              {majors.map((n) => (
+                <span key={n} style={{ left: (n - min) * TICK }}>
+                  {n}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          className="onb__nudge"
+          onClick={() => set(value + 1)}
+          disabled={disabled || value >= max}
+          aria-label={t('increase')}
+        >
+          <Plus />
+        </button>
+      </motion.div>
+
+      <motion.div className="onb__actions" {...rise(0.35)}>
+        {onBack && (
+          <button type="button" className="btn btn--line" onClick={onBack}>
+            {t('back')}
+          </button>
+        )}
+        {extraActions}
+        <button type="button" className="btn btn--primary btn--big" onClick={onNext}>
+          {isSkippable ? t('skip') : t('continue')}
+        </button>
+      </motion.div>
+
+      {note && (
+        <motion.p className="onb__note" {...rise(0.45)}>
+          {note}
+        </motion.p>
+      )}
     </div>
   );
 }
